@@ -62,11 +62,10 @@
 		3636387024E2CBD500F6B267 /* FiveTwoFiveRule */ = {
 			isa = PBXGroup;
 			children = (
+				3636388D24E6578D00F6B267 /* Function */,
+				3636388C24E6572A00F6B267 /* Controller */,
 				3636387124E2CBD500F6B267 /* AppDelegate.swift */,
 				3636387324E2CBD500F6B267 /* SceneDelegate.swift */,
-				3636387524E2CBD500F6B267 /* GoalViewController.swift */,
-				3636388824E2D19400F6B267 /* WishViewController.swift */,
-				3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */,
 				3636387724E2CBD500F6B267 /* Main.storyboard */,
 				3636387D24E2CBD600F6B267 /* Assets.xcassets */,
 				3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */,
@@ -74,6 +73,23 @@
 				3636387A24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld */,
 			);
 			path = FiveTwoFiveRule;
+			sourceTree = "<group>";
+		};
+		3636388C24E6572A00F6B267 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3636387524E2CBD500F6B267 /* GoalViewController.swift */,
+				3636388824E2D19400F6B267 /* WishViewController.swift */,
+				3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3636388D24E6578D00F6B267 /* Function */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Function;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
