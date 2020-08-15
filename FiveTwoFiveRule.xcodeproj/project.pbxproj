@@ -16,6 +16,9 @@
 		3636388124E2CBD600F6B267 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */; };
 		3636388924E2D19400F6B267 /* WishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636388824E2D19400F6B267 /* WishViewController.swift */; };
 		3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */; };
+		363638AF24E7A6B300F6B267 /* Goals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638AE24E7A6B300F6B267 /* Goals.swift */; };
+		363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B024E7AA9F00F6B267 /* Wishes.swift */; };
+		363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B224E7AB0D00F6B267 /* Givingups.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		3636388224E2CBD600F6B267 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3636388824E2D19400F6B267 /* WishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishViewController.swift; sourceTree = "<group>"; };
 		3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GivingupViewController.swift; sourceTree = "<group>"; };
+		363638AE24E7A6B300F6B267 /* Goals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goals.swift; sourceTree = "<group>"; };
+		363638B024E7AA9F00F6B267 /* Wishes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wishes.swift; sourceTree = "<group>"; };
+		363638B224E7AB0D00F6B267 /* Givingups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Givingups.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +68,7 @@
 		3636387024E2CBD500F6B267 /* FiveTwoFiveRule */ = {
 			isa = PBXGroup;
 			children = (
-				3636388D24E6578D00F6B267 /* Function */,
+				3636389124E79B0600F6B267 /* SIngletons */,
 				3636388C24E6572A00F6B267 /* Controller */,
 				3636387124E2CBD500F6B267 /* AppDelegate.swift */,
 				3636387324E2CBD500F6B267 /* SceneDelegate.swift */,
@@ -85,11 +91,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		3636388D24E6578D00F6B267 /* Function */ = {
+		3636389124E79B0600F6B267 /* SIngletons */ = {
 			isa = PBXGroup;
 			children = (
+				363638AE24E7A6B300F6B267 /* Goals.swift */,
+				363638B024E7AA9F00F6B267 /* Wishes.swift */,
+				363638B224E7AB0D00F6B267 /* Givingups.swift */,
 			);
-			path = Function;
+			path = SIngletons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,12 +172,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				363638AF24E7A6B300F6B267 /* Goals.swift in Sources */,
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
+				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
 				3636387224E2CBD500F6B267 /* AppDelegate.swift in Sources */,
 				3636387C24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld in Sources */,
 				3636388924E2D19400F6B267 /* WishViewController.swift in Sources */,
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
+				363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,7 +324,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = FiveTwoFiveRule/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -320,6 +334,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = SM.FiveTwoFiveRule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -329,7 +344,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = FiveTwoFiveRule/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -337,6 +354,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = SM.FiveTwoFiveRule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

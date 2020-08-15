@@ -36,9 +36,9 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="qkw-Gj-Uzm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="2cF-jr-D4W"/>
                             <constraint firstItem="qkw-Gj-Uzm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="PjT-M0-Cya"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qkw-Gj-Uzm" secondAttribute="trailing" id="ZUy-Mk-CzF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qkw-Gj-Uzm" secondAttribute="bottom" id="ZXl-de-cUs"/>
                             <constraint firstItem="qkw-Gj-Uzm" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="cpy-KL-hZS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -109,7 +109,7 @@
                         <viewLayoutGuide key="safeArea" id="mGO-sV-bF3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Wish" id="Q93-7e-jJ1">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="iYh-KI-7Au">
+                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="iYh-KI-7Au">
                             <connections>
                                 <action selector="touchUpAddWishButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
                             </connections>
