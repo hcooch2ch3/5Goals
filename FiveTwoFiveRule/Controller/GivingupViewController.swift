@@ -45,6 +45,46 @@ extension GivingupViewController: UITableViewDataSource {
 
 extension GivingupViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if self.givingupTableView.isEditing {
+            return UITableViewCell.EditingStyle.delete
+        }
+        return UITableViewCell.EditingStyle.none
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let givingupToDelete = Givingups.shared.givingups[indexPath.row]
+            self.context.delete(givingupToDelete)
+            
+            Givingups.shared.givingups.remove(at: indexPath.row)
+            self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            
+            Givingups.shared.resetPriority()
+            
+            do {
+                try self.context.save()
+            }
+            catch {
+                
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedGivingup = Givingups.shared.givingups[sourceIndexPath.row]
+        Givingups.shared.givingups.remove(at: sourceIndexPath.row)
+        Givingups.shared.givingups.insert(movedGivingup, at: destinationIndexPath.row)
+        Givingups.shared.resetPriority()
+        
+        do {
+            try self.context.save()
+        }
+        catch {
+            
+        }
+    }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: "Wish") { (action, view, completion) in
             // Move givingup to wish
@@ -52,17 +92,17 @@ extension GivingupViewController: UITableViewDelegate {
             
             let wishFromGivingup = Wish(context: self.context)
             wishFromGivingup.name = givingupToWish.name
+            wishFromGivingup.priority = Int16(Wishes.shared.wishes.count)
+            Wishes.shared.wishes.append(wishFromGivingup)
+            
+            NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
             
             self.context.delete(givingupToWish)
+            Givingups.shared.givingups.remove(at: indexPath.row)
+            self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             
             do {
                 try self.context.save()
-                
-                Wishes.shared.wishes.append(wishFromGivingup)
-                NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
-                
-                Givingups.shared.givingups.remove(at: indexPath.row)
-                self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             }
             catch {
                 /// To do:
@@ -81,6 +121,7 @@ extension GivingupViewController {
     func fetchGivingup() {
         do {
             Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
+            Givingups.shared.givingups.sort { $0.priority < $1.priority }
             
             DispatchQueue.main.async {
                 self.givingupTableView.reloadData()
@@ -97,4 +138,11 @@ extension GivingupViewController {
         }
     }
     
+}
+
+extension GivingupViewController {
+    
+    @IBAction func touchUpEditButton(_ sender: UIBarButtonItem) {
+        self.givingupTableView.isEditing.toggle()
+    }
 }

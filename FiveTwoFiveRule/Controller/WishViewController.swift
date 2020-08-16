@@ -45,6 +45,46 @@ extension WishViewController: UITableViewDataSource {
 
 extension WishViewController: UITableViewDelegate {
     
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//        if self.wishTableView.isEditing {
+//            return UITableViewCell.EditingStyle.delete
+//        }
+//        return UITableViewCell.EditingStyle.none
+//    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let wishToDelete = Wishes.shared.wishes[indexPath.row]
+            self.context.delete(wishToDelete)
+            
+            Wishes.shared.wishes.remove(at: indexPath.row)
+            self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            
+            Wishes.shared.resetPriority()
+            
+            do {
+                try self.context.save()
+            }
+            catch {
+                
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedWish = Wishes.shared.wishes[sourceIndexPath.row]
+        Wishes.shared.wishes.remove(at: sourceIndexPath.row)
+        Wishes.shared.wishes.insert(movedWish, at: destinationIndexPath.row)
+        Wishes.shared.resetPriority()
+        
+        do {
+            try self.context.save()
+        }
+        catch {
+            
+        }
+    }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let goalSwipeAction = UIContextualAction(style: .destructive, title: "Goal") { (action, view, completion) in
             guard Goals.shared.goals.count < 5 else {
@@ -57,17 +97,18 @@ extension WishViewController: UITableViewDelegate {
             
             let goalFromWish = Goal(context: self.context)
             goalFromWish.name = wishToGoal.name
+            goalFromWish.priority = Int16(Goals.shared.goals.count)
+            Goals.shared.goals.append(goalFromWish)
+            
+            NotificationCenter.default.post(name: Notification.Name("ReloadGoal"), object: nil)
             
             self.context.delete(wishToGoal)
+            Wishes.shared.wishes.remove(at: indexPath.row)
+            self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            Wishes.shared.resetPriority()
             
             do {
                 try self.context.save()
-            
-                Goals.shared.goals.append(goalFromWish)
-                NotificationCenter.default.post(name: Notification.Name("ReloadGoal"), object: nil)
-                
-                Wishes.shared.wishes.remove(at: indexPath.row)
-                self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             }
             catch {
                 /// To do:
@@ -86,17 +127,18 @@ extension WishViewController: UITableViewDelegate {
             
             let givingupFromWish = Givingup(context: self.context)
             givingupFromWish.name = wishToGivingup.name
+            givingupFromWish.priority = Int16(Givingups.shared.givingups.count)
+            Givingups.shared.givingups.append(givingupFromWish)
+            
+            NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
             
             self.context.delete(wishToGivingup)
+            Wishes.shared.wishes.remove(at: indexPath.row)
+            self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            Wishes.shared.resetPriority()
             
             do {
                 try self.context.save()
-                
-                Givingups.shared.givingups.append(givingupFromWish)
-                NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
-                
-                Wishes.shared.wishes.remove(at: indexPath.row)
-                self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             }
             catch {
                 /// To do:
@@ -112,22 +154,10 @@ extension WishViewController: UITableViewDelegate {
 
 extension WishViewController {
     
-    @IBAction func touchUpAddWishButton(_ sender: UIBarButtonItem) {
-        guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
-            // To do: Show Alert
-            return
-        }
-        
-        presentAddWishAlert()
-    }
-    
-}
-
-extension WishViewController {
-    
     func fetchWish() {
         do {
             Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
+            Wishes.shared.wishes.sort { $0.priority < $1.priority }
             
             DispatchQueue.main.async {
                 self.wishTableView.reloadData()
@@ -154,16 +184,16 @@ extension WishViewController {
              
              let wish = Wish(context: self.context)
              wish.name = textField.text
+            wish.priority = Int16(Wishes.shared.wishes.count)
+            Wishes.shared.wishes.append(wish)
+            
+            // Insert Wish Cell
+            self.wishTableView.beginUpdates()
+            self.wishTableView.insertRows(at: [IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)], with: UITableView.RowAnimation.none)
+            self.wishTableView.endUpdates()
              
              do {
                  try self.context.save()
-                 
-                 Wishes.shared.wishes.append(wish)
-                 
-                 // Insert Wish Cell
-                 self.wishTableView.beginUpdates()
-                 self.wishTableView.insertRows(at: [IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)], with: UITableView.RowAnimation.none)
-                 self.wishTableView.endUpdates()
              }
              catch {
                  
@@ -176,6 +206,24 @@ extension WishViewController {
          alert.addAction(cancelButton)
          
          self.present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+// MARK:- IBAction
+extension WishViewController {
+    
+    @IBAction func touchUpAddWishButton(_ sender: UIBarButtonItem) {
+        guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
+            // To do: Show Alert
+            return
+        }
+        
+        presentAddWishAlert()
+    }
+    
+    @IBAction func touchUpEditButton(_ sender:UIBarButtonItem) {
+        self.wishTableView.isEditing.toggle()
     }
     
 }

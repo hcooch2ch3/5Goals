@@ -13,5 +13,11 @@ class Goals {
     
     var goals: [Goal] = []
     
+    func resetPriority() {
+        for (offset, goal) in self.goals.enumerated() {
+            goal.priority = Int16(offset)
+        }
+    }
+    
     private init() {}
 }

@@ -43,7 +43,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB"/>
+                    <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB">
+                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="2vl-p9-BUT">
+                            <connections>
+                                <action selector="touchUpEditButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
                     </connections>
@@ -109,9 +115,14 @@
                         <viewLayoutGuide key="safeArea" id="mGO-sV-bF3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Wish" id="Q93-7e-jJ1">
-                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="iYh-KI-7Au">
+                        <barButtonItem key="leftBarButtonItem" image="plus" catalog="system" id="iYh-KI-7Au">
                             <connections>
                                 <action selector="touchUpAddWishButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="Xdr-pI-gqP">
+                            <connections>
+                                <action selector="touchUpEditButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -159,7 +170,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zof-x4-0vk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y"/>
+                    <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y">
+                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="iLp-nt-6WS">
+                            <connections>
+                                <action selector="touchUpEditButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
                     </connections>
@@ -239,6 +256,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.circle" catalog="system" width="128" height="121"/>

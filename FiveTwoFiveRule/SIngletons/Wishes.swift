@@ -13,5 +13,11 @@ class Wishes {
     
     var wishes: [Wish] = []
     
+    func resetPriority() {
+        for (offset, wish) in self.wishes.enumerated() {
+            wish.priority = Int16(offset)
+        }
+    }
+    
     private init() {}
 }

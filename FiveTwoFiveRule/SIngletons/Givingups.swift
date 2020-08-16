@@ -13,5 +13,11 @@ class Givingups {
     
     var givingups: [Givingup] = []
     
+    func resetPriority() {
+        for (offset, givingup) in self.givingups.enumerated() {
+            givingup.priority = Int16(offset)
+        }
+    }
+    
     private init() {}
 }
