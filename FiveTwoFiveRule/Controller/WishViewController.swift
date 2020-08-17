@@ -20,7 +20,7 @@ class WishViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadWish"), object: nil)
         
-        fetchWish()
+        self.reload()
     }
     
 }
@@ -45,30 +45,12 @@ extension WishViewController: UITableViewDataSource {
 
 extension WishViewController: UITableViewDelegate {
     
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-//        if self.wishTableView.isEditing {
-//            return UITableViewCell.EditingStyle.delete
-//        }
-//        return UITableViewCell.EditingStyle.none
-//    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return UITableViewCell.EditingStyle.none
+    }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let wishToDelete = Wishes.shared.wishes[indexPath.row]
-            self.context.delete(wishToDelete)
-            
-            Wishes.shared.wishes.remove(at: indexPath.row)
-            self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            
-            Wishes.shared.resetPriority()
-            
-            do {
-                try self.context.save()
-            }
-            catch {
-                
-            }
-        }
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -76,6 +58,8 @@ extension WishViewController: UITableViewDelegate {
         Wishes.shared.wishes.remove(at: sourceIndexPath.row)
         Wishes.shared.wishes.insert(movedWish, at: destinationIndexPath.row)
         Wishes.shared.resetPriority()
+        
+        self.refreshBadge()
         
         do {
             try self.context.save()
@@ -107,6 +91,8 @@ extension WishViewController: UITableViewDelegate {
             self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             Wishes.shared.resetPriority()
             
+            self.refreshBadge()
+            
             do {
                 try self.context.save()
             }
@@ -137,6 +123,8 @@ extension WishViewController: UITableViewDelegate {
             self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             Wishes.shared.resetPriority()
             
+            self.refreshBadge()
+            
             do {
                 try self.context.save()
             }
@@ -154,19 +142,21 @@ extension WishViewController: UITableViewDelegate {
 
 extension WishViewController {
     
-    func fetchWish() {
-        do {
-            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
-            Wishes.shared.wishes.sort { $0.priority < $1.priority }
-            
-            DispatchQueue.main.async {
-                self.wishTableView.reloadData()
-            }
-        }
-        catch {
-            
-        }
-    }
+//    func fetchWish() {
+//        do {
+//            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
+//            Wishes.shared.wishes.sort { $0.priority < $1.priority }
+//
+//            self.refreshBadge()
+//
+//            DispatchQueue.main.async {
+//                self.wishTableView.reloadData()
+//            }
+//        }
+//        catch {
+//
+//        }
+//    }
     
     @objc func reload() {
         DispatchQueue.main.async {
@@ -191,7 +181,9 @@ extension WishViewController {
             self.wishTableView.beginUpdates()
             self.wishTableView.insertRows(at: [IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)], with: UITableView.RowAnimation.none)
             self.wishTableView.endUpdates()
-             
+            
+            self.refreshBadge()
+            
              do {
                  try self.context.save()
              }
@@ -206,6 +198,12 @@ extension WishViewController {
          alert.addAction(cancelButton)
          
          self.present(alert, animated: true, completion: nil)
+    }
+    
+    func refreshBadge() {
+        tabBarController?.tabBar.items?[0].badgeValue = Goals.shared.goals.count > 0 ? String(Goals.shared.goals.count) : nil
+        tabBarController?.tabBar.items?[1].badgeValue = Wishes.shared.wishes.count > 0 ? String(Wishes.shared.wishes.count) : nil
+        tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
 }

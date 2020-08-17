@@ -20,7 +20,7 @@ class GivingupViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGivingup"), object: nil)
         
-        fetchGivingup()
+        self.reload()
     }
 
 }
@@ -46,29 +46,11 @@ extension GivingupViewController: UITableViewDataSource {
 extension GivingupViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        if self.givingupTableView.isEditing {
-            return UITableViewCell.EditingStyle.delete
-        }
         return UITableViewCell.EditingStyle.none
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let givingupToDelete = Givingups.shared.givingups[indexPath.row]
-            self.context.delete(givingupToDelete)
-            
-            Givingups.shared.givingups.remove(at: indexPath.row)
-            self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            
-            Givingups.shared.resetPriority()
-            
-            do {
-                try self.context.save()
-            }
-            catch {
-                
-            }
-        }
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -76,6 +58,8 @@ extension GivingupViewController: UITableViewDelegate {
         Givingups.shared.givingups.remove(at: sourceIndexPath.row)
         Givingups.shared.givingups.insert(movedGivingup, at: destinationIndexPath.row)
         Givingups.shared.resetPriority()
+        
+        self.refreshBadge()
         
         do {
             try self.context.save()
@@ -101,6 +85,8 @@ extension GivingupViewController: UITableViewDelegate {
             Givingups.shared.givingups.remove(at: indexPath.row)
             self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             
+            self.refreshBadge()
+            
             do {
                 try self.context.save()
             }
@@ -114,28 +100,61 @@ extension GivingupViewController: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [wishSwipeAction])
     }
     
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteSwipeAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
+            let givingupToDelete = Givingups.shared.givingups[indexPath.row]
+            self.context.delete(givingupToDelete)
+            
+            Givingups.shared.givingups.remove(at: indexPath.row)
+            self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            
+            Givingups.shared.resetPriority()
+            
+            self.refreshBadge()
+            
+            do {
+                try self.context.save()
+            }
+            catch {
+                
+            }
+        }
+        
+        deleteSwipeAction.backgroundColor =     UIColor.systemGray
+        
+        return UISwipeActionsConfiguration(actions: [deleteSwipeAction])
+    }
+    
 }
 
 extension GivingupViewController {
     
-    func fetchGivingup() {
-        do {
-            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
-            Givingups.shared.givingups.sort { $0.priority < $1.priority }
-            
-            DispatchQueue.main.async {
-                self.givingupTableView.reloadData()
-            }
-        }
-        catch {
-            
-        }
-    }
+//    func fetchGivingup() {
+//        do {
+//            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
+//            Givingups.shared.givingups.sort { $0.priority < $1.priority }
+//
+//            self.refreshBadge()
+//
+//            DispatchQueue.main.async {
+//                self.givingupTableView.reloadData()
+//            }
+//        }
+//        catch {
+//
+//        }
+//    }
     
     @objc func reload() {
         DispatchQueue.main.async {
             self.givingupTableView.reloadData()
         }
+    }
+    
+    func refreshBadge() {
+        tabBarController?.tabBar.items?[0].badgeValue = Goals.shared.goals.count > 0 ? String(Goals.shared.goals.count) : nil
+        tabBarController?.tabBar.items?[1].badgeValue = Wishes.shared.wishes.count > 0 ? String(Wishes.shared.wishes.count) : nil
+        tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
 }

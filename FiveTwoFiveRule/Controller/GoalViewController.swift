@@ -20,7 +20,10 @@ class GoalViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
         
-        fetchGoal()
+//        fetchGoal()
+        self.fetchData()
+        self.refreshBadge()
+        self.goalTableView.reloadData()
     }
         
 }
@@ -46,28 +49,11 @@ extension GoalViewController: UITableViewDataSource {
 extension GoalViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        if self.goalTableView.isEditing {
-            return UITableViewCell.EditingStyle.delete
-        }
         return UITableViewCell.EditingStyle.none
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let goalToDelete = Goals.shared.goals[indexPath.row]
-            self.context.delete(goalToDelete)
-            
-            Goals.shared.goals.remove(at: indexPath.row)
-            self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            Goals.shared.resetPriority()
-            
-            do {
-                try self.context.save()
-            }
-            catch {
-                
-            }
-        }
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -75,6 +61,8 @@ extension GoalViewController: UITableViewDelegate {
         Goals.shared.goals.remove(at: sourceIndexPath.row)
         Goals.shared.goals.insert(movedGoal, at: destinationIndexPath.row)
         Goals.shared.resetPriority()
+        
+        self.refreshBadge()
         
         do {
             try self.context.save()
@@ -101,6 +89,8 @@ extension GoalViewController: UITableViewDelegate {
             self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             Goals.shared.resetPriority()
             
+            self.refreshBadge()
+            
             do {
                 try self.context.save()
             }
@@ -118,14 +108,32 @@ extension GoalViewController: UITableViewDelegate {
 
 extension GoalViewController {
     
-    func fetchGoal() {
+//    func fetchGoal() {
+//        do {
+//            Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
+//            Goals.shared.goals.sort { $0.priority < $1.priority }
+//
+//            self.refreshBadge()
+//
+//            DispatchQueue.main.async {
+//                self.goalTableView.reloadData()
+//            }
+//        }
+//        catch {
+//
+//        }
+//    }
+    
+    func fetchData() {
         do {
             Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
             Goals.shared.goals.sort { $0.priority < $1.priority }
             
-            DispatchQueue.main.async {
-                self.goalTableView.reloadData()
-            }
+            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
+            Wishes.shared.wishes.sort { $0.priority < $1.priority }
+            
+            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
+            Givingups.shared.givingups.sort { $0.priority < $1.priority }
         }
         catch {
             
@@ -136,6 +144,12 @@ extension GoalViewController {
         DispatchQueue.main.async {
             self.goalTableView.reloadData()
         }
+    }
+    
+    func refreshBadge() {
+        tabBarController?.tabBar.items?[0].badgeValue = Goals.shared.goals.count > 0 ? String(Goals.shared.goals.count) : nil
+        tabBarController?.tabBar.items?[1].badgeValue = Wishes.shared.wishes.count > 0 ? String(Wishes.shared.wishes.count) : nil
+        tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
 }
