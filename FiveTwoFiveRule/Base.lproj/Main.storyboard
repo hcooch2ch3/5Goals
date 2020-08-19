@@ -44,11 +44,18 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB">
-                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="2vl-p9-BUT">
-                            <connections>
-                                <action selector="touchUpEditButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="list.number" catalog="system" id="2vl-p9-BUT">
+                                <connections>
+                                    <action selector="touchUpEditButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="questionmark" catalog="system" id="RiP-My-NXp">
+                                <connections>
+                                    <segue destination="yvB-0F-fXE" kind="presentation" id="IsI-iI-vbL"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
@@ -57,6 +64,124 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1760.8695652173915" y="-368.30357142857139"/>
+        </scene>
+        <!--Help-->
+        <scene sceneID="88Z-mk-shF">
+            <objects>
+                <viewController id="TI0-P1-wri" customClass="HelpViewController" customModule="FiveTwoFiveRule" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KZA-6Z-MNd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NNW-Yb-hjL">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="heQ-K6-UIC">
+                                        <rect key="frame" x="0.0" y="20" width="414" height="650"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iOX-Uv-WOi">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 1. Add 25 Wishes!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HNW-MV-buf">
+                                                        <rect key="frame" x="10" y="15" width="394" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="HNW-MV-buf" firstAttribute="centerY" secondItem="iOX-Uv-WOi" secondAttribute="centerY" id="1G9-ZH-YjB"/>
+                                                    <constraint firstAttribute="trailing" secondItem="HNW-MV-buf" secondAttribute="trailing" constant="10" id="H7a-8D-1rD"/>
+                                                    <constraint firstItem="HNW-MV-buf" firstAttribute="leading" secondItem="iOX-Uv-WOi" secondAttribute="leading" constant="10" id="Wh6-Ou-Hvs"/>
+                                                </constraints>
+                                            </view>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddWish" translatesAutoresizingMaskIntoConstraints="NO" id="HM2-Cv-ZYR">
+                                                <rect key="frame" x="0.0" y="80" width="414" height="110"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="110" id="cZx-46-N5W"/>
+                                                </constraints>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ybk-fm-DYc">
+                                                <rect key="frame" x="0.0" y="220" width="414" height="50"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 2. Swipe 20 Wishes to Giving-up!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ha1-Ul-3GG">
+                                                        <rect key="frame" x="10" y="15" width="394" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="ha1-Ul-3GG" firstAttribute="leading" secondItem="Ybk-fm-DYc" secondAttribute="leading" constant="10" id="IjP-B9-UPn"/>
+                                                    <constraint firstItem="ha1-Ul-3GG" firstAttribute="centerY" secondItem="Ybk-fm-DYc" secondAttribute="centerY" id="PLJ-NV-iZP"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ha1-Ul-3GG" secondAttribute="trailing" constant="10" id="kyZ-xd-50c"/>
+                                                </constraints>
+                                            </view>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SwipeToGivingup" translatesAutoresizingMaskIntoConstraints="NO" id="lkm-3c-uW7">
+                                                <rect key="frame" x="0.0" y="300" width="414" height="120"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="120" id="jeV-E4-PxO"/>
+                                                </constraints>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zbe-lY-3nb">
+                                                <rect key="frame" x="0.0" y="450" width="414" height="50"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 3. Swipe 5 Wishes to Goals!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dvw-np-W3c">
+                                                        <rect key="frame" x="10" y="15" width="414" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Dvw-np-W3c" secondAttribute="trailing" constant="-10" id="CK2-AD-KGT"/>
+                                                    <constraint firstItem="Dvw-np-W3c" firstAttribute="leading" secondItem="Zbe-lY-3nb" secondAttribute="leading" constant="10" id="Gs8-i6-pxb"/>
+                                                    <constraint firstItem="Dvw-np-W3c" firstAttribute="centerY" secondItem="Zbe-lY-3nb" secondAttribute="centerY" id="Ugx-Bl-aeF"/>
+                                                </constraints>
+                                            </view>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SwipeToGoal" translatesAutoresizingMaskIntoConstraints="NO" id="y3G-zY-7s8">
+                                                <rect key="frame" x="0.0" y="530" width="414" height="120"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="120" id="nHY-yL-58s"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="heQ-K6-UIC" firstAttribute="trailing" secondItem="oFY-Zi-k1o" secondAttribute="trailing" id="Rd6-US-Ppd"/>
+                                    <constraint firstItem="heQ-K6-UIC" firstAttribute="width" secondItem="mPf-Aw-ega" secondAttribute="width" id="ZHy-3f-Sfv"/>
+                                    <constraint firstItem="heQ-K6-UIC" firstAttribute="top" secondItem="oFY-Zi-k1o" secondAttribute="top" constant="20" id="a5j-5T-SGr"/>
+                                    <constraint firstItem="heQ-K6-UIC" firstAttribute="bottom" secondItem="oFY-Zi-k1o" secondAttribute="bottom" id="iZP-sS-gWL"/>
+                                    <constraint firstItem="heQ-K6-UIC" firstAttribute="leading" secondItem="oFY-Zi-k1o" secondAttribute="leading" id="x3D-Me-4PT"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="oFY-Zi-k1o"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="mPf-Aw-ega"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="k0p-nk-8iH" firstAttribute="bottom" secondItem="NNW-Yb-hjL" secondAttribute="bottom" id="SwO-zr-1xE"/>
+                            <constraint firstItem="NNW-Yb-hjL" firstAttribute="leading" secondItem="KZA-6Z-MNd" secondAttribute="leading" id="UJC-I8-2bB"/>
+                            <constraint firstAttribute="trailing" secondItem="NNW-Yb-hjL" secondAttribute="trailing" id="ZN9-NT-B3L"/>
+                            <constraint firstItem="NNW-Yb-hjL" firstAttribute="top" secondItem="KZA-6Z-MNd" secondAttribute="top" id="b61-Fa-sG4"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="k0p-nk-8iH"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Help" id="bsz-UM-pcF">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="xmark" catalog="system" id="ulF-u8-1dU">
+                            <connections>
+                                <action selector="touchUpExitButton:" destination="TI0-P1-wri" id="YKX-yI-mg6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PEx-cb-tDL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3534.7826086956525" y="300"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="MK3-AZ-ejn">
@@ -120,11 +245,18 @@
                                 <action selector="touchUpAddWishButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="Xdr-pI-gqP">
-                            <connections>
-                                <action selector="touchUpEditButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="list.number" catalog="system" id="Xdr-pI-gqP">
+                                <connections>
+                                    <action selector="touchUpEditButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="questionmark" catalog="system" id="hNr-j5-kVw">
+                                <connections>
+                                    <segue destination="yvB-0F-fXE" kind="presentation" id="sna-T0-fqm"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="wishTableView" destination="tbA-66-Z78" id="1wo-HJ-31z"/>
@@ -171,11 +303,18 @@
                         <viewLayoutGuide key="safeArea" id="zof-x4-0vk"/>
                     </view>
                     <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y">
-                        <barButtonItem key="rightBarButtonItem" image="list.number" catalog="system" id="iLp-nt-6WS">
-                            <connections>
-                                <action selector="touchUpEditButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="list.number" catalog="system" id="iLp-nt-6WS">
+                                <connections>
+                                    <action selector="touchUpEditButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="questionmark" catalog="system" id="pye-SD-44e">
+                                <connections>
+                                    <segue destination="yvB-0F-fXE" kind="presentation" id="A7S-bV-cug"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
@@ -254,12 +393,38 @@
             </objects>
             <point key="canvasLocation" x="850.72463768115949" y="951.5625"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="J0s-Le-KdJ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yvB-0F-fXE" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="IZL-Y7-o7Q">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="TI0-P1-wri" kind="relationship" relationship="rootViewController" id="L6l-KV-Dph"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dg7-Ao-Ahj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2664" y="300"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="IsI-iI-vbL"/>
+    </inferredMetricsTieBreakers>
     <resources>
+        <image name="AddWish" width="750" height="194"/>
+        <image name="SwipeToGivingup" width="750" height="192"/>
+        <image name="SwipeToGoal" width="750" height="184"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="questionmark" catalog="system" width="96" height="128"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.circle" catalog="system" width="128" height="121"/>
         <image name="star.slash" catalog="system" width="128" height="116"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
     </resources>
 </document>
