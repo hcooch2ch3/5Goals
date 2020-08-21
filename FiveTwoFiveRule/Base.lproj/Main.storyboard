@@ -44,21 +44,24 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="questionmark" catalog="system" id="RiP-My-NXp">
+                            <connections>
+                                <segue destination="yvB-0F-fXE" kind="presentation" id="IsI-iI-vbL"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="list.number" catalog="system" id="2vl-p9-BUT">
+                            <barButtonItem image="slider.horizontal.3" catalog="system" id="2vl-p9-BUT">
                                 <connections>
-                                    <action selector="touchUpEditButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                                    <action selector="touchUpReorderBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" image="questionmark" catalog="system" id="RiP-My-NXp">
-                                <connections>
-                                    <segue destination="yvB-0F-fXE" kind="presentation" id="IsI-iI-vbL"/>
-                                </connections>
-                            </barButtonItem>
+                            <barButtonItem enabled="NO" image="trash" catalog="system" id="NJz-2U-mlY"/>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
+                        <outlet property="helpBarButton" destination="RiP-My-NXp" id="Q0W-Eq-m2j"/>
+                        <outlet property="reorderBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -211,14 +214,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tbA-66-Z78">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tbA-66-Z78">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="WishCell" id="ysU-RD-4ge">
                                         <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ysU-RD-4ge" id="ETo-vl-yXo">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ysU-RD-4ge" id="ETo-vl-yXo">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
@@ -240,25 +243,34 @@
                         <viewLayoutGuide key="safeArea" id="mGO-sV-bF3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Wish" id="Q93-7e-jJ1">
-                        <barButtonItem key="leftBarButtonItem" image="plus" catalog="system" id="iYh-KI-7Au">
+                        <barButtonItem key="leftBarButtonItem" image="questionmark" catalog="system" id="hNr-j5-kVw">
                             <connections>
-                                <action selector="touchUpAddWishButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
+                                <segue destination="yvB-0F-fXE" kind="presentation" id="sna-T0-fqm"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="list.number" catalog="system" id="Xdr-pI-gqP">
+                            <barButtonItem image="slider.horizontal.3" catalog="system" id="Xdr-pI-gqP">
                                 <connections>
-                                    <action selector="touchUpEditButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
+                                    <action selector="touchUpEditBarButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" image="questionmark" catalog="system" id="hNr-j5-kVw">
+                            <barButtonItem enabled="NO" systemItem="trash" id="pXM-zc-edG">
                                 <connections>
-                                    <segue destination="yvB-0F-fXE" kind="presentation" id="sna-T0-fqm"/>
+                                    <action selector="touchUpDeleteBarButton:" destination="whK-CH-sRD" id="H1h-sb-1bK"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="add" id="iYh-KI-7Au">
+                                <connections>
+                                    <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addBarButton" destination="iYh-KI-7Au" id="gJ9-Lf-zv0"/>
+                        <outlet property="deleteBarButton" destination="pXM-zc-edG" id="Y1r-yo-P7B"/>
+                        <outlet property="editBarButton" destination="Xdr-pI-gqP" id="piN-Ti-0NE"/>
+                        <outlet property="helpBarButton" destination="hNr-j5-kVw" id="JTQ-vb-LNG"/>
                         <outlet property="wishTableView" destination="tbA-66-Z78" id="1wo-HJ-31z"/>
                     </connections>
                 </viewController>
@@ -303,21 +315,23 @@
                         <viewLayoutGuide key="safeArea" id="zof-x4-0vk"/>
                     </view>
                     <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="questionmark" catalog="system" id="pye-SD-44e">
+                            <connections>
+                                <segue destination="yvB-0F-fXE" kind="presentation" id="A7S-bV-cug"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="list.number" catalog="system" id="iLp-nt-6WS">
+                            <barButtonItem image="slider.horizontal.3" catalog="system" id="iLp-nt-6WS">
                                 <connections>
-                                    <action selector="touchUpEditButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                                    <action selector="touchUpReorderBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" image="questionmark" catalog="system" id="pye-SD-44e">
-                                <connections>
-                                    <segue destination="yvB-0F-fXE" kind="presentation" id="A7S-bV-cug"/>
-                                </connections>
-                            </barButtonItem>
+                            <barButtonItem enabled="NO" image="trash" catalog="system" id="X1w-6t-vbj"/>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
+                        <outlet property="helpBarButton" destination="pye-SD-44e" id="FAo-fP-dbC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6LS-jh-sOd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -413,18 +427,18 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IsI-iI-vbL"/>
+        <segue reference="sna-T0-fqm"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AddWish" width="750" height="194"/>
         <image name="SwipeToGivingup" width="750" height="192"/>
         <image name="SwipeToGoal" width="750" height="184"/>
-        <image name="list.number" catalog="system" width="128" height="97"/>
-        <image name="plus" catalog="system" width="128" height="113"/>
         <image name="questionmark" catalog="system" width="96" height="128"/>
+        <image name="slider.horizontal.3" catalog="system" width="128" height="100"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.circle" catalog="system" width="128" height="121"/>
         <image name="star.slash" catalog="system" width="128" height="116"/>
+        <image name="trash" catalog="system" width="121" height="128"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
     </resources>
 </document>

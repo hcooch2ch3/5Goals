@@ -12,6 +12,7 @@ import CoreData
 class GivingupViewController: UIViewController {
 
     @IBOutlet weak var givingupTableView: UITableView!
+    @IBOutlet weak var helpBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -129,22 +130,6 @@ extension GivingupViewController: UITableViewDelegate {
 
 extension GivingupViewController {
     
-//    func fetchGivingup() {
-//        do {
-//            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
-//            Givingups.shared.givingups.sort { $0.priority < $1.priority }
-//
-//            self.refreshBadge()
-//
-//            DispatchQueue.main.async {
-//                self.givingupTableView.reloadData()
-//            }
-//        }
-//        catch {
-//
-//        }
-//    }
-    
     @objc func reload() {
         DispatchQueue.main.async {
             self.givingupTableView.reloadData()
@@ -157,11 +142,40 @@ extension GivingupViewController {
         tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
+    func toggleTabbars() {
+        tabBarController?.tabBar.items?.forEach {
+            $0.isEnabled.toggle()
+        }
+    }
+    
+    func presentWarningAlert(_ message:String) {
+         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+         
+         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+         
+         alert.addAction(cancelButton)
+         
+         self.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension GivingupViewController {
     
-    @IBAction func touchUpEditButton(_ sender: UIBarButtonItem) {
+    @IBAction func touchUpReorderBarButton(_ sender: UIBarButtonItem) {
+        guard Givingups.shared.givingups.count > 1 else {
+            presentWarningAlert("Reordering is possible when givingups are more than 1.")
+            return
+        }
+        
         self.givingupTableView.isEditing.toggle()
+        self.helpBarButton.isEnabled.toggle()
+        self.toggleTabbars()
+        
+        if self.givingupTableView.isEditing {
+            sender.tintColor = UIColor.systemPink
+        } else {
+            sender.tintColor = nil
+        }
     }
 }

@@ -12,6 +12,8 @@ import CoreData
 class GoalViewController: UIViewController {
     
     @IBOutlet weak var goalTableView: UITableView!
+    @IBOutlet weak var helpBarButton: UIBarButtonItem!
+    @IBOutlet weak var reorderBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -20,9 +22,12 @@ class GoalViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
         
-//        fetchGoal()
         self.fetchData()
         self.refreshBadge()
+        
+        /// To remove empty cell in table view
+        self.goalTableView.tableFooterView = UIView()
+        
         self.goalTableView.reloadData()
     }
         
@@ -108,22 +113,6 @@ extension GoalViewController: UITableViewDelegate {
 
 extension GoalViewController {
     
-//    func fetchGoal() {
-//        do {
-//            Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
-//            Goals.shared.goals.sort { $0.priority < $1.priority }
-//
-//            self.refreshBadge()
-//
-//            DispatchQueue.main.async {
-//                self.goalTableView.reloadData()
-//            }
-//        }
-//        catch {
-//
-//        }
-//    }
-    
     func fetchData() {
         do {
             Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
@@ -152,13 +141,42 @@ extension GoalViewController {
         tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
+    func toggleTabbars() {
+        tabBarController?.tabBar.items?.forEach {
+            $0.isEnabled.toggle()
+        }
+    }
+    
+    func presentWarningAlert(_ message:String) {
+         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+         
+         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+         
+         alert.addAction(cancelButton)
+         
+         self.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 // MARK:- IBAction
 extension GoalViewController {
     
-    @IBAction func touchUpEditButton(_ sender: UIBarButtonItem) {
+    @IBAction func touchUpReorderBarButton(_ sender: UIBarButtonItem) {
+        guard Goals.shared.goals.count > 1 else {
+            presentWarningAlert("Reordering is possible when goals are more than 1.")
+            return
+        }
+        
         self.goalTableView.isEditing.toggle()
+        self.helpBarButton.isEnabled.toggle()
+        self.toggleTabbars()
+        
+        if self.goalTableView.isEditing {
+            sender.tintColor = UIColor.systemPink
+        } else {
+            sender.tintColor = nil
+        }
     }
     
 }

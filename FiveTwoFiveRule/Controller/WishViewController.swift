@@ -12,6 +12,10 @@ import CoreData
 class WishViewController: UIViewController {
 
     @IBOutlet weak var wishTableView: UITableView!
+    @IBOutlet weak var helpBarButton: UIBarButtonItem!
+    @IBOutlet weak var addBarButton: UIBarButtonItem!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var deleteBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -19,6 +23,15 @@ class WishViewController: UIViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadWish"), object: nil)
+        
+        self.wishTableView.allowsSelection = false
+        self.wishTableView.allowsMultipleSelectionDuringEditing = true
+        
+        self.wishTableView.rowHeight = UITableView.automaticDimension
+        self.wishTableView.estimatedRowHeight = 120
+        
+        /// To remove empty cell in table view
+        self.wishTableView.tableFooterView = UIView()
         
         self.reload()
     }
@@ -28,6 +41,12 @@ class WishViewController: UIViewController {
 extension WishViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        /// Enable edit button only when there is wish.
+        self.editBarButton.isEnabled = Wishes.shared.wishes.count > 0 ? true : false
+        
+        /// Update tab bar badge
+        self.refreshBadge()
+        
         return Wishes.shared.wishes.count
     }
     
@@ -38,6 +57,16 @@ extension WishViewController: UITableViewDataSource {
         
         cell.textLabel?.text = wish.name
         
+        /// For dynamic cell height about text line number
+        cell.textLabel?.numberOfLines = 0
+        
+        let RenameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
+        RenameButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        RenameButton.tag = indexPath.row
+        RenameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
+        
+        cell.editingAccessoryView = RenameButton
+        
         return cell
     }
     
@@ -45,7 +74,12 @@ extension WishViewController: UITableViewDataSource {
 
 extension WishViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        /// Hide delete swipe action
         return UITableViewCell.EditingStyle.none
     }
     
@@ -72,11 +106,11 @@ extension WishViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let goalSwipeAction = UIContextualAction(style: .destructive, title: "Goal") { (action, view, completion) in
             guard Goals.shared.goals.count < 5 else {
-                // To do: Show Alert
+                self.presentWarningAlert("The number of goals cannot exceed 5.")
                 return
             }
             
-            // Move wish to goal
+            /// Move wish to goal
             let wishToGoal = Wishes.shared.wishes[indexPath.row]
             
             let goalFromWish = Goal(context: self.context)
@@ -97,7 +131,7 @@ extension WishViewController: UITableViewDelegate {
                 try self.context.save()
             }
             catch {
-                /// To do:
+                
             }
         }
         
@@ -108,28 +142,33 @@ extension WishViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let givingupSwipeAction = UIContextualAction(style: .destructive, title: "Giving-up") { (action, view, completion) in
-            // Move wish to giving-up
+            /// Wish to move giving-up area
             let wishToGivingup = Wishes.shared.wishes[indexPath.row]
             
+            /// New giving-up  from the wish area
             let givingupFromWish = Givingup(context: self.context)
             givingupFromWish.name = wishToGivingup.name
             givingupFromWish.priority = Int16(Givingups.shared.givingups.count)
-            Givingups.shared.givingups.append(givingupFromWish)
-            
-            NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
             
             self.context.delete(wishToGivingup)
-            Wishes.shared.wishes.remove(at: indexPath.row)
-            self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            Wishes.shared.resetPriority()
-            
-            self.refreshBadge()
             
             do {
                 try self.context.save()
+                
+                Givingups.shared.givingups.append(givingupFromWish)
+                
+                NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
+                
+                Wishes.shared.wishes.remove(at: indexPath.row)
+                
+                self.wishTableView.beginUpdates()
+                self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.wishTableView.endUpdates()
+                
+                Wishes.shared.resetPriority()
             }
             catch {
-                /// To do:
+
             }
         }
         
@@ -140,64 +179,12 @@ extension WishViewController: UITableViewDelegate {
     
 }
 
-extension WishViewController {
-    
-//    func fetchWish() {
-//        do {
-//            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
-//            Wishes.shared.wishes.sort { $0.priority < $1.priority }
-//
-//            self.refreshBadge()
-//
-//            DispatchQueue.main.async {
-//                self.wishTableView.reloadData()
-//            }
-//        }
-//        catch {
-//
-//        }
-//    }
+extension WishViewController: UITextFieldDelegate {
     
     @objc func reload() {
         DispatchQueue.main.async {
             self.wishTableView.reloadData()
         }
-    }
-    
-    func presentAddWishAlert() {
-         let alert = UIAlertController(title: "Add Wish", message: "Enter your wish you think seriously.", preferredStyle: .alert)
-         alert.addTextField()
-         
-         /// To do: Exception handling for null string input
-         let submitButton = UIAlertAction(title: "Add", style: .default, handler: { (action) in
-             let textField = alert.textFields![0]
-             
-             let wish = Wish(context: self.context)
-             wish.name = textField.text
-            wish.priority = Int16(Wishes.shared.wishes.count)
-            Wishes.shared.wishes.append(wish)
-            
-            // Insert Wish Cell
-            self.wishTableView.beginUpdates()
-            self.wishTableView.insertRows(at: [IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)], with: UITableView.RowAnimation.none)
-            self.wishTableView.endUpdates()
-            
-            self.refreshBadge()
-            
-             do {
-                 try self.context.save()
-             }
-             catch {
-                 
-             }
-         })
-         
-         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-         
-         alert.addAction(submitButton)
-         alert.addAction(cancelButton)
-         
-         self.present(alert, animated: true, completion: nil)
     }
     
     func refreshBadge() {
@@ -206,22 +193,226 @@ extension WishViewController {
         tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
+    /// This function enable or disable all tab bar items
+    func toggleTabbars() {
+        tabBarController?.tabBar.items?.forEach {
+            $0.isEnabled.toggle()
+        }
+    }
+    
+    func toggleEditMode() {
+        self.wishTableView.isEditing.toggle()
+        self.helpBarButton.isEnabled.toggle()
+        self.addBarButton.isEnabled.toggle()
+        
+        /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
+        self.toggleTabbars()
+        
+        if self.wishTableView.isEditing {
+            self.editBarButton.tintColor = UIColor.systemPink
+            self.deleteBarButton.isEnabled = true
+        } else {
+            self.editBarButton.tintColor = nil
+            self.deleteBarButton.isEnabled = false
+        }
+    }
+    
+    func presentAddWishAlert() {
+        let alert = UIAlertController(title: "Add Wish", message: nil, preferredStyle: .alert)
+
+        alert.addTextField { texfield in
+            texfield.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+            texfield.delegate = self
+        }
+         
+        let submitButton = UIAlertAction(title: "Add", style: .default, handler: { (action) in
+            let textField = alert.textFields![0]
+
+            guard textField.text != "" else {
+                self.presentWarningAlert("")
+                return
+            }
+             
+            let wish = Wish(context: self.context)
+            wish.name = textField.text
+            wish.priority = Int16(Wishes.shared.wishes.count)
+            Wishes.shared.wishes.append(wish)
+
+            // Insert Wish Cell
+            let indexPath = IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)
+            self.wishTableView.beginUpdates()
+            self.wishTableView.insertRows(at: [indexPath], with: UITableView.RowAnimation.none)
+            self.wishTableView.endUpdates()
+            self.wishTableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableView.ScrollPosition.bottom)
+            
+            self.refreshBadge()
+
+            do {
+                try self.context.save()
+            }
+            catch {
+             
+            }
+        })
+         
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+         
+        alert.addAction(submitButton)
+        alert.addAction(cancelButton)
+        alert.actions[0].isEnabled = false // Add Button's default value is false
+         
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentRenameWishAlert(_ indexPath: IndexPath) {
+        let wish = Wishes.shared.wishes[indexPath.row]
+        let alert = UIAlertController(title: "Rename Wish", message: nil, preferredStyle: .alert)
+
+        alert.addTextField { textField in
+            textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+            textField.delegate = self
+            textField.text = wish.name
+        }
+         
+        let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
+            let textField = alert.textFields![0]
+
+            guard textField.text != "" else {
+                self.presentWarningAlert("")
+                return
+            }
+        
+            wish.name = textField.text
+            self.wishTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            
+            do {
+                try self.context.save()
+                
+                /// To exit edit mode after renaming wish.
+                self.toggleEditMode()
+            }
+            catch {
+             
+            }
+        })
+         
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+         
+        alert.addAction(submitButton)
+        alert.addAction(cancelButton)
+        alert.actions[0].isEnabled = false // Add Button's default value is false
+         
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func presentWarningAlert(_ message:String) {
+         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+         
+         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+         
+         alert.addAction(cancelButton)
+         
+         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentAlert(_ title:String) {
+        let alertController: UIAlertController = UIAlertController(title: title, message: "Edit or Delete", preferredStyle: UIAlertController.Style.actionSheet)
+        
+        let editAction = UIAlertAction(title: "Edit", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+        })
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
+        
+        alertController.addAction(editAction)
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func touchUpRenameButton(_ sender: UIButton, _ event: UIEvent) {
+        /// To find cell's index path whose edit button is touched
+        let touch = event.allTouches?.first as AnyObject
+        let point = touch.location(in: self.wishTableView)
+        guard let indexPath = self.wishTableView.indexPathForRow(at: point) else { return }
+        
+        self.presentRenameWishAlert(indexPath)
+    }
+    
+    /// This function is to detect whether alert's text field is blank string or not.
+    /// This function to enable alert's OK button when text field is not blank string.
+    @objc func textChanged(_ sender: Any) {
+        let textfield = sender as! UITextField
+        
+        /// To find the alert controller whose textfield is changed
+        var responder : UIResponder? = textfield
+        while !(responder is UIAlertController) { responder = responder?.next }
+        let alert = responder as? UIAlertController
+        
+        alert?.actions[0].isEnabled = (textfield.text != "")
+    }
+    
+    func deleteWishes() {
+        guard let selectedRows = self.wishTableView.indexPathsForSelectedRows else {
+            presentWarningAlert("Check the wishes to delete.")
+            return
+        }
+        
+        var wishesToRemove: [Wish] = []
+        
+        selectedRows.forEach {
+            let wishToRemove = Wishes.shared.wishes[$0.row]
+            wishesToRemove.append(wishToRemove)
+        }
+        
+        /// To delete wishes in Core Data
+        wishesToRemove.forEach { self.context.delete($0) }
+        
+        do {
+            try self.context.save()
+            
+            /// To delete selected wish in data source
+            selectedRows.forEach { Wishes.shared.wishes.remove(at: $0.row) }
+            
+            /// To delete table view cell of selected wish
+            self.wishTableView.beginUpdates()
+            self.wishTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
+            self.wishTableView.endUpdates()
+            
+            /// To update tab bar badge indicating wishes count after deleting the wishes
+            self.refreshBadge()
+            
+            /// To exit edit mode after deleting the wishes
+            self.toggleEditMode()
+        }
+        catch {
+            
+        }
+    }
+    
 }
 
 // MARK:- IBAction
 extension WishViewController {
     
-    @IBAction func touchUpAddWishButton(_ sender: UIBarButtonItem) {
+    @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
         guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
-            // To do: Show Alert
+            presentWarningAlert("The total number cannot exceed 25.")
             return
         }
         
         presentAddWishAlert()
     }
     
-    @IBAction func touchUpEditButton(_ sender:UIBarButtonItem) {
-        self.wishTableView.isEditing.toggle()
+    @IBAction func touchUpEditBarButton(_ sender:UIBarButtonItem) {
+        toggleEditMode()
+    }
+    
+    @IBAction func touchUpDeleteBarButton(_ sender:UIBarButtonItem) {
+        deleteWishes()
     }
     
 }
