@@ -52,16 +52,21 @@
                         <rightBarButtonItems>
                             <barButtonItem image="slider.horizontal.3" catalog="system" id="2vl-p9-BUT">
                                 <connections>
-                                    <action selector="touchUpReorderBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                                    <action selector="touchUpEditBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem enabled="NO" image="trash" catalog="system" id="NJz-2U-mlY"/>
+                            <barButtonItem enabled="NO" image="trash" catalog="system" id="NJz-2U-mlY">
+                                <connections>
+                                    <action selector="touchUpDeleteBarButton:" destination="BYZ-38-t0r" id="OcA-w8-fqr"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteBarButton" destination="NJz-2U-mlY" id="UtH-SW-1Ne"/>
+                        <outlet property="editBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
                         <outlet property="helpBarButton" destination="RiP-My-NXp" id="Q0W-Eq-m2j"/>
-                        <outlet property="reorderBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -323,13 +328,19 @@
                         <rightBarButtonItems>
                             <barButtonItem image="slider.horizontal.3" catalog="system" id="iLp-nt-6WS">
                                 <connections>
-                                    <action selector="touchUpReorderBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                                    <action selector="touchUpEditBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem enabled="NO" image="trash" catalog="system" id="X1w-6t-vbj"/>
+                            <barButtonItem enabled="NO" image="trash" catalog="system" id="X1w-6t-vbj">
+                                <connections>
+                                    <action selector="touchUpDeleteBarButton:" destination="IB9-WP-PMd" id="kgi-Hn-5Nk"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteBarButton" destination="X1w-6t-vbj" id="7Qs-jH-vX1"/>
+                        <outlet property="editBarButton" destination="iLp-nt-6WS" id="xaF-3G-M7e"/>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
                         <outlet property="helpBarButton" destination="pye-SD-44e" id="FAo-fP-dbC"/>
                     </connections>
@@ -427,7 +438,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="sna-T0-fqm"/>
+        <segue reference="IsI-iI-vbL"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AddWish" width="750" height="194"/>

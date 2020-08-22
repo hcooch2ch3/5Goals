@@ -70,7 +70,7 @@
 		3636387024E2CBD500F6B267 /* FiveTwoFiveRule */ = {
 			isa = PBXGroup;
 			children = (
-				3636389124E79B0600F6B267 /* SIngletons */,
+				3636389124E79B0600F6B267 /* Singletons */,
 				3636388C24E6572A00F6B267 /* Controller */,
 				3636387124E2CBD500F6B267 /* AppDelegate.swift */,
 				3636387324E2CBD500F6B267 /* SceneDelegate.swift */,
@@ -94,14 +94,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		3636389124E79B0600F6B267 /* SIngletons */ = {
+		3636389124E79B0600F6B267 /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
 				363638AE24E7A6B300F6B267 /* Goals.swift */,
 				363638B024E7AA9F00F6B267 /* Wishes.swift */,
 				363638B224E7AB0D00F6B267 /* Givingups.swift */,
 			);
-			path = SIngletons;
+			path = Singletons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

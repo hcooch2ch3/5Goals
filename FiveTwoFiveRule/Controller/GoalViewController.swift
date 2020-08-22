@@ -13,7 +13,8 @@ class GoalViewController: UIViewController {
     
     @IBOutlet weak var goalTableView: UITableView!
     @IBOutlet weak var helpBarButton: UIBarButtonItem!
-    @IBOutlet weak var reorderBarButton: UIBarButtonItem!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var deleteBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -22,13 +23,19 @@ class GoalViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
         
-        self.fetchData()
-        self.refreshBadge()
+        self.goalTableView.allowsSelection = false
+        self.goalTableView.allowsMultipleSelectionDuringEditing = true
+        
+        /// For dynamic cell height by text lines
+        self.goalTableView.rowHeight = UITableView.automaticDimension
+        self.goalTableView.estimatedRowHeight = 120
         
         /// To remove empty cell in table view
         self.goalTableView.tableFooterView = UIView()
         
-        self.goalTableView.reloadData()
+        self.fetchData()
+        
+        self.reload()
     }
         
 }
@@ -36,6 +43,12 @@ class GoalViewController: UIViewController {
 extension GoalViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        /// Enable edit button only when there is goal.
+        self.editBarButton.isEnabled = Goals.shared.goals.count > 0 ? true : false
+        
+        /// Update tab bar badge because goal count is changed.
+        self.refreshBadge()
+        
         return Goals.shared.goals.count
     }
     
@@ -46,6 +59,16 @@ extension GoalViewController: UITableViewDataSource {
         
         cell.textLabel?.text = goal.name
         
+        /// For dynamic cell height about text line number
+        cell.textLabel?.numberOfLines = 0
+        
+        /// Add rename button to right side of each cell.
+        let RenameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
+        RenameButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        RenameButton.tag = indexPath.row
+        RenameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
+        cell.editingAccessoryView = RenameButton
+        
         return cell
     }
 
@@ -53,7 +76,12 @@ extension GoalViewController: UITableViewDataSource {
 
 extension GoalViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        /// Hide delete swipe action
         return UITableViewCell.EditingStyle.none
     }
     
@@ -65,6 +93,8 @@ extension GoalViewController: UITableViewDelegate {
         let movedGoal = Goals.shared.goals[sourceIndexPath.row]
         Goals.shared.goals.remove(at: sourceIndexPath.row)
         Goals.shared.goals.insert(movedGoal, at: destinationIndexPath.row)
+        
+        /// Reset priority because of reordering priority
         Goals.shared.resetPriority()
         
         self.refreshBadge()
@@ -79,25 +109,31 @@ extension GoalViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: "Wish") { (action, view, completion) in
-            // Move goal to wish (Add wish and Delete goal)
+            /// A goal to move the wish area
             let goalToWish = Goals.shared.goals[indexPath.row]
             
-            let wishFromGoal = Wish(context: self.context) /// Add wish
+            /// New wish from the goal area
+            let wishFromGoal = Wish(context: self.context)
             wishFromGoal.name = goalToWish.name
             wishFromGoal.priority = Int16(Wishes.shared.wishes.count)
-            Wishes.shared.wishes.append(wishFromGoal)
             
-            NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
+            self.context.delete(goalToWish)
             
-            self.context.delete(goalToWish) /// Delete goal
-            Goals.shared.goals.remove(at: indexPath.row)
-            self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            /// Reset all wish priority because one of them disappear
             Goals.shared.resetPriority()
-            
-            self.refreshBadge()
             
             do {
                 try self.context.save()
+                
+                Wishes.shared.wishes.append(wishFromGoal)
+                
+                NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
+                
+                Goals.shared.goals.remove(at: indexPath.row)
+                
+                self.goalTableView.beginUpdates()
+                self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.goalTableView.endUpdates()
             }
             catch {
                 /// To do:
@@ -111,8 +147,9 @@ extension GoalViewController: UITableViewDelegate {
 
 }
 
-extension GoalViewController {
+extension GoalViewController: UITextFieldDelegate {
     
+    // TODO: - Move fetch code to each singleton class.
     func fetchData() {
         do {
             Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
@@ -141,9 +178,26 @@ extension GoalViewController {
         tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
     }
     
+    /// This function enable or disable all tab bar items
     func toggleTabbars() {
         tabBarController?.tabBar.items?.forEach {
             $0.isEnabled.toggle()
+        }
+    }
+    
+    func toggleEditMode() {
+        self.goalTableView.isEditing.toggle()
+        self.helpBarButton.isEnabled.toggle()
+        
+        /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
+        self.toggleTabbars()
+        
+        if self.goalTableView.isEditing {
+            self.editBarButton.tintColor = UIColor.systemPink
+            self.deleteBarButton.isEnabled = true
+        } else {
+            self.editBarButton.tintColor = nil
+            self.deleteBarButton.isEnabled = false
         }
     }
     
@@ -157,26 +211,117 @@ extension GoalViewController {
          self.present(alert, animated: true, completion: nil)
     }
     
+    @objc func touchUpRenameButton(_ sender: UIButton, _ event: UIEvent) {
+        /// To find cell's index path whose edit button is touched
+        let touch = event.allTouches?.first as AnyObject
+        let point = touch.location(in: self.goalTableView)
+        guard let indexPath = self.goalTableView.indexPathForRow(at: point) else { return }
+        
+        self.presentRenameGoalAlert(indexPath)
+    }
+    
+    func presentRenameGoalAlert(_ indexPath: IndexPath) {
+        let goal = Goals.shared.goals[indexPath.row]
+        let alert = UIAlertController(title: "Rename Goal", message: nil, preferredStyle: .alert)
+
+        alert.addTextField { textField in
+            textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+            textField.delegate = self
+            textField.text = goal.name
+        }
+         
+        let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
+            let textField = alert.textFields![0]
+
+            guard textField.text != "" else {
+                self.presentWarningAlert("")
+                return
+            }
+        
+            goal.name = textField.text
+    
+            do {
+                try self.context.save()
+                
+                self.goalTableView.beginUpdates()
+                self.goalTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.goalTableView.endUpdates()
+                
+                /// To exit edit mode after renaming wish.
+                self.toggleEditMode()
+            }
+            catch {
+             
+            }
+        })
+         
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+         
+        alert.addAction(submitButton)
+        alert.addAction(cancelButton)
+        alert.actions[0].isEnabled = false // Add Button's default value is false
+         
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    /// This function is to detect whether alert's text field is blank string or not.
+    /// This function to enable alert's OK button when text field is not blank string.
+    @objc func textChanged(_ sender: Any) {
+        let textfield = sender as! UITextField
+        
+        /// To find the alert controller whose textfield is changed
+        var responder : UIResponder? = textfield
+        while !(responder is UIAlertController) { responder = responder?.next }
+        let alert = responder as? UIAlertController
+        
+        alert?.actions[0].isEnabled = (textfield.text != "")
+    }
+    
+    func deleteGoals() {
+        guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
+            presentWarningAlert("Check the goals to delete.")
+            return
+        }
+        
+        var goalsToRemove: [Goal] = []
+        
+        selectedRows.forEach {
+            let goalToRemove = Goals.shared.goals[$0.row]
+            goalsToRemove.append(goalToRemove)
+        }
+        
+        /// To delete wishes in Core Data
+        goalsToRemove.forEach { self.context.delete($0) }
+        
+        do {
+            try self.context.save()
+            
+            /// To delete selected wish in data source
+            selectedRows.forEach { Goals.shared.goals.remove(at: $0.row) }
+            
+            /// To delete table view cell of selected goal
+            self.goalTableView.beginUpdates()
+            self.goalTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
+            self.goalTableView.endUpdates()
+            
+            /// To exit edit mode after deleting the goals
+            self.toggleEditMode()
+        }
+        catch {
+            
+        }
+    }
+    
 }
 
 // MARK:- IBAction
 extension GoalViewController {
     
-    @IBAction func touchUpReorderBarButton(_ sender: UIBarButtonItem) {
-        guard Goals.shared.goals.count > 1 else {
-            presentWarningAlert("Reordering is possible when goals are more than 1.")
-            return
-        }
-        
-        self.goalTableView.isEditing.toggle()
-        self.helpBarButton.isEnabled.toggle()
-        self.toggleTabbars()
-        
-        if self.goalTableView.isEditing {
-            sender.tintColor = UIColor.systemPink
-        } else {
-            sender.tintColor = nil
-        }
+    @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
+        toggleEditMode()
     }
     
+    @IBAction func touchUpDeleteBarButton(_ sender: UIBarButtonItem) {
+        deleteGoals()
+    }
 }
