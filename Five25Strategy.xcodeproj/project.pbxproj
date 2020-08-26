@@ -20,6 +20,7 @@
 		363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B024E7AA9F00F6B267 /* Wishes.swift */; };
 		363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B224E7AB0D00F6B267 /* Givingups.swift */; };
 		363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B424ECEA6600F6B267 /* HelpViewController.swift */; };
+		364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364EFDC324F6CDB300521B7C /* MoreViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		363638B024E7AA9F00F6B267 /* Wishes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wishes.swift; sourceTree = "<group>"; };
 		363638B224E7AB0D00F6B267 /* Givingups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Givingups.swift; sourceTree = "<group>"; };
 		363638B424ECEA6600F6B267 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		364EFDC324F6CDB300521B7C /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				3636388824E2D19400F6B267 /* WishViewController.swift */,
 				3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */,
 				363638B424ECEA6600F6B267 /* HelpViewController.swift */,
+				364EFDC324F6CDB300521B7C /* MoreViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
 				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
 				3636387224E2CBD500F6B267 /* AppDelegate.swift in Sources */,
+				364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */,
 				3636387C24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld in Sources */,
 				3636388924E2D19400F6B267 /* WishViewController.swift in Sources */,
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,

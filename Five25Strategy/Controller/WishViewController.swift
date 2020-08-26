@@ -23,7 +23,6 @@ class WishViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadWish"), object: nil)
         
-        self.wishTableView.allowsSelection = false
         self.wishTableView.allowsMultipleSelectionDuringEditing = true
         
         /// For dynamic cell height by text lines
@@ -76,15 +75,6 @@ extension WishViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        /// Hide delete swipe action
-        return UITableViewCell.EditingStyle.none
-    }
-    
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -201,25 +191,35 @@ extension WishViewController: UITextFieldDelegate {
     }
     
     /// This function enable or disable all tab bar items
-    func toggleTabbars() {
+    func setTabbarEnabled(_ able: Bool) {
         tabBarController?.tabBar.items?.forEach {
-            $0.isEnabled.toggle()
+            $0.isEnabled = able
         }
     }
     
     func toggleEditMode() {
         self.wishTableView.isEditing.toggle()
-        self.addBarButton.isEnabled.toggle()
-        
-        /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
-        self.toggleTabbars()
         
         if self.wishTableView.isEditing {
+            self.addBarButton.isEnabled = false
+            
+            self.editBarButton.image = UIImage(systemName: "xmark.square")
             self.editBarButton.tintColor = UIColor.systemPink
+            
             self.leftBarButton.image = UIImage(systemName: "trash")
+            
+            /// To disable all tab bar items in edit mode
+            self.setTabbarEnabled(false)
         } else {
+            self.addBarButton.isEnabled = true
+            
+            self.editBarButton.image = UIImage(systemName: "square.and.pencil")
             self.editBarButton.tintColor = nil
+            
             self.leftBarButton.image = UIImage(systemName: "ellipsis")
+            
+            /// To enable all tab bar items in normal mode.
+            self.setTabbarEnabled(true)
         }
     }
     
@@ -255,7 +255,7 @@ extension WishViewController: UITextFieldDelegate {
                 self.wishTableView.endUpdates()
                 
                 /// Show inserted cell.
-                self.wishTableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableView.ScrollPosition.bottom)
+                self.wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
             catch {
              

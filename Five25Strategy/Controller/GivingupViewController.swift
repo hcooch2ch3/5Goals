@@ -22,7 +22,6 @@ class GivingupViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGivingup"), object: nil)
         
-        self.givingupTableView.allowsSelection = false
         self.givingupTableView.allowsMultipleSelectionDuringEditing = true
         
         /// For dynamic cell height by text lines
@@ -75,14 +74,6 @@ extension GivingupViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return UITableViewCell.EditingStyle.none
-    }
-    
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -154,24 +145,31 @@ extension GivingupViewController: UITextFieldDelegate {
     }
     
     /// This function enable or disable all tab bar items
-    func toggleTabbars() {
+    func setTabbarEnabled(_ able: Bool) {
         tabBarController?.tabBar.items?.forEach {
-            $0.isEnabled.toggle()
+            $0.isEnabled = able
         }
     }
     
     func toggleEditMode() {
         self.givingupTableView.isEditing.toggle()
         
-        /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
-        self.toggleTabbars()
-        
         if self.givingupTableView.isEditing {
-            self.editBarButton.tintColor = UIColor.systemOrange
+            self.editBarButton.image = UIImage(systemName: "xmark.square")
+            self.editBarButton.tintColor = UIColor.systemYellow
+            
             self.leftBarButton.image = UIImage(systemName: "trash")
+            
+            /// To disable all tab bar items in edit mode
+            self.setTabbarEnabled(false)
         } else {
+            self.editBarButton.image = UIImage(systemName: "square.and.pencil")
             self.editBarButton.tintColor = nil
+            
             self.leftBarButton.image = UIImage(systemName: "ellipsis")
+            
+            /// To enable all tab bar items in normal mode.
+            self.setTabbarEnabled(true)
         }
     }
     
