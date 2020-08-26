@@ -1,4 +1,4 @@
-# FiveTwoFiveRule
+# Five25Strategy
 
 5/25 Rule : What is the most important your life?
 
