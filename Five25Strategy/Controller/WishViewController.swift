@@ -12,10 +12,9 @@ import CoreData
 class WishViewController: UIViewController {
 
     @IBOutlet weak var wishTableView: UITableView!
-    @IBOutlet weak var helpBarButton: UIBarButtonItem!
+    @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
-    @IBOutlet weak var deleteBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -210,7 +209,6 @@ extension WishViewController: UITextFieldDelegate {
     
     func toggleEditMode() {
         self.wishTableView.isEditing.toggle()
-        self.helpBarButton.isEnabled.toggle()
         self.addBarButton.isEnabled.toggle()
         
         /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
@@ -218,10 +216,10 @@ extension WishViewController: UITextFieldDelegate {
         
         if self.wishTableView.isEditing {
             self.editBarButton.tintColor = UIColor.systemPink
-            self.deleteBarButton.isEnabled = true
+            self.leftBarButton.image = UIImage(systemName: "trash")
         } else {
             self.editBarButton.tintColor = nil
-            self.deleteBarButton.isEnabled = false
+            self.leftBarButton.image = UIImage(systemName: "ellipsis")
         }
     }
     
@@ -368,8 +366,12 @@ extension WishViewController: UITextFieldDelegate {
         do {
             try self.context.save()
             
-            /// To delete selected wish in data source
-            selectedRows.forEach { Wishes.shared.wishes.remove(at: $0.row) }
+            /// To delete selected items in table view data source
+            wishesToRemove.forEach {
+                if let index = Wishes.shared.wishes.firstIndex(of: $0) {
+                    Wishes.shared.wishes.remove(at: index)
+                }
+            }
             
             /// To delete table view cell of selected wish
             self.wishTableView.beginUpdates()
@@ -402,8 +404,12 @@ extension WishViewController {
         toggleEditMode()
     }
     
-    @IBAction func touchUpDeleteBarButton(_ sender:UIBarButtonItem) {
-        deleteWishes()
+    @IBAction func touchUpLeftBarButton(_ sender:UIBarButtonItem) {
+        if self.wishTableView.isEditing {
+            deleteWishes()
+        } else {
+            performSegue(withIdentifier: "More", sender: sender)
+        }
     }
     
 }

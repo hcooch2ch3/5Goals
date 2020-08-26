@@ -10,7 +10,7 @@
         <!--Goal-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="GoalViewController" customModule="FiveTwoFiveRule" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="GoalViewController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,29 +44,22 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="questionmark" catalog="system" id="RiP-My-NXp">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="RiP-My-NXp">
                             <connections>
-                                <segue destination="yvB-0F-fXE" kind="presentation" id="IsI-iI-vbL"/>
+                                <action selector="touchUpLeftBarButton:" destination="BYZ-38-t0r" id="eWO-gq-De5"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem image="slider.horizontal.3" catalog="system" id="2vl-p9-BUT">
-                                <connections>
-                                    <action selector="touchUpEditBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem enabled="NO" image="trash" catalog="system" id="NJz-2U-mlY">
-                                <connections>
-                                    <action selector="touchUpDeleteBarButton:" destination="BYZ-38-t0r" id="OcA-w8-fqr"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" image="gear" catalog="system" id="2vl-p9-BUT">
+                            <connections>
+                                <action selector="touchUpEditBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="deleteBarButton" destination="NJz-2U-mlY" id="UtH-SW-1Ne"/>
                         <outlet property="editBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
-                        <outlet property="helpBarButton" destination="RiP-My-NXp" id="Q0W-Eq-m2j"/>
+                        <outlet property="leftBarButton" destination="RiP-My-NXp" id="Q0W-Eq-m2j"/>
+                        <segue destination="yvB-0F-fXE" kind="show" identifier="More" id="EOQ-56-Rga"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -76,13 +69,13 @@
         <!--Help-->
         <scene sceneID="88Z-mk-shF">
             <objects>
-                <viewController id="TI0-P1-wri" customClass="HelpViewController" customModule="FiveTwoFiveRule" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="TI0-P1-wri" customClass="HelpViewController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KZA-6Z-MNd">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NNW-Yb-hjL">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="heQ-K6-UIC">
                                         <rect key="frame" x="0.0" y="20" width="414" height="650"/>
@@ -214,7 +207,7 @@
         <!--Wish-->
         <scene sceneID="Snr-f1-rDu">
             <objects>
-                <viewController id="whK-CH-sRD" customClass="WishViewController" customModule="FiveTwoFiveRule" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="whK-CH-sRD" customClass="WishViewController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F1l-MJ-MVV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -248,20 +241,15 @@
                         <viewLayoutGuide key="safeArea" id="mGO-sV-bF3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Wish" id="Q93-7e-jJ1">
-                        <barButtonItem key="leftBarButtonItem" image="questionmark" catalog="system" id="hNr-j5-kVw">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="hNr-j5-kVw">
                             <connections>
-                                <segue destination="yvB-0F-fXE" kind="presentation" id="sna-T0-fqm"/>
+                                <action selector="touchUpLeftBarButton:" destination="whK-CH-sRD" id="qpL-Ig-tKw"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="slider.horizontal.3" catalog="system" id="Xdr-pI-gqP">
+                            <barButtonItem image="gear" catalog="system" id="Xdr-pI-gqP">
                                 <connections>
                                     <action selector="touchUpEditBarButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem enabled="NO" systemItem="trash" id="pXM-zc-edG">
-                                <connections>
-                                    <action selector="touchUpDeleteBarButton:" destination="whK-CH-sRD" id="H1h-sb-1bK"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="add" id="iYh-KI-7Au">
@@ -273,20 +261,20 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addBarButton" destination="iYh-KI-7Au" id="gJ9-Lf-zv0"/>
-                        <outlet property="deleteBarButton" destination="pXM-zc-edG" id="Y1r-yo-P7B"/>
                         <outlet property="editBarButton" destination="Xdr-pI-gqP" id="piN-Ti-0NE"/>
-                        <outlet property="helpBarButton" destination="hNr-j5-kVw" id="JTQ-vb-LNG"/>
+                        <outlet property="leftBarButton" destination="hNr-j5-kVw" id="JTQ-vb-LNG"/>
                         <outlet property="wishTableView" destination="tbA-66-Z78" id="1wo-HJ-31z"/>
+                        <segue destination="yvB-0F-fXE" kind="show" identifier="More" id="9Kx-cz-nck"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c7L-ZA-lJn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1760.8695652173915" y="300"/>
+            <point key="canvasLocation" x="1761" y="300"/>
         </scene>
         <!--Giving-up-->
         <scene sceneID="beZ-1N-RCU">
             <objects>
-                <viewController id="IB9-WP-PMd" customClass="GivingupViewController" customModule="FiveTwoFiveRule" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="IB9-WP-PMd" customClass="GivingupViewController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LGt-i7-57i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -320,29 +308,22 @@
                         <viewLayoutGuide key="safeArea" id="zof-x4-0vk"/>
                     </view>
                     <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="questionmark" catalog="system" id="pye-SD-44e">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="pye-SD-44e">
                             <connections>
-                                <segue destination="yvB-0F-fXE" kind="presentation" id="A7S-bV-cug"/>
+                                <action selector="touchUpLeftBarButton:" destination="IB9-WP-PMd" id="zXq-hK-Gaf"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem image="slider.horizontal.3" catalog="system" id="iLp-nt-6WS">
-                                <connections>
-                                    <action selector="touchUpEditBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem enabled="NO" image="trash" catalog="system" id="X1w-6t-vbj">
-                                <connections>
-                                    <action selector="touchUpDeleteBarButton:" destination="IB9-WP-PMd" id="kgi-Hn-5Nk"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" image="gear" catalog="system" id="iLp-nt-6WS">
+                            <connections>
+                                <action selector="touchUpEditBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="deleteBarButton" destination="X1w-6t-vbj" id="7Qs-jH-vX1"/>
                         <outlet property="editBarButton" destination="iLp-nt-6WS" id="xaF-3G-M7e"/>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
-                        <outlet property="helpBarButton" destination="pye-SD-44e" id="FAo-fP-dbC"/>
+                        <outlet property="leftBarButton" destination="pye-SD-44e" id="FAo-fP-dbC"/>
+                        <segue destination="yvB-0F-fXE" kind="show" identifier="More" id="XoJ-2v-6sY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6LS-jh-sOd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -421,10 +402,12 @@
         <!--Navigation Controller-->
         <scene sceneID="J0s-Le-KdJ">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dg7-Ao-Ahj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yvB-0F-fXE" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="IXE-HC-Bez"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="IZL-Y7-o7Q">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -432,24 +415,22 @@
                         <segue destination="TI0-P1-wri" kind="relationship" relationship="rootViewController" id="L6l-KV-Dph"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dg7-Ao-Ahj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2664" y="300"/>
+            <point key="canvasLocation" x="2788" y="300"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IsI-iI-vbL"/>
+        <segue reference="EOQ-56-Rga"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AddWish" width="750" height="194"/>
         <image name="SwipeToGivingup" width="750" height="192"/>
         <image name="SwipeToGoal" width="750" height="184"/>
-        <image name="questionmark" catalog="system" width="96" height="128"/>
-        <image name="slider.horizontal.3" catalog="system" width="128" height="100"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="gear" catalog="system" width="128" height="119"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.circle" catalog="system" width="128" height="121"/>
         <image name="star.slash" catalog="system" width="128" height="116"/>
-        <image name="trash" catalog="system" width="121" height="128"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
     </resources>
 </document>

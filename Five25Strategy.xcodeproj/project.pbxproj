@@ -23,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3636386E24E2CBD500F6B267 /* FiveTwoFiveRule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiveTwoFiveRule.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3636386E24E2CBD500F6B267 /* Five25Strategy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Five25Strategy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3636387124E2CBD500F6B267 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3636387324E2CBD500F6B267 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3636387524E2CBD500F6B267 /* GoalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewController.swift; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 		3636386524E2CBD500F6B267 = {
 			isa = PBXGroup;
 			children = (
-				3636387024E2CBD500F6B267 /* FiveTwoFiveRule */,
+				3636387024E2CBD500F6B267 /* Five25Strategy */,
 				3636386F24E2CBD500F6B267 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,12 +62,12 @@
 		3636386F24E2CBD500F6B267 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3636386E24E2CBD500F6B267 /* FiveTwoFiveRule.app */,
+				3636386E24E2CBD500F6B267 /* Five25Strategy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3636387024E2CBD500F6B267 /* FiveTwoFiveRule */ = {
+		3636387024E2CBD500F6B267 /* Five25Strategy */ = {
 			isa = PBXGroup;
 			children = (
 				3636389124E79B0600F6B267 /* Singletons */,
@@ -80,7 +80,7 @@
 				3636388224E2CBD600F6B267 /* Info.plist */,
 				3636387A24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld */,
 			);
-			path = FiveTwoFiveRule;
+			path = Five25Strategy;
 			sourceTree = "<group>";
 		};
 		3636388C24E6572A00F6B267 /* Controller */ = {
@@ -121,7 +121,7 @@
 			);
 			name = FiveTwoFiveRule;
 			productName = FiveTwoFiveRule;
-			productReference = 3636386E24E2CBD500F6B267 /* FiveTwoFiveRule.app */;
+			productReference = 3636386E24E2CBD500F6B267 /* Five25Strategy.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -139,7 +139,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3636386924E2CBD500F6B267 /* Build configuration list for PBXProject "FiveTwoFiveRule" */;
+			buildConfigurationList = 3636386924E2CBD500F6B267 /* Build configuration list for PBXProject "Five25Strategy" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -331,13 +331,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
-				INFOPLIST_FILE = FiveTwoFiveRule/Info.plist;
+				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SM.FiveTwoFiveRule;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
+				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -351,13 +351,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
-				INFOPLIST_FILE = FiveTwoFiveRule/Info.plist;
+				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SM.FiveTwoFiveRule;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
+				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -367,7 +367,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3636386924E2CBD500F6B267 /* Build configuration list for PBXProject "FiveTwoFiveRule" */ = {
+		3636386924E2CBD500F6B267 /* Build configuration list for PBXProject "Five25Strategy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3636388324E2CBD600F6B267 /* Debug */,

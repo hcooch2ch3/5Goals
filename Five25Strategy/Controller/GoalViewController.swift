@@ -1,5 +1,5 @@
 //
-//  GivingupViewController.swift
+//  ViewController.swift
 //  FiveTwoFiveRule
 //
 //  Created by 임성민 on 2020/08/11.
@@ -9,53 +9,54 @@
 import UIKit
 import CoreData
 
-class GivingupViewController: UIViewController {
-
-    @IBOutlet weak var givingupTableView: UITableView!
-    @IBOutlet weak var helpBarButton: UIBarButtonItem!
+class GoalViewController: UIViewController {
+    
+    @IBOutlet weak var goalTableView: UITableView!
+    @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
-    @IBOutlet weak var deleteBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGivingup"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
         
-        self.givingupTableView.allowsSelection = false
-        self.givingupTableView.allowsMultipleSelectionDuringEditing = true
+        self.goalTableView.allowsSelection = false
+        self.goalTableView.allowsMultipleSelectionDuringEditing = true
         
         /// For dynamic cell height by text lines
-        self.givingupTableView.rowHeight = UITableView.automaticDimension
-        self.givingupTableView.estimatedRowHeight = 120
+        self.goalTableView.rowHeight = UITableView.automaticDimension
+        self.goalTableView.estimatedRowHeight = 120
         
         /// To remove empty cell in table view
-        self.givingupTableView.tableFooterView = UIView()
+        self.goalTableView.tableFooterView = UIView()
+        
+        self.fetchData()
         
         self.reload()
     }
-
+        
 }
 
-extension GivingupViewController: UITableViewDataSource {
+extension GoalViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        /// Enable edit button only when there is givingup.
-        self.editBarButton.isEnabled = Givingups.shared.givingups.count > 0 ? true : false
+        /// Enable edit button only when there is goal.
+        self.editBarButton.isEnabled = Goals.shared.goals.count > 0 ? true : false
         
-        /// Update tab bar badge because wish count is changed.
+        /// Update tab bar badge because goal count is changed.
         self.refreshBadge()
         
-        return Givingups.shared.givingups.count
+        return Goals.shared.goals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = givingupTableView.dequeueReusableCell(withIdentifier: "GivingupCell", for: indexPath)
+        let cell = goalTableView.dequeueReusableCell(withIdentifier: "GoalCell", for: indexPath)
         
-        let givingup = Givingups.shared.givingups[indexPath.row]
+        let goal = Goals.shared.goals[indexPath.row]
         
-        cell.textLabel?.text = givingup.name
+        cell.textLabel?.text = goal.name
         
         /// For dynamic cell height about text line number
         cell.textLabel?.numberOfLines = 0
@@ -69,16 +70,17 @@ extension GivingupViewController: UITableViewDataSource {
         
         return cell
     }
-    
+
 }
 
-extension GivingupViewController: UITableViewDelegate {
+extension GoalViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        /// Hide delete swipe action
         return UITableViewCell.EditingStyle.none
     }
     
@@ -87,12 +89,14 @@ extension GivingupViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedGivingup = Givingups.shared.givingups[sourceIndexPath.row]
-        Givingups.shared.givingups.remove(at: sourceIndexPath.row)
-        Givingups.shared.givingups.insert(movedGivingup, at: destinationIndexPath.row)
+        let movedGoal = Goals.shared.goals[sourceIndexPath.row]
+        Goals.shared.goals.remove(at: sourceIndexPath.row)
+        Goals.shared.goals.insert(movedGoal, at: destinationIndexPath.row)
         
         /// Reset priority because of reordering priority
-        Givingups.shared.resetPriority()
+        Goals.shared.resetPriority()
+        
+        self.refreshBadge()
         
         do {
             try self.context.save()
@@ -102,31 +106,33 @@ extension GivingupViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: "Wish") { (action, view, completion) in
-            let givingupToWish = Givingups.shared.givingups[indexPath.row]
+            /// A goal to move the wish area
+            let goalToWish = Goals.shared.goals[indexPath.row]
             
-            let wishFromGivingup = Wish(context: self.context)
-            wishFromGivingup.name = givingupToWish.name
-            wishFromGivingup.priority = Int16(Wishes.shared.wishes.count)
-             
-            self.context.delete(givingupToWish)
+            /// New wish from the goal area
+            let wishFromGoal = Wish(context: self.context)
+            wishFromGoal.name = goalToWish.name
+            wishFromGoal.priority = Int16(Wishes.shared.wishes.count)
+            
+            self.context.delete(goalToWish)
             
             /// Reset all wish priority because one of them disappear
-            Givingups.shared.resetPriority()
+            Goals.shared.resetPriority()
             
             do {
                 try self.context.save()
                 
-                Wishes.shared.wishes.append(wishFromGivingup)
-                 
-                 NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
+                Wishes.shared.wishes.append(wishFromGoal)
                 
-                Givingups.shared.givingups.remove(at: indexPath.row)
+                NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
                 
-                self.givingupTableView.beginUpdates()
-                self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.givingupTableView.endUpdates()
+                Goals.shared.goals.remove(at: indexPath.row)
+                
+                self.goalTableView.beginUpdates()
+                self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.goalTableView.endUpdates()
             }
             catch {
                 /// To do:
@@ -137,14 +143,31 @@ extension GivingupViewController: UITableViewDelegate {
         
         return UISwipeActionsConfiguration(actions: [wishSwipeAction])
     }
-    
+
 }
 
-extension GivingupViewController: UITextFieldDelegate {
+extension GoalViewController: UITextFieldDelegate {
+    
+    // TODO: - Move fetch code to each singleton class.
+    func fetchData() {
+        do {
+            Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
+            Goals.shared.goals.sort { $0.priority < $1.priority }
+            
+            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
+            Wishes.shared.wishes.sort { $0.priority < $1.priority }
+            
+            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
+            Givingups.shared.givingups.sort { $0.priority < $1.priority }
+        }
+        catch {
+            
+        }
+    }
     
     @objc func reload() {
         DispatchQueue.main.async {
-            self.givingupTableView.reloadData()
+            self.goalTableView.reloadData()
         }
     }
     
@@ -162,18 +185,17 @@ extension GivingupViewController: UITextFieldDelegate {
     }
     
     func toggleEditMode() {
-        self.givingupTableView.isEditing.toggle()
-        self.helpBarButton.isEnabled.toggle()
+        self.goalTableView.isEditing.toggle()
         
         /// To enable all tab bar items in normal mode and disable all tab bar items in edit mode
         self.toggleTabbars()
         
-        if self.givingupTableView.isEditing {
-            self.editBarButton.tintColor = UIColor.systemOrange
-            self.deleteBarButton.isEnabled = true
+        if self.goalTableView.isEditing {
+            self.editBarButton.tintColor = UIColor.systemPink
+            self.leftBarButton.image = UIImage(systemName: "trash")
         } else {
             self.editBarButton.tintColor = nil
-            self.deleteBarButton.isEnabled = false
+            self.leftBarButton.image = UIImage(systemName: "ellipsis")
         }
     }
     
@@ -190,20 +212,20 @@ extension GivingupViewController: UITextFieldDelegate {
     @objc func touchUpRenameButton(_ sender: UIButton, _ event: UIEvent) {
         /// To find cell's index path whose edit button is touched
         let touch = event.allTouches?.first as AnyObject
-        let point = touch.location(in: self.givingupTableView)
-        guard let indexPath = self.givingupTableView.indexPathForRow(at: point) else { return }
+        let point = touch.location(in: self.goalTableView)
+        guard let indexPath = self.goalTableView.indexPathForRow(at: point) else { return }
         
-        self.presentRenameGivingupAlert(indexPath)
+        self.presentRenameGoalAlert(indexPath)
     }
     
-    func presentRenameGivingupAlert(_ indexPath: IndexPath) {
-        let givingup = Givingups.shared.givingups[indexPath.row]
-        let alert = UIAlertController(title: "Rename Giving-up", message: nil, preferredStyle: .alert)
+    func presentRenameGoalAlert(_ indexPath: IndexPath) {
+        let goal = Goals.shared.goals[indexPath.row]
+        let alert = UIAlertController(title: "Rename Goal", message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
             textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
             textField.delegate = self
-            textField.text = givingup.name
+            textField.text = goal.name
         }
          
         let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
@@ -214,14 +236,14 @@ extension GivingupViewController: UITextFieldDelegate {
                 return
             }
         
-            givingup.name = textField.text
+            goal.name = textField.text
     
             do {
                 try self.context.save()
                 
-                self.givingupTableView.beginUpdates()
-                self.givingupTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.givingupTableView.endUpdates()
+                self.goalTableView.beginUpdates()
+                self.goalTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.goalTableView.endUpdates()
                 
                 /// To exit edit mode after renaming wish.
                 self.toggleEditMode()
@@ -253,34 +275,38 @@ extension GivingupViewController: UITextFieldDelegate {
         alert?.actions[0].isEnabled = (textfield.text != "")
     }
     
-    func deleteGivingups() {
-        guard let selectedRows = self.givingupTableView.indexPathsForSelectedRows else {
-            presentWarningAlert("Check the giving-up to delete.")
+    func deleteGoals() {
+        guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
+            presentWarningAlert("Check the goals to delete.")
             return
         }
         
-        var givingupsToRemove: [Givingup] = []
+        var goalsToRemove: [Goal] = []
         
         selectedRows.forEach {
-            let givingupToRemove = Givingups.shared.givingups[$0.row]
-            givingupsToRemove.append(givingupToRemove)
+            let goalToRemove = Goals.shared.goals[$0.row]
+            goalsToRemove.append(goalToRemove)
         }
         
-        /// To delete givingups in Core Data
-        givingupsToRemove.forEach { self.context.delete($0) }
+        /// To delete wishes in Core Data
+        goalsToRemove.forEach { self.context.delete($0) }
         
         do {
             try self.context.save()
             
-            /// To delete selected wish in data source
-            selectedRows.forEach { Givingups.shared.givingups.remove(at: $0.row) }
+            /// To delete selected items in table view data source
+            goalsToRemove.forEach {
+                if let index = Goals.shared.goals.firstIndex(of: $0) {
+                    Goals.shared.goals.remove(at: index)
+                }
+            }
             
-            /// To delete table view cell of selected giving-up
-            self.givingupTableView.beginUpdates()
-            self.givingupTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
-            self.givingupTableView.endUpdates()
+            /// To delete table view cell of selected goal
+            self.goalTableView.beginUpdates()
+            self.goalTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
+            self.goalTableView.endUpdates()
             
-            /// To exit edit mode after deleting the wishes
+            /// To exit edit mode after deleting the goals
             self.toggleEditMode()
         }
         catch {
@@ -290,13 +316,19 @@ extension GivingupViewController: UITextFieldDelegate {
     
 }
 
-extension GivingupViewController {
+// MARK:- IBAction
+extension GoalViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
-       toggleEditMode()
+        toggleEditMode()
     }
     
-    @IBAction func touchUpDeleteBarButton(_ sender:UIBarButtonItem) {
-        deleteGivingups()
+    @IBAction func touchUpLeftBarButton(_ sender: UIBarButtonItem) {
+        if self.goalTableView.isEditing {
+            deleteGoals()
+        } else {
+            performSegue(withIdentifier: "More", sender: sender)
+        }
     }
+    
 }
