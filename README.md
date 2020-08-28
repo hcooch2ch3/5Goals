@@ -1,23 +1,23 @@
 # Five25Strategy
 
-5/25 Rule : What is the most important your life?
+5/25 Strategy : Choose and Focus
 
 This app is inspired by the Warren Buffett's story.
 
-Buffett advised his pilot, Mike Plint, about the way of achieving caree goals.
+Buffett advised his pilot, Mike Plint, about the way of achieving career goals.
 
 Buffett's said like this :
 
-STEP 1. Write the 25 wishes you want to realize in life time.
+First, Write the 25 wishes you want to realize in your life time.
+Second, Choose the Top 5 goals which are the most important.
+Finally, Discard the others so that focus on your 5 goals.
 
-STEP 2. Select the Top 5 wishes which are the most important.
+Based on this story, this app has been implemented like below :
 
-STEP 3. Discard the other 20 wishes so that focus on your 5 goals.
+STEP 1. Add 25 wishes. 
+STEP 2. Swipe right 20 Wishes to give-up.
+STEP 3. Swipe left 5 Wishes to set goals.
 
-This procedure is implemented to this app like below:
+Therefore, you can choose the most important thing in your life and focus on by using this app.
 
-STEP 1. Add 25 Wishes. 
-
-STEP 2. Swipe 5 Wishes to the left so that these are in goal area.
-
-STEP 3. Swipe 20 Wishes to the right so that the remainder are in giving-up area.
+Just ADD and SWIPE!
