@@ -16,6 +16,7 @@ class GoalViewController: UIViewController {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var isEditMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,9 +176,16 @@ extension GoalViewController: UITextFieldDelegate {
     }
     
     func toggleEditMode() {
-        self.goalTableView.isEditing.toggle()
+        self.isEditMode.toggle()
         
-        if self.goalTableView.isEditing {
+        if self.isEditMode {
+            /// To exit cell swipe status
+            if self.goalTableView.isEditing {
+                self.goalTableView.setEditing(false, animated: true)
+            }
+            
+            self.goalTableView.setEditing(true, animated: true)
+            
             self.editBarButton.image = UIImage(systemName: "xmark.square")
             self.editBarButton.tintColor = UIColor.systemPink
             
@@ -186,6 +194,8 @@ extension GoalViewController: UITextFieldDelegate {
             /// To disable all tab bar items in edit mode
             self.setTabbarEnabled(false)
         } else {
+            self.goalTableView.setEditing(false, animated: true)
+            
             self.editBarButton.image = UIImage(systemName: "square.and.pencil")
             self.editBarButton.tintColor = nil
             
@@ -321,7 +331,7 @@ extension GoalViewController {
     }
     
     @IBAction func touchUpLeftBarButton(_ sender: UIBarButtonItem) {
-        if self.goalTableView.isEditing {
+        if self.isEditMode {
             deleteGoals()
         } else {
             performSegue(withIdentifier: "More", sender: sender)

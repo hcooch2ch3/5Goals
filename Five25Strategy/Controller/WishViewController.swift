@@ -17,6 +17,7 @@ class WishViewController: UIViewController {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var isEditMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -198,9 +199,16 @@ extension WishViewController: UITextFieldDelegate {
     }
     
     func toggleEditMode() {
-        self.wishTableView.isEditing.toggle()
+        self.isEditMode.toggle()
         
-        if self.wishTableView.isEditing {
+        if self.isEditMode {
+            /// To exit cell swipe status
+            if self.wishTableView.isEditing {
+                self.wishTableView.setEditing(false, animated: true)
+            }
+            
+            self.wishTableView.setEditing(true, animated: true)
+            
             self.addBarButton.isEnabled = false
             
             self.editBarButton.image = UIImage(systemName: "xmark.square")
@@ -211,6 +219,8 @@ extension WishViewController: UITextFieldDelegate {
             /// To disable all tab bar items in edit mode
             self.setTabbarEnabled(false)
         } else {
+            self.wishTableView.setEditing(false, animated: true)
+            
             self.addBarButton.isEnabled = true
             
             self.editBarButton.image = UIImage(systemName: "square.and.pencil")
@@ -405,7 +415,7 @@ extension WishViewController {
     }
     
     @IBAction func touchUpLeftBarButton(_ sender:UIBarButtonItem) {
-        if self.wishTableView.isEditing {
+        if self.isEditMode {
             deleteWishes()
         } else {
             performSegue(withIdentifier: "More", sender: sender)

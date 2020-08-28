@@ -11,7 +11,7 @@
 		3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636387324E2CBD500F6B267 /* SceneDelegate.swift */; };
 		3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636387524E2CBD500F6B267 /* GoalViewController.swift */; };
 		3636387924E2CBD500F6B267 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3636387724E2CBD500F6B267 /* Main.storyboard */; };
-		3636387C24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3636387A24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld */; };
+		3636387C24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */; };
 		3636387E24E2CBD600F6B267 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3636387D24E2CBD600F6B267 /* Assets.xcassets */; };
 		3636388124E2CBD600F6B267 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */; };
 		3636388924E2D19400F6B267 /* WishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636388824E2D19400F6B267 /* WishViewController.swift */; };
@@ -80,7 +80,7 @@
 				3636387D24E2CBD600F6B267 /* Assets.xcassets */,
 				3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */,
 				3636388224E2CBD600F6B267 /* Info.plist */,
-				3636387A24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld */,
+				3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */,
 			);
 			path = Five25Strategy;
 			sourceTree = "<group>";
@@ -110,9 +110,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3636386D24E2CBD500F6B267 /* FiveTwoFiveRule */ = {
+		3636386D24E2CBD500F6B267 /* Five25Strategy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3636388524E2CBD600F6B267 /* Build configuration list for PBXNativeTarget "FiveTwoFiveRule" */;
+			buildConfigurationList = 3636388524E2CBD600F6B267 /* Build configuration list for PBXNativeTarget "Five25Strategy" */;
 			buildPhases = (
 				3636386A24E2CBD500F6B267 /* Sources */,
 				3636386B24E2CBD500F6B267 /* Frameworks */,
@@ -122,7 +122,7 @@
 			);
 			dependencies = (
 			);
-			name = FiveTwoFiveRule;
+			name = Five25Strategy;
 			productName = FiveTwoFiveRule;
 			productReference = 3636386E24E2CBD500F6B267 /* Five25Strategy.app */;
 			productType = "com.apple.product-type.application";
@@ -155,7 +155,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3636386D24E2CBD500F6B267 /* FiveTwoFiveRule */,
+				3636386D24E2CBD500F6B267 /* Five25Strategy */,
 			);
 		};
 /* End PBXProject section */
@@ -183,7 +183,7 @@
 				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
 				3636387224E2CBD500F6B267 /* AppDelegate.swift in Sources */,
 				364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */,
-				3636387C24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld in Sources */,
+				3636387C24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld in Sources */,
 				3636388924E2D19400F6B267 /* WishViewController.swift in Sources */,
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
@@ -344,7 +344,7 @@
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -364,7 +364,7 @@
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -380,7 +380,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3636388524E2CBD600F6B267 /* Build configuration list for PBXNativeTarget "FiveTwoFiveRule" */ = {
+		3636388524E2CBD600F6B267 /* Build configuration list for PBXNativeTarget "Five25Strategy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3636388624E2CBD600F6B267 /* Debug */,
@@ -392,13 +392,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		3636387A24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodeld */ = {
+		3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				3636387B24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodel */,
 			);
 			currentVersion = 3636387B24E2CBD500F6B267 /* FiveTwoFiveRule.xcdatamodel */;
-			path = FiveTwoFiveRule.xcdatamodeld;
+			path = Five25Strategy.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

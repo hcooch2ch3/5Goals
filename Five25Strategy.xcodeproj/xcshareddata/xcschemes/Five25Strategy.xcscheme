@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3636386D24E2CBD500F6B267"
                BuildableName = "Five25Strategy.app"
-               BlueprintName = "FiveTwoFiveRule"
+               BlueprintName = "Five25Strategy"
                ReferencedContainer = "container:Five25Strategy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3636386D24E2CBD500F6B267"
             BuildableName = "Five25Strategy.app"
-            BlueprintName = "FiveTwoFiveRule"
+            BlueprintName = "Five25Strategy"
             ReferencedContainer = "container:Five25Strategy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3636386D24E2CBD500F6B267"
             BuildableName = "Five25Strategy.app"
-            BlueprintName = "FiveTwoFiveRule"
+            BlueprintName = "Five25Strategy"
             ReferencedContainer = "container:Five25Strategy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
