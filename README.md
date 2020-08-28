@@ -9,7 +9,9 @@ Buffett advised his pilot, Mike Plint, about the way of achieving career goals.
 Buffett's said like this :
 
 
-    First, Write the 25 wishes you want to realize in your life time. Second, Choose the Top 5 goals which are the most important. Finally, Discard the others so that focus on your 5 goals.
+    First, Write the 25 wishes you want to realize in your life time. 
+    Second, Choose the Top 5 goals which are the most important. 
+    Finally, Discard the others so that focus on your 5 goals.
 
 
 Based on this story, this app has been implemented like below :
