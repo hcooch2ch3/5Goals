@@ -64,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1760.8695652173915" y="-368.30357142857139"/>
+            <point key="canvasLocation" x="1712" y="-601"/>
         </scene>
         <!--Help-->
         <scene sceneID="88Z-mk-shF">
@@ -202,7 +202,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aic-km-SrI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-759" y="471"/>
+            <point key="canvasLocation" x="-535" y="300"/>
         </scene>
         <!--Wish-->
         <scene sceneID="Snr-f1-rDu">
@@ -328,7 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6LS-jh-sOd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1760.8695652173915" y="951.5625"/>
+            <point key="canvasLocation" x="1761" y="1278"/>
         </scene>
         <!--Goal-->
         <scene sceneID="BSS-Ua-fNl">
@@ -351,7 +351,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LmJ-J0-voh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="850.72463768115949" y="-368.30357142857139"/>
+            <point key="canvasLocation" x="851" y="-601"/>
         </scene>
         <!--Wish-->
         <scene sceneID="4PI-qQ-c0Z">
@@ -397,7 +397,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JQZ-4W-Iys" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="850.72463768115949" y="951.5625"/>
+            <point key="canvasLocation" x="851" y="1278"/>
         </scene>
         <!--More View Controller-->
         <scene sceneID="0Wl-3p-m77">
@@ -488,7 +488,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Y5d-5G-fLF"/>
+        <segue reference="J05-9J-NGD"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AddWish" width="750" height="190"/>

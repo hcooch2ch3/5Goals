@@ -40,9 +40,6 @@ class GivingupViewController: UIViewController {
 extension GivingupViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        /// Enable edit button only when there is givingup.
-        self.editBarButton.isEnabled = Givingups.shared.givingups.count > 0 ? true : false
-        
         /// Update tab bar badge because wish count is changed.
         self.refreshBadge()
         
@@ -303,6 +300,11 @@ extension GivingupViewController: UITextFieldDelegate {
 extension GivingupViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
+        guard Givingups.shared.givingups.count > 0 else {
+            presentWarningAlert("Editing is possible when there is more than one giving-up.")
+            return
+        }
+        
        toggleEditMode()
     }
     

@@ -41,9 +41,6 @@ class WishViewController: UIViewController {
 extension WishViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        /// Enable edit button only when there is wish.
-        self.editBarButton.isEnabled = Wishes.shared.wishes.count > 0 ? true : false
-        
         /// Update tab bar badge because wish count is changed.
         self.refreshBadge()
         
@@ -410,7 +407,12 @@ extension WishViewController {
         presentAddWishAlert()
     }
     
-    @IBAction func touchUpEditBarButton(_ sender:UIBarButtonItem) {        
+    @IBAction func touchUpEditBarButton(_ sender:UIBarButtonItem) {
+        guard Wishes.shared.wishes.count > 0 else {
+            presentWarningAlert("Editing is possible when there is more than one wish.")
+            return
+        }
+        
         toggleEditMode()
     }
     

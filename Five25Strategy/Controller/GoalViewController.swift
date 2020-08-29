@@ -23,6 +23,11 @@ class GoalViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
         
+        /// Show help on first use
+        if UserDefaults.standard.bool(forKey: "Use") == false {
+            performSegue(withIdentifier: "More", sender: nil)
+        }
+        
         self.goalTableView.allowsMultipleSelectionDuringEditing = true
         
         /// For dynamic cell height by text lines
@@ -34,17 +39,34 @@ class GoalViewController: UIViewController {
         
         self.fetchData()
         
+        /// Move wish tab when there is any goal.
+        if Goals.shared.goals.count == 0 {
+            tabBarController?.selectedIndex = 1
+        }
+    
         self.reload()
     }
-        
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "More" {
+            /// Only execute when showing help first.
+            guard UserDefaults.standard.bool(forKey: "Use") == false else {
+                return
+            }
+            
+            guard let navigationVC = segue.destination as? UINavigationController, let moreVC = navigationVC.viewControllers[0] as? MoreViewController else {
+                return
+            }
+            
+            moreVC.performSegue(withIdentifier: "Help", sender: nil)
+        }
+    }
+            
 }
 
 extension GoalViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        /// Enable edit button only when there is goal.
-        self.editBarButton.isEnabled = Goals.shared.goals.count > 0 ? true : false
-        
         /// Update tab bar badge because goal count is changed.
         self.refreshBadge()
         
@@ -327,6 +349,11 @@ extension GoalViewController: UITextFieldDelegate {
 extension GoalViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
+        guard Goals.shared.goals.count > 0 else {
+            presentWarningAlert("Editing is possible when there is more than one goal.")
+            return
+        }
+        
         toggleEditMode()
     }
     

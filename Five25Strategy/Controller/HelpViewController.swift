@@ -12,6 +12,13 @@ class HelpViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if UserDefaults.standard.bool(forKey: "Use") == false {
+            UserDefaults.standard.set(true, forKey: "Use")
+            
+            /// Hide back button when first read help to prevent confusing user.
+            self.navigationItem.setHidesBackButton(true, animated: true)
+        }
     }
     
     @IBAction func touchUpExitButton(_ sender: UIBarButtonItem) {
