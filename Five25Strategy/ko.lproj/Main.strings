@@ -1,0 +1,48 @@
+
+/* Class = "UITabBarItem"; title = "Giving-up"; ObjectID = "4jz-2y-vzH"; */
+"4jz-2y-vzH.title" = "포기";
+
+/* Class = "UILabel"; text = "STEP 3."; ObjectID = "Dvw-np-W3c"; */
+"Dvw-np-W3c.text" = "STEP 3.";
+
+/* Class = "UITabBarItem"; title = "Goal"; ObjectID = "ENf-UK-Jaw"; */
+"ENf-UK-Jaw.title" = "목표";
+
+/* Class = "UILabel"; text = "STEP 1."; ObjectID = "HNW-MV-buf"; */
+"HNW-MV-buf.text" = "STEP 1.";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "I42-ju-U0U"; */
+"I42-ju-U0U.text" = "Title";
+
+/* Class = "UINavigationItem"; title = "Wish"; ObjectID = "Q93-7e-jJ1"; */
+"Q93-7e-jJ1.title" = "소망";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "RiP-My-NXp"; */
+"RiP-My-NXp.title" = "Item";
+
+/* Class = "UITabBarItem"; title = "Wish"; ObjectID = "Uvg-GA-DPe"; */
+"Uvg-GA-DPe.title" = "소망";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "Xdr-pI-gqP"; */
+"Xdr-pI-gqP.title" = "Item";
+
+/* Class = "UINavigationItem"; title = "Giving-up"; ObjectID = "Xsh-C6-i0Y"; */
+"Xsh-C6-i0Y.title" = "포기";
+
+/* Class = "UINavigationItem"; title = "Help"; ObjectID = "bsz-UM-pcF"; */
+"bsz-UM-pcF.title" = "도움말";
+
+/* Class = "UINavigationItem"; title = "Goal"; ObjectID = "eQg-UO-LFB"; */
+"eQg-UO-LFB.title" = "목표";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "hNr-j5-kVw"; */
+"hNr-j5-kVw.title" = "Item";
+
+/* Class = "UILabel"; text = "STEP 2."; ObjectID = "ha1-Ul-3GG"; */
+"ha1-Ul-3GG.text" = "STEP 2.";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "pye-SD-44e"; */
+"pye-SD-44e.title" = "Item";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "ulF-u8-1dU"; */
+"ulF-u8-1dU.title" = "Item";

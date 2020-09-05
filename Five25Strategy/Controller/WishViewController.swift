@@ -92,9 +92,9 @@ extension WishViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let goalSwipeAction = UIContextualAction(style: .destructive, title: "Goal") { (action, view, completion) in
+        let goalSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Goal", comment: "")) { (action, view, completion) in
             guard Goals.shared.goals.count < 5 else {
-                self.presentWarningAlert("The number of goals cannot exceed 5.")
+                self.presentNoticeAlert("The number of goals cannot exceed 5.")
                 return
             }
             
@@ -135,7 +135,7 @@ extension WishViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let givingupSwipeAction = UIContextualAction(style: .destructive, title: "Giving-up") { (action, view, completion) in
+        let givingupSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Giving-up", comment: "")) { (action, view, completion) in
             /// A wish to move the giving-up area
             let wishToGivingup = Wishes.shared.wishes[indexPath.row]
             
@@ -231,18 +231,18 @@ extension WishViewController: UITextFieldDelegate {
     }
     
     func presentAddWishAlert() {
-        let alert = UIAlertController(title: "Add Wish", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("AddWish", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { texfield in
             texfield.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
             texfield.delegate = self
         }
          
-        let submitButton = UIAlertAction(title: "Add", style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
 
             guard textField.text != "" else {
-                self.presentWarningAlert("")
+                self.presentNoticeAlert("")
                 return
             }
              
@@ -269,7 +269,7 @@ extension WishViewController: UITextFieldDelegate {
             }
         })
          
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
          
         alert.addAction(submitButton)
         alert.addAction(cancelButton)
@@ -280,7 +280,7 @@ extension WishViewController: UITextFieldDelegate {
     
     func presentRenameWishAlert(_ indexPath: IndexPath) {
         let wish = Wishes.shared.wishes[indexPath.row]
-        let alert = UIAlertController(title: "Rename Wish", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("RenameWish", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
             textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
@@ -288,11 +288,10 @@ extension WishViewController: UITextFieldDelegate {
             textField.text = wish.name
         }
          
-        let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
 
             guard textField.text != "" else {
-                self.presentWarningAlert("")
                 return
             }
         
@@ -313,7 +312,7 @@ extension WishViewController: UITextFieldDelegate {
             }
         })
          
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
          
         alert.addAction(submitButton)
         alert.addAction(cancelButton)
@@ -322,11 +321,11 @@ extension WishViewController: UITextFieldDelegate {
         self.present(alert, animated: true, completion: nil)
     }
 
-    func presentWarningAlert(_ message:String) {
-         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+    func presentNoticeAlert(_ message:String) {
+         let alert = UIAlertController(title: NSLocalizedString("Notice", comment: ""), message: message, preferredStyle: .alert)
          
-         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-         
+         let cancelButton = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: nil)
+        
          alert.addAction(cancelButton)
          
          self.present(alert, animated: true, completion: nil)
@@ -356,7 +355,7 @@ extension WishViewController: UITextFieldDelegate {
     
     func deleteWishes() {
         guard let selectedRows = self.wishTableView.indexPathsForSelectedRows else {
-            presentWarningAlert("Check the wishes to delete.")
+            presentNoticeAlert(NSLocalizedString("CheckWish", comment: "Check the wishes to delete."))
             return
         }
         
@@ -400,7 +399,7 @@ extension WishViewController {
     
     @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
         guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
-            presentWarningAlert("The total number cannot exceed 25.")
+            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
             return
         }
         
@@ -409,7 +408,7 @@ extension WishViewController {
     
     @IBAction func touchUpEditBarButton(_ sender:UIBarButtonItem) {
         guard Wishes.shared.wishes.count > 0 else {
-            presentWarningAlert("Editing is possible when there is more than one wish.")
+            presentNoticeAlert(NSLocalizedString("EditWishUnavailable", comment: ""))
             return
         }
         

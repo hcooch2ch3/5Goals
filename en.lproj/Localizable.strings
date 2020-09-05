@@ -1,0 +1,41 @@
+/* 
+  Localizable.strings
+  Five25Strategy
+
+  Created by 임성민 on 2020/09/05.
+  Copyright © 2020 SeongMin. All rights reserved.
+*/
+
+"Goal" = "Goal";
+"Wish" = "Wish";
+"Giving-up" = "Giving-up";
+
+"Notice" = "Notice";
+"OK" = "OK";
+"Cancel" = "Cancel";
+
+"Rename" = "Rename";
+"RenameGoal" = "Rename Goal";
+"RenameWish" = "Rename Wish";
+"RenameGivingup" = "Rename Giving-up";
+
+"CheckGoal" = "Check the goals to delete.";
+"CheckWish" = "Check the wishes to delete.";
+"CheckGivingup" = "Check the giving-ups to delete.";
+
+"EditGoalUnavailable" = "You can edit when there is more than one goal.";
+"EditWishUnavailable" = "You can edit when there is more than one wish.";
+"EditGivingupUnavailable" = "You can edit when there is more than one giving-up.";
+
+"TotalNumberExceed" = "The total number cannot exceed 25.";
+
+"Add" = "Add";
+"AddWish" = "Add Wish";
+
+"Help" = "Help";
+"STEP1Image" = "STEP1Image";
+"STEP2Image" = "STEP2Image";
+"STEP3Image" = "STEP3Image";
+"STEP1Text" = "STEP 1. Add 25 Wishes!";
+"STEP2Text" = "STEP 2. Swipe Right 20 Wishes to Give-up.";
+"STEP3Text" = "STEP 3. Swipe Left 5 Wishes to Set the Goals.";

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -83,7 +83,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iOX-Uv-WOi">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 1. Add 25 Wishes!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HNW-MV-buf">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 1." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HNW-MV-buf">
                                                         <rect key="frame" x="10" y="16" width="394" height="18"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                         <nil key="textColor"/>
@@ -97,7 +97,7 @@
                                                     <constraint firstItem="HNW-MV-buf" firstAttribute="leading" secondItem="iOX-Uv-WOi" secondAttribute="leading" constant="10" id="Wh6-Ou-Hvs"/>
                                                 </constraints>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddWish" translatesAutoresizingMaskIntoConstraints="NO" id="HM2-Cv-ZYR">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HM2-Cv-ZYR">
                                                 <rect key="frame" x="0.0" y="80" width="414" height="110"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="110" id="cZx-46-N5W"/>
@@ -106,7 +106,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ybk-fm-DYc">
                                                 <rect key="frame" x="0.0" y="220" width="414" height="50"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 2. Swipe Right 20 Wishes to Give-up. " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ha1-Ul-3GG">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 2." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ha1-Ul-3GG">
                                                         <rect key="frame" x="10" y="16" width="394" height="18"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                         <nil key="textColor"/>
@@ -120,7 +120,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="ha1-Ul-3GG" secondAttribute="trailing" constant="10" id="kyZ-xd-50c"/>
                                                 </constraints>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SwipeToGivingup" translatesAutoresizingMaskIntoConstraints="NO" id="lkm-3c-uW7">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lkm-3c-uW7">
                                                 <rect key="frame" x="0.0" y="300" width="414" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="80" id="jeV-E4-PxO"/>
@@ -129,7 +129,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zbe-lY-3nb">
                                                 <rect key="frame" x="0.0" y="410" width="414" height="50"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 3. Swipe Left 5 Wishes to Set the Goals." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dvw-np-W3c">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STEP 3." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dvw-np-W3c">
                                                         <rect key="frame" x="10" y="16" width="414" height="18"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                         <nil key="textColor"/>
@@ -143,7 +143,7 @@
                                                     <constraint firstItem="Dvw-np-W3c" firstAttribute="centerY" secondItem="Zbe-lY-3nb" secondAttribute="centerY" id="Ugx-Bl-aeF"/>
                                                 </constraints>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SwipeToGoal" translatesAutoresizingMaskIntoConstraints="NO" id="y3G-zY-7s8">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y3G-zY-7s8">
                                                 <rect key="frame" x="0.0" y="490" width="414" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="80" id="nHY-yL-58s"/>
@@ -179,6 +179,14 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="step1ImageView" destination="HM2-Cv-ZYR" id="df7-P4-dBj"/>
+                        <outlet property="step1Label" destination="HNW-MV-buf" id="qGY-z0-8l2"/>
+                        <outlet property="step2ImageView" destination="lkm-3c-uW7" id="Oy4-5v-52d"/>
+                        <outlet property="step2Label" destination="ha1-Ul-3GG" id="11L-kL-f7t"/>
+                        <outlet property="step3ImageView" destination="y3G-zY-7s8" id="AVo-Go-t3H"/>
+                        <outlet property="step3Label" destination="Dvw-np-W3c" id="1zw-dJ-pmm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PEx-cb-tDL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -488,12 +496,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="J05-9J-NGD"/>
+        <segue reference="Y5d-5G-fLF"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="AddWish" width="750" height="190"/>
-        <image name="SwipeToGivingup" width="750" height="86"/>
-        <image name="SwipeToGoal" width="750" height="86"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="square.and.pencil" catalog="system" width="128" height="118"/>
         <image name="star" catalog="system" width="128" height="116"/>

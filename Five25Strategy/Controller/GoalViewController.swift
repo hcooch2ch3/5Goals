@@ -120,7 +120,7 @@ extension GoalViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let wishSwipeAction = UIContextualAction(style: .destructive, title: "Wish") { (action, view, completion) in
+        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
             /// A goal to move the wish area
             let goalToWish = Goals.shared.goals[indexPath.row]
             
@@ -228,10 +228,10 @@ extension GoalViewController: UITextFieldDelegate {
         }
     }
     
-    func presentWarningAlert(_ message:String) {
-         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+    func presentNoticeAlert(_ message:String) {
+         let alert = UIAlertController(title: NSLocalizedString("Notice", comment: ""), message: message, preferredStyle: .alert)
          
-         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+         let cancelButton = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: nil)
          
          alert.addAction(cancelButton)
          
@@ -249,7 +249,7 @@ extension GoalViewController: UITextFieldDelegate {
     
     func presentRenameGoalAlert(_ indexPath: IndexPath) {
         let goal = Goals.shared.goals[indexPath.row]
-        let alert = UIAlertController(title: "Rename Goal", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("RenameGoal", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
             textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
@@ -257,11 +257,10 @@ extension GoalViewController: UITextFieldDelegate {
             textField.text = goal.name
         }
          
-        let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
 
             guard textField.text != "" else {
-                self.presentWarningAlert("")
                 return
             }
         
@@ -282,7 +281,7 @@ extension GoalViewController: UITextFieldDelegate {
             }
         })
          
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
          
         alert.addAction(submitButton)
         alert.addAction(cancelButton)
@@ -306,7 +305,7 @@ extension GoalViewController: UITextFieldDelegate {
     
     func deleteGoals() {
         guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
-            presentWarningAlert("Check the goals to delete.")
+            presentNoticeAlert(NSLocalizedString("CheckGoal", comment: "Check the goals to delete."))
             return
         }
         
@@ -350,7 +349,7 @@ extension GoalViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
         guard Goals.shared.goals.count > 0 else {
-            presentWarningAlert("Editing is possible when there is more than one goal.")
+            presentNoticeAlert(NSLocalizedString("EditGoalUnavailable", comment: ""))
             return
         }
         

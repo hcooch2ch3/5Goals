@@ -91,7 +91,7 @@ extension GivingupViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let wishSwipeAction = UIContextualAction(style: .destructive, title: "Wish") { (action, view, completion) in
+        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
             let givingupToWish = Givingups.shared.givingups[indexPath.row]
             
             let wishFromGivingup = Wish(context: self.context)
@@ -180,10 +180,10 @@ extension GivingupViewController: UITextFieldDelegate {
         }
     }
     
-    func presentWarningAlert(_ message:String) {
-         let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+    func presentNoticeAlert(_ message:String) {
+         let alert = UIAlertController(title: NSLocalizedString("Notice", comment: ""), message: message, preferredStyle: .alert)
          
-         let cancelButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+         let cancelButton = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: nil)
          
          alert.addAction(cancelButton)
          
@@ -201,7 +201,7 @@ extension GivingupViewController: UITextFieldDelegate {
     
     func presentRenameGivingupAlert(_ indexPath: IndexPath) {
         let givingup = Givingups.shared.givingups[indexPath.row]
-        let alert = UIAlertController(title: "Rename Giving-up", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("RenameGivingup", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
             textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
@@ -209,11 +209,10 @@ extension GivingupViewController: UITextFieldDelegate {
             textField.text = givingup.name
         }
          
-        let submitButton = UIAlertAction(title: "Rename", style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
 
             guard textField.text != "" else {
-                self.presentWarningAlert("")
                 return
             }
         
@@ -234,7 +233,7 @@ extension GivingupViewController: UITextFieldDelegate {
             }
         })
          
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
          
         alert.addAction(submitButton)
         alert.addAction(cancelButton)
@@ -258,7 +257,7 @@ extension GivingupViewController: UITextFieldDelegate {
     
     func deleteGivingups() {
         guard let selectedRows = self.givingupTableView.indexPathsForSelectedRows else {
-            presentWarningAlert("Check the giving-up to delete.")
+            presentNoticeAlert(NSLocalizedString("CheckGivingup", comment: "Check the giving-ups to delete."))
             return
         }
         
@@ -301,7 +300,7 @@ extension GivingupViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
         guard Givingups.shared.givingups.count > 0 else {
-            presentWarningAlert("Editing is possible when there is more than one giving-up.")
+            presentNoticeAlert(NSLocalizedString("EditGivingupUnavailable", comment: ""))
             return
         }
         

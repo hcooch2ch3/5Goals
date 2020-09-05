@@ -1,0 +1,41 @@
+/* 
+  Localizable.strings
+  Five25Strategy
+
+  Created by 임성민 on 2020/09/05.
+  Copyright © 2020 SeongMin. All rights reserved.
+*/
+
+"Goal" = "목표";
+"Wish" = "소망";
+"Giving-up" = "포기";
+
+"Notice" = "알림";
+"OK" = "확인";
+"Cancel" = "취소";
+
+"Rename" = "수정";
+"RenameGoal" = "목표 수정";
+"RenameWish" = "소망 수정";
+"RenameGivingup" = "포기 수정";
+
+"CheckGoal" = "삭제할 목표를 선택하세요.";
+"CheckWish" = "삭제할 소망을 선택하세요.";
+"CheckGivingup" = "삭제할 포기를 선택하세요.";
+
+"EditGoalUnavailable" = "목표가 1개 이상 있을때 편집이 가능합니다.";
+"EditWishUnavailable" = "소망이 1개 이상 있을때 편집이 가능합니다.";
+"EditGivingupUnavailable" = "포기가 1개 이상 있을때 편집이 가능합니다.";
+
+"TotalNumberExceed" = "총 25개까지만 추가 가능합니다.";
+
+"Add" = "추가";
+"AddWish" = "소망 추가";
+
+"Help" = "도움말";
+"STEP1Image" = "STEP1ImageKor";
+"STEP2Image" = "STEP2ImageKor";
+"STEP3Image" = "STEP3ImageKor";
+"STEP1Text" = "STEP 1. 이루고 싶은 소망 25개 추가";
+"STEP2Text" = "STEP 2. 포기할 소망 20개를 오른쪽으로 스와이프.";
+"STEP3Text" = "STEP 3. 목표로 삼을 소망 5개를 왼쪽으로 스와이프.";

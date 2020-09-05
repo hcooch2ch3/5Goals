@@ -21,6 +21,7 @@
 		363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B224E7AB0D00F6B267 /* Givingups.swift */; };
 		363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B424ECEA6600F6B267 /* HelpViewController.swift */; };
 		364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364EFDC324F6CDB300521B7C /* MoreViewController.swift */; };
+		36948BFF250389A8009D3A1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 36948C01250389A8009D3A1B /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,10 @@
 		363638B224E7AB0D00F6B267 /* Givingups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Givingups.swift; sourceTree = "<group>"; };
 		363638B424ECEA6600F6B267 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		364EFDC324F6CDB300521B7C /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		36948C00250389A8009D3A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		36948C02250389DD009D3A1B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
+		36948C03250389DD009D3A1B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		36948C04250389DD009D3A1B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +61,7 @@
 		3636386524E2CBD500F6B267 = {
 			isa = PBXGroup;
 			children = (
+				36948C01250389A8009D3A1B /* Localizable.strings */,
 				3636387024E2CBD500F6B267 /* Five25Strategy */,
 				3636386F24E2CBD500F6B267 /* Products */,
 			);
@@ -149,6 +155,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 3636386524E2CBD500F6B267;
 			productRefGroup = 3636386F24E2CBD500F6B267 /* Products */;
@@ -166,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3636388124E2CBD600F6B267 /* LaunchScreen.storyboard in Resources */,
+				36948BFF250389A8009D3A1B /* Localizable.strings in Resources */,
 				3636387E24E2CBD600F6B267 /* Assets.xcassets in Resources */,
 				3636387924E2CBD500F6B267 /* Main.storyboard in Resources */,
 			);
@@ -199,6 +207,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				3636387824E2CBD500F6B267 /* Base */,
+				36948C02250389DD009D3A1B /* ko */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -207,8 +216,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				3636388024E2CBD600F6B267 /* Base */,
+				36948C03250389DD009D3A1B /* ko */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		36948C01250389A8009D3A1B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				36948C00250389A8009D3A1B /* en */,
+				36948C04250389DD009D3A1B /* ko */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -218,6 +237,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -278,6 +298,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -334,6 +355,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -354,6 +376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

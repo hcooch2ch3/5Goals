@@ -12,7 +12,7 @@ class MoreViewController: UIViewController {
     
     @IBOutlet weak var moreTableView: UITableView!
     
-    let contents: [(name: String, imageName: String)] = [("Help", "questionmark")]
+    let contents: [(name: String, imageName: String, segueIdentifier: String)] = [(NSLocalizedString("Help", comment: ""), "questionmark", "Help")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ extension MoreViewController: UITableViewDataSource {
 extension MoreViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let segueIdentifier = self.contents[indexPath.row].name
+        let segueIdentifier = self.contents[indexPath.row].segueIdentifier
         performSegue(withIdentifier: segueIdentifier, sender: nil)
         self.moreTableView.deselectRow(at: indexPath, animated: true)
     }
