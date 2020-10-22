@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import WidgetKit
 
 class GoalViewController: UIViewController {
     
@@ -113,6 +114,10 @@ extension GoalViewController: UITableViewDelegate {
         
         do {
             try self.context.save()
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+            }
         }
         catch {
             
@@ -137,6 +142,10 @@ extension GoalViewController: UITableViewDelegate {
             do {
                 try self.context.save()
                 
+                if #available(iOS 14.0, *) {
+                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+                }
+                
                 Wishes.shared.wishes.append(wishFromGoal)
                 
                 NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
@@ -159,23 +168,12 @@ extension GoalViewController: UITableViewDelegate {
 
 }
 
-extension GoalViewController: UITextFieldDelegate {
+extension GoalViewController {
     
-    // TODO: - Move fetch code to each singleton class.
     func fetchData() {
-        do {
-            Goals.shared.goals = try self.context.fetch(Goal.fetchRequest())
-            Goals.shared.goals.sort { $0.priority < $1.priority }
-            
-            Wishes.shared.wishes = try self.context.fetch(Wish.fetchRequest())
-            Wishes.shared.wishes.sort { $0.priority < $1.priority }
-            
-            Givingups.shared.givingups = try self.context.fetch(Givingup.fetchRequest())
-            Givingups.shared.givingups.sort { $0.priority < $1.priority }
-        }
-        catch {
-            
-        }
+        Goals.shared.fetch()
+        Wishes.shared.fetch()
+        Givingups.shared.fetch()
     }
     
     @objc func reload() {
@@ -238,6 +236,53 @@ extension GoalViewController: UITextFieldDelegate {
          self.present(alert, animated: true, completion: nil)
     }
     
+    func deleteGoals() {
+        guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
+            presentNoticeAlert(NSLocalizedString("CheckGoal", comment: "Check the goals to delete."))
+            return
+        }
+        
+        var goalsToRemove: [Goal] = []
+        
+        selectedRows.forEach {
+            let goalToRemove = Goals.shared.goals[$0.row]
+            goalsToRemove.append(goalToRemove)
+        }
+        
+        /// To delete wishes in Core Data
+        goalsToRemove.forEach { self.context.delete($0) }
+        
+        do {
+            try self.context.save()
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+            }
+            
+            /// To delete selected items in table view data source
+            goalsToRemove.forEach {
+                if let index = Goals.shared.goals.firstIndex(of: $0) {
+                    Goals.shared.goals.remove(at: index)
+                }
+            }
+            
+            /// To delete table view cell of selected goal
+            self.goalTableView.beginUpdates()
+            self.goalTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
+            self.goalTableView.endUpdates()
+            
+            /// To exit edit mode after deleting the goals
+            self.toggleEditMode()
+        }
+        catch {
+            
+        }
+    }
+    
+}
+
+extension GoalViewController: UITextFieldDelegate {
+    
     @objc func touchUpRenameButton(_ sender: UIButton, _ event: UIEvent) {
         /// To find cell's index path whose edit button is touched
         let touch = event.allTouches?.first as AnyObject
@@ -268,6 +313,10 @@ extension GoalViewController: UITextFieldDelegate {
     
             do {
                 try self.context.save()
+                
+                if #available(iOS 14.0, *) {
+                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+                }
                 
                 self.goalTableView.beginUpdates()
                 self.goalTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
@@ -301,45 +350,6 @@ extension GoalViewController: UITextFieldDelegate {
         let alert = responder as? UIAlertController
         
         alert?.actions[0].isEnabled = (textfield.text != "")
-    }
-    
-    func deleteGoals() {
-        guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
-            presentNoticeAlert(NSLocalizedString("CheckGoal", comment: "Check the goals to delete."))
-            return
-        }
-        
-        var goalsToRemove: [Goal] = []
-        
-        selectedRows.forEach {
-            let goalToRemove = Goals.shared.goals[$0.row]
-            goalsToRemove.append(goalToRemove)
-        }
-        
-        /// To delete wishes in Core Data
-        goalsToRemove.forEach { self.context.delete($0) }
-        
-        do {
-            try self.context.save()
-            
-            /// To delete selected items in table view data source
-            goalsToRemove.forEach {
-                if let index = Goals.shared.goals.firstIndex(of: $0) {
-                    Goals.shared.goals.remove(at: index)
-                }
-            }
-            
-            /// To delete table view cell of selected goal
-            self.goalTableView.beginUpdates()
-            self.goalTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
-            self.goalTableView.endUpdates()
-            
-            /// To exit edit mode after deleting the goals
-            self.toggleEditMode()
-        }
-        catch {
-            
-        }
     }
     
 }

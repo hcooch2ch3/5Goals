@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import WidgetKit
 
 class WishViewController: UIViewController {
 
@@ -113,6 +114,10 @@ extension WishViewController: UITableViewDelegate {
 
             do {
                 try self.context.save()
+                
+                if #available(iOS 14.0, *) {
+                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+                }
                 
                 Goals.shared.goals.append(goalFromWish)
                 
