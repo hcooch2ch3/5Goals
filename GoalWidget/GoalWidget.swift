@@ -23,15 +23,11 @@ struct Provider: IntentTimelineProvider {
     
     func fontSize(for config: SetFontSizeIntent) -> Int {
         switch config.fontsize {
-        case .xS:
-            return 10
         case .s:
             return 12
         case .m:
-            return 14
+            return 15
         case .l:
-            return 16
-        case .xL:
             return 18
         case .unknown:
             return 15

@@ -27,16 +27,6 @@
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
-					<string>XS</string>
-					<key>INEnumValueDisplayNameID</key>
-					<string>Gm63i4</string>
-					<key>INEnumValueIndex</key>
-					<integer>1</integer>
-					<key>INEnumValueName</key>
-					<string>XS</string>
-				</dict>
-				<dict>
-					<key>INEnumValueDisplayName</key>
 					<string>S</string>
 					<key>INEnumValueDisplayNameID</key>
 					<string>VNJ7P4</string>
@@ -64,16 +54,6 @@
 					<integer>4</integer>
 					<key>INEnumValueName</key>
 					<string>L</string>
-				</dict>
-				<dict>
-					<key>INEnumValueDisplayName</key>
-					<string>XL</string>
-					<key>INEnumValueDisplayNameID</key>
-					<string>w2seLM</string>
-					<key>INEnumValueIndex</key>
-					<integer>5</integer>
-					<key>INEnumValueName</key>
-					<string>XL</string>
 				</dict>
 			</array>
 		</dict>
@@ -123,7 +103,7 @@
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataDefaultValue</key>
-						<string>M</string>
+						<string>S</string>
 					</dict>
 					<key>INIntentParameterName</key>
 					<string>fontsize</string>
