@@ -100,9 +100,6 @@ extension GivingupViewController: UITableViewDelegate {
              
             self.context.delete(givingupToWish)
             
-            /// Reset all wish priority because one of them disappear
-            Givingups.shared.resetPriority()
-            
             do {
                 try self.context.save()
                 
@@ -111,6 +108,9 @@ extension GivingupViewController: UITableViewDelegate {
                  NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
                 
                 Givingups.shared.givingups.remove(at: indexPath.row)
+                
+                /// Reset all wish priority because one of them disappear
+                Givingups.shared.resetPriority()
                 
                 self.givingupTableView.beginUpdates()
                 self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)

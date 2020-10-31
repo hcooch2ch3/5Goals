@@ -79,7 +79,7 @@ extension GoalViewController: UITableViewDataSource {
         
         let goal = Goals.shared.goals[indexPath.row]
         
-        cell.textLabel?.text = goal.name
+        cell.textLabel?.text = "\(goal.priority + 1). \(goal.name!)"
         
         /// For dynamic cell height about text line number
         cell.textLabel?.numberOfLines = 0
@@ -136,9 +136,6 @@ extension GoalViewController: UITableViewDelegate {
             
             self.context.delete(goalToWish)
             
-            /// Reset all wish priority because one of them disappear
-            Goals.shared.resetPriority()
-            
             do {
                 try self.context.save()
                 
@@ -150,10 +147,21 @@ extension GoalViewController: UITableViewDelegate {
                 
                 NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
                 
+                /// Set indexpaths to reload priority.
+                var indexPaths: [IndexPath] = []
+                for i in 0..<Goals.shared.goals.count {
+                    if i == indexPath.row { continue }
+                    indexPaths.append(IndexPath(row: i, section: 0))
+                }
+                
                 Goals.shared.goals.remove(at: indexPath.row)
+                
+                /// Reset all wish priority because one of them disappear
+                Goals.shared.resetPriority()
                 
                 self.goalTableView.beginUpdates()
                 self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.goalTableView.reloadRows(at: indexPaths, with: UITableView.RowAnimation.automatic)
                 self.goalTableView.endUpdates()
             }
             catch {
@@ -214,6 +222,8 @@ extension GoalViewController {
             /// To disable all tab bar items in edit mode
             self.setTabbarEnabled(false)
         } else {
+            self.goalTableView.reloadData()
+            
             self.goalTableView.setEditing(false, animated: true)
             
             self.editBarButton.image = UIImage(systemName: "square.and.pencil")

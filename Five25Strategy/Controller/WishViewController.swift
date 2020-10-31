@@ -109,9 +109,6 @@ extension WishViewController: UITableViewDelegate {
             
             self.context.delete(wishToGoal)
             
-            /// Reset all wish priority because one of them disappear
-            Wishes.shared.resetPriority()
-
             do {
                 try self.context.save()
                 
@@ -124,6 +121,9 @@ extension WishViewController: UITableViewDelegate {
                 NotificationCenter.default.post(name: Notification.Name("ReloadGoal"), object: nil)
                 
                 Wishes.shared.wishes.remove(at: indexPath.row)
+                
+                /// Reset all wish priority because one of them disappear
+                Wishes.shared.resetPriority()
                 
                 self.wishTableView.beginUpdates()
                 self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
@@ -150,10 +150,7 @@ extension WishViewController: UITableViewDelegate {
             givingupFromWish.priority = Int16(Givingups.shared.givingups.count)
             
             self.context.delete(wishToGivingup)
-            
-            /// Reset all wish priority because one of them disappear
-            Wishes.shared.resetPriority()
-            
+
             do {
                 try self.context.save()
                 
@@ -162,6 +159,9 @@ extension WishViewController: UITableViewDelegate {
                 NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
                 
                 Wishes.shared.wishes.remove(at: indexPath.row)
+
+                /// Reset all wish priority because one of them disappear
+                Wishes.shared.resetPriority()
                 
                 self.wishTableView.beginUpdates()
                 self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
