@@ -484,14 +484,14 @@
 				CODE_SIGN_ENTITLEMENTS = Five25Strategy/Five25Strategy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -508,14 +508,14 @@
 				CODE_SIGN_ENTITLEMENTS = Five25Strategy/Five25Strategy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = Five25Strategy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -533,6 +533,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoalWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = GoalWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -541,6 +542,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy.GoalWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -558,6 +560,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoalWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = PF8SSD5DBD;
 				INFOPLIST_FILE = GoalWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -566,6 +569,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy.GoalWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
