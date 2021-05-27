@@ -41,8 +41,9 @@ class GoalViewController: UIViewController {
         self.fetchData()
         
         /// Move wish tab when there is any goal.
-        if Goals.shared.goals.count == 0 {
-            tabBarController?.selectedIndex = 1
+        if Goals.shared.goals.count == 0,
+           let tabBarController = tabBarController as? TabBarController {
+            tabBarController.moveTab(to: 1)
         }
     
         self.reload()
@@ -69,7 +70,9 @@ extension GoalViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         /// Update tab bar badge because goal count is changed.
-        self.refreshBadge()
+        if let tabBarController = tabBarController as? TabBarController {
+            tabBarController.refreshTabBarItemsBadge()
+        }
         
         return Goals.shared.goals.count
     }
@@ -110,7 +113,9 @@ extension GoalViewController: UITableViewDelegate {
         /// Reset priority because of reordering priority
         Goals.shared.resetPriority()
         
-        self.refreshBadge()
+        if let tabBarController = tabBarController as? TabBarController {
+            tabBarController.refreshTabBarItemsBadge()
+        }
         
         do {
             try self.context.save()
@@ -190,19 +195,6 @@ extension GoalViewController {
         }
     }
     
-    func refreshBadge() {
-        tabBarController?.tabBar.items?[0].badgeValue = Goals.shared.goals.count > 0 ? String(Goals.shared.goals.count) : nil
-        tabBarController?.tabBar.items?[1].badgeValue = Wishes.shared.wishes.count > 0 ? String(Wishes.shared.wishes.count) : nil
-        tabBarController?.tabBar.items?[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
-    }
-    
-    /// This function enable or disable all tab bar items
-    func setTabbarEnabled(_ able: Bool) {
-        tabBarController?.tabBar.items?.forEach {
-            $0.isEnabled = able
-        }
-    }
-    
     func toggleEditMode() {
         self.isEditMode.toggle()
         
@@ -220,7 +212,9 @@ extension GoalViewController {
             self.leftBarButton.image = UIImage(systemName: "trash")
             
             /// To disable all tab bar items in edit mode
-            self.setTabbarEnabled(false)
+            if let tabBarController = tabBarController as? TabBarController {
+                tabBarController.changeTabBarItemsState(to: false)
+            }
         } else {
             self.goalTableView.reloadData()
             
@@ -232,7 +226,9 @@ extension GoalViewController {
             self.leftBarButton.image = UIImage(systemName: "ellipsis")
             
             /// To enable all tab bar items in normal mode.
-            self.setTabbarEnabled(true)
+            if let tabBarController = tabBarController as? TabBarController {
+                tabBarController.changeTabBarItemsState(to: true)
+            }
         }
     }
     

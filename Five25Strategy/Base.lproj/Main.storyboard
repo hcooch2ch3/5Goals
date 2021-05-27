@@ -197,7 +197,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="MK3-AZ-ejn">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="YMD-he-1ga" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="YMD-he-1ga" customClass="TabBarController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c6B-0Q-Rwt">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
