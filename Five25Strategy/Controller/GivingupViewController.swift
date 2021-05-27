@@ -59,11 +59,11 @@ extension GivingupViewController: UITableViewDataSource {
         cell.textLabel?.numberOfLines = 0
         
         /// Add rename button to right side of each cell.
-        let RenameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
-        RenameButton.setImage(UIImage(systemName: "pencil.tip.crop.circle"), for: .normal)
-        RenameButton.tag = indexPath.row
-        RenameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
-        cell.editingAccessoryView = RenameButton
+        let renameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
+        renameButton.setImage(UIImage(systemName: "pencil.tip.crop.circle"), for: .normal)
+        renameButton.tag = indexPath.row
+        renameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
+        cell.editingAccessoryView = renameButton
         
         return cell
     }
