@@ -206,10 +206,10 @@ extension GoalViewController {
             
             self.goalTableView.setEditing(true, animated: true)
             
-            self.editBarButton.image = UIImage(systemName: "xmark.square")
+            self.editBarButton.image = UIImage(systemName: "escape")
             self.editBarButton.tintColor = UIColor.systemPink
             
-            self.leftBarButton.image = UIImage(systemName: "trash")
+            self.leftBarButton.image = UIImage(systemName: "trash.circle")
             
             /// To disable all tab bar items in edit mode
             if let tabBarController = tabBarController as? TabBarController {
@@ -220,10 +220,10 @@ extension GoalViewController {
             
             self.goalTableView.setEditing(false, animated: true)
             
-            self.editBarButton.image = UIImage(systemName: "square.and.pencil")
+            self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
             self.editBarButton.tintColor = nil
             
-            self.leftBarButton.image = UIImage(systemName: "ellipsis")
+            self.leftBarButton.image = UIImage(systemName: "ellipsis.circle")
             
             /// To enable all tab bar items in normal mode.
             if let tabBarController = tabBarController as? TabBarController {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,7 +22,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GoalCell" id="XYA-HN-5WT">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XYA-HN-5WT" id="afz-zE-f5o">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -46,16 +46,24 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Goal" id="eQg-UO-LFB">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="RiP-My-NXp">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="RiP-My-NXp">
                             <connections>
                                 <action selector="touchUpLeftBarButton:" destination="BYZ-38-t0r" id="eWO-gq-De5"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="square.and.pencil" catalog="system" id="2vl-p9-BUT">
-                            <connections>
-                                <action selector="touchUpEditBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="pencil.tip.crop.circle" catalog="system" id="2vl-p9-BUT">
+                                <connections>
+                                    <action selector="touchUpEditBarButton:" destination="BYZ-38-t0r" id="A8E-4d-Jsy"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="plus.circle.fill" catalog="system" id="DOd-Wb-uxi">
+                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <connections>
+                                    <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="vd1-3F-fMM"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="editBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
@@ -227,7 +235,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="WishCell" id="ysU-RD-4ge">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ysU-RD-4ge" id="ETo-vl-yXo">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -251,18 +259,19 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Wish" id="Q93-7e-jJ1">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="hNr-j5-kVw">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="hNr-j5-kVw">
                             <connections>
                                 <action selector="touchUpLeftBarButton:" destination="whK-CH-sRD" id="qpL-Ig-tKw"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem title="Item" image="square.and.pencil" catalog="system" id="Xdr-pI-gqP">
+                            <barButtonItem title="Item" image="pencil.tip.crop.circle" catalog="system" id="Xdr-pI-gqP">
                                 <connections>
                                     <action selector="touchUpEditBarButton:" destination="whK-CH-sRD" id="xuY-Qu-qoO"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="add" id="iYh-KI-7Au">
+                            <barButtonItem image="plus.circle.fill" catalog="system" id="iYh-KI-7Au">
+                                <color key="tintColor" systemColor="systemYellowColor"/>
                                 <connections>
                                     <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="Tb4-14-imK"/>
                                 </connections>
@@ -294,7 +303,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GivingupCell" id="0ey-Qk-Zj6">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0ey-Qk-Zj6" id="Uwh-OH-4dz">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -318,16 +327,24 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Giving-up" id="Xsh-C6-i0Y">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis" catalog="system" id="pye-SD-44e">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="pye-SD-44e">
                             <connections>
                                 <action selector="touchUpLeftBarButton:" destination="IB9-WP-PMd" id="zXq-hK-Gaf"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="square.and.pencil" catalog="system" id="iLp-nt-6WS">
-                            <connections>
-                                <action selector="touchUpEditBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="pencil.tip.crop.circle" catalog="system" id="iLp-nt-6WS">
+                                <connections>
+                                    <action selector="touchUpEditBarButton:" destination="IB9-WP-PMd" id="nRN-1N-B97"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="plus.circle.fill" catalog="system" id="TB0-RN-VUw">
+                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <connections>
+                                    <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="PUc-8n-2QH"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="editBarButton" destination="iLp-nt-6WS" id="xaF-3G-M7e"/>
@@ -349,7 +366,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="QHt-Ha-3KM">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" systemColor="systemGreenColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" systemColor="systemGreenColor"/>
+                        </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" systemColor="systemGreenColor"/>
                         </textAttributes>
@@ -372,7 +391,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="3Hd-Le-6ah">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" systemColor="systemYellowColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" systemColor="systemYellowColor"/>
+                        </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" systemColor="systemYellowColor"/>
                         </textAttributes>
@@ -395,7 +416,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="iEa-NN-PRb">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" systemColor="systemRedColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" systemColor="systemRedColor"/>
+                        </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" systemColor="systemRedColor"/>
                         </textAttributes>
@@ -421,14 +444,14 @@
                                 <rect key="frame" x="0.0" y="56" width="414" height="752"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MoreCell" textLabel="I42-ju-U0U" imageView="nfS-X1-brM" rowHeight="101" style="IBUITableViewCellStyleDefault" id="i6Z-4e-8ok">
-                                        <rect key="frame" x="20" y="55.5" width="374" height="101"/>
+                                        <rect key="frame" x="20" y="49.5" width="374" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i6Z-4e-8ok" id="ghQ-Zb-56e">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="101"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344.5" height="101"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I42-ju-U0U">
-                                                    <rect key="frame" x="20" y="0.0" width="315" height="101"/>
+                                                    <rect key="frame" x="20" y="0.0" width="316.5" height="101"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -501,8 +524,9 @@
         <segue reference="J05-9J-NGD"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <image name="square.and.pencil" catalog="system" width="128" height="115"/>
+        <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
+        <image name="pencil.tip.crop.circle" catalog="system" width="128" height="121"/>
+        <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.circle" catalog="system" width="128" height="121"/>
         <image name="star.slash" catalog="system" width="128" height="116"/>
