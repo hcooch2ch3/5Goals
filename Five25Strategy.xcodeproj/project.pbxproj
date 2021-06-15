@@ -30,6 +30,7 @@
 		36E078C7252505C9003C439A /* GoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E078C6252505C9003C439A /* GoalWidget.swift */; };
 		36E078C9252505C9003C439A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36E078C8252505C9003C439A /* Assets.xcassets */; };
 		36E078CD252505C9003C439A /* GoalWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 36E078BF252505C8003C439A /* GoalWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		36E2694B26788B5800C19FEB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2694A26788B5800C19FEB /* Constants.swift */; };
 		36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7EB3A265F7D5C0059C860 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +88,7 @@
 		36E078C6252505C9003C439A /* GoalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWidget.swift; sourceTree = "<group>"; };
 		36E078C8252505C9003C439A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		36E078CA252505C9003C439A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36E2694A26788B5800C19FEB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		36E7EB3A265F7D5C0059C860 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +146,7 @@
 				3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */,
 				3636388224E2CBD600F6B267 /* Info.plist */,
 				3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */,
+				36E2694A26788B5800C19FEB /* Constants.swift */,
 			);
 			path = Five25Strategy;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				366AE50A2542C9CD0080C1DE /* Goal.intentdefinition in Sources */,
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
 				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
+				36E2694B26788B5800C19FEB /* Constants.swift in Sources */,
 				3636387224E2CBD500F6B267 /* AppDelegate.swift in Sources */,
 				364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */,
 				3636387C24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld in Sources */,
