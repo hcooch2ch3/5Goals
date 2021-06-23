@@ -10,9 +10,11 @@ import CoreData
 
 final class PersistentContainer: NSPersistentContainer {
     
+    static let shared = PersistentContainer()
+    
     private let persistentStoreURL: URL? = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.PersistentContainer.groupIdentifier)?.appendingPathComponent(Constants.PersistentContainer.pathComponent)
     
-    convenience init() {
+    private convenience init() {
         self.init(name: Constants.PersistentContainer.name)
         
         guard let persistentStoreURL = self.persistentStoreURL else {
