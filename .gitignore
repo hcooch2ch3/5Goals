@@ -63,6 +63,11 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+profile
+*.moved-aside
+**/.xccurrentversion
+**/Breakpoints.xcbkptlist
+*.xcbkptlist
 
 ## Other
 *.moved-aside
