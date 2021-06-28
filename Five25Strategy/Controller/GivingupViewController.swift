@@ -10,18 +10,25 @@ import UIKit
 import CoreData
 
 class GivingupViewController: UIViewController {
-
+    
     @IBOutlet weak var givingupTableView: UITableView!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var isEditMode = false
+    private var isEditMode = false
+    private var minDeletedRow: Int? = nil
+    private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Givingup.priority), delegate: self, Givingup.self)
+    private var isSwipeDone = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGivingup"), object: nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            // TODO: 예외처리 추가.
+            print("Fail to fetch givingup data.")
+        }
         
         self.givingupTableView.allowsMultipleSelectionDuringEditing = true
         
@@ -31,10 +38,8 @@ class GivingupViewController: UIViewController {
         
         /// To remove empty cell in table view
         self.givingupTableView.tableFooterView = UIView()
-        
-        self.reload()
     }
-
+    
 }
 
 extension GivingupViewController: UITableViewDataSource {
@@ -45,13 +50,18 @@ extension GivingupViewController: UITableViewDataSource {
             tabBarController.refreshTabBarItemsBadge()
         }
         
-        return Givingups.shared.givingups.count
+        guard let section = fetchedResultsController.sections?[section] else {
+            return 0
+        }
+        return section.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = givingupTableView.dequeueReusableCell(withIdentifier: "GivingupCell", for: indexPath)
         
-        let givingup = Givingups.shared.givingups[indexPath.row]
+        guard let givingup = fetchedResultsController.object(at: indexPath) as? Givingup else {
+            return UITableViewCell()
+        }
         
         cell.textLabel?.text = givingup.name
         
@@ -77,50 +87,43 @@ extension GivingupViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedGivingup = Givingups.shared.givingups[sourceIndexPath.row]
-        Givingups.shared.givingups.remove(at: sourceIndexPath.row)
-        Givingups.shared.givingups.insert(movedGivingup, at: destinationIndexPath.row)
-        
-        /// Reset priority because of reordering priority
-        Givingups.shared.resetPriority()
-        
-        do {
-            try self.context.save()
+        guard var givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
+            return
         }
-        catch {
-            
+        let movedGivingup = givingups.remove(at: sourceIndexPath.row)
+        givingups.insert(movedGivingup, at: destinationIndexPath.row)
+        
+        if sourceIndexPath.row < destinationIndexPath.row {
+            for index in sourceIndexPath.row...destinationIndexPath.row {
+                givingups[index].priority = Int16(index)
+            }
+        } else {
+            for index in destinationIndexPath.row...sourceIndexPath.row {
+                givingups[index].priority = Int16(index)
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
-            let givingupToWish = Givingups.shared.givingups[indexPath.row]
+            guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
+                // TODO: To localize alert string
+                return
+            }
             
-            let wishFromGivingup = Wish(context: self.context)
+            self.isSwipeDone = true
+            
+            guard let givingupToWish = self.fetchedResultsController.object(at: indexPath) as? Givingup else {
+                return
+            }
+            
+            let wishFromGivingup = Wish(context: PersistentContainer.shared.viewContext)
             wishFromGivingup.name = givingupToWish.name
-            wishFromGivingup.priority = Int16(Wishes.shared.wishes.count)
-             
-            self.context.delete(givingupToWish)
+            wishFromGivingup.priority = Int16(wishCount)
             
-            do {
-                try self.context.save()
-                
-                Wishes.shared.wishes.append(wishFromGivingup)
-                 
-                 NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
-                
-                Givingups.shared.givingups.remove(at: indexPath.row)
-                
-                /// Reset all wish priority because one of them disappear
-                Givingups.shared.resetPriority()
-                
-                self.givingupTableView.beginUpdates()
-                self.givingupTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.givingupTableView.endUpdates()
-            }
-            catch {
-                /// To do:
-            }
+            PersistentContainer.shared.viewContext.delete(givingupToWish)
+            
+            self.minDeletedRow = indexPath.row
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -131,12 +134,6 @@ extension GivingupViewController: UITableViewDelegate {
 }
 
 extension GivingupViewController: UITextFieldDelegate {
-    
-    @objc func reload() {
-        DispatchQueue.main.async {
-            self.givingupTableView.reloadData()
-        }
-    }
     
     func toggleEditMode() {
         self.isEditMode.toggle()
@@ -193,7 +190,9 @@ extension GivingupViewController: UITextFieldDelegate {
     }
     
     func presentRenameGivingupAlert(_ indexPath: IndexPath) {
-        let givingup = Givingups.shared.givingups[indexPath.row]
+        guard let givingup = fetchedResultsController.object(at: indexPath) as? Givingup else {
+            return
+        }
         let alert = UIAlertController(title: NSLocalizedString("RenameGivingup", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
@@ -210,20 +209,6 @@ extension GivingupViewController: UITextFieldDelegate {
             }
         
             givingup.name = textField.text
-    
-            do {
-                try self.context.save()
-                
-                self.givingupTableView.beginUpdates()
-                self.givingupTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.givingupTableView.endUpdates()
-                
-                /// To exit edit mode after renaming wish.
-                self.toggleEditMode()
-            }
-            catch {
-             
-            }
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -253,37 +238,34 @@ extension GivingupViewController: UITextFieldDelegate {
             presentNoticeAlert(NSLocalizedString("CheckGivingup", comment: "Check the giving-ups to delete."))
             return
         }
-        
-        var givingupsToRemove: [Givingup] = []
-        
-        selectedRows.forEach {
-            let givingupToRemove = Givingups.shared.givingups[$0.row]
-            givingupsToRemove.append(givingupToRemove)
+        guard let givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
+            return
         }
         
-        /// To delete givingups in Core Data
-        givingupsToRemove.forEach { self.context.delete($0) }
+        var minDeletedRow = givingups.count - selectedRows.count - 1
+        selectedRows.forEach {
+            PersistentContainer.shared.viewContext.delete(givingups[$0.row])
+            if $0.row < minDeletedRow {
+                minDeletedRow = $0.row
+            }
+        }
+        if minDeletedRow >= 0 {
+            self.minDeletedRow = minDeletedRow
+        }
         
-        do {
-            try self.context.save()
-            
-            /// To delete selected items in table view data source
-            givingupsToRemove.forEach {
-                if let index = Givingups.shared.givingups.firstIndex(of: $0) {
-                    Givingups.shared.givingups.remove(at: index)
-                }
+        self.toggleEditMode()
+    }
+    
+    private func resetPriorityIfDeletionIsDone() {
+        if let minDeletedRow = self.minDeletedRow {
+            guard let givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
+                return
             }
             
-            /// To delete table view cell of selected giving-up
-            self.givingupTableView.beginUpdates()
-            self.givingupTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
-            self.givingupTableView.endUpdates()
-            
-            /// To exit edit mode after deleting the wishes
-            self.toggleEditMode()
-        }
-        catch {
-            
+            for row in minDeletedRow..<givingups.count {
+                givingups[row].priority = Int16(row)
+            }
+            self.minDeletedRow = nil
         }
     }
     
@@ -292,7 +274,7 @@ extension GivingupViewController: UITextFieldDelegate {
 extension GivingupViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
-        guard Givingups.shared.givingups.count > 0 else {
+        guard let section = fetchedResultsController.sections?[0], section.numberOfObjects > 0 else {
             presentNoticeAlert(NSLocalizedString("EditGivingupUnavailable", comment: ""))
             return
         }
@@ -307,4 +289,49 @@ extension GivingupViewController {
             performSegue(withIdentifier: "More", sender: sender)
         }
     }
+    
+}
+
+extension GivingupViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        givingupTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            guard let indexPath = indexPath else {
+                return
+            }
+            givingupTableView.deleteRows(at: [indexPath], with: .automatic)
+        case .insert:
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            givingupTableView.insertRows(at: [newIndexPath], with: .automatic)
+        case .update:
+            guard let indexPath = indexPath else {
+                return
+            }
+            givingupTableView.reloadRows(at: [indexPath], with: .automatic)
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            givingupTableView.reloadRows(at: [newIndexPath], with: .automatic)
+        default:
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        givingupTableView.endUpdates()
+        resetPriorityIfDeletionIsDone()
+        if isSwipeDone == false {
+            PersistentContainer.shared.saveContext()
+        } else {
+            isSwipeDone = false
+        }
+    }
+    
 }
