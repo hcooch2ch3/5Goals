@@ -49,12 +49,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        
-        if #available(iOS 14.0, *) {
-            WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
-        }
-        
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
 
