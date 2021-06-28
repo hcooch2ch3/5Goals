@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import WidgetKit
 
 class WishViewController: UIViewController {
 
@@ -16,14 +15,21 @@ class WishViewController: UIViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var isEditMode = false
+
+    private var isEditMode = false
+    private var minDeletedRow: Int? = nil
+    private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Wish.priority), delegate: self, Wish.self)
+    private var isSwipeDone = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadWish"), object: nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            // TODO: 예외처리 추가.
+            print("Fail to fetch wish data.")
+        }
         
         self.wishTableView.allowsMultipleSelectionDuringEditing = true
         
@@ -33,8 +39,6 @@ class WishViewController: UIViewController {
         
         /// To remove empty cell in table view
         self.wishTableView.tableFooterView = UIView()
-        
-        self.reload()
     }
     
 }
@@ -47,13 +51,18 @@ extension WishViewController: UITableViewDataSource {
             tabBarController.refreshTabBarItemsBadge()
         }
         
-        return Wishes.shared.wishes.count
+        guard let section = fetchedResultsController.sections?[section] else {
+            return 0
+        }
+        return section.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = wishTableView.dequeueReusableCell(withIdentifier: "WishCell", for: indexPath)
         
-        let wish = Wishes.shared.wishes[indexPath.row]
+        guard let wish = fetchedResultsController.object(at: indexPath) as? Wish else {
+            return UITableViewCell()
+        }
         
         cell.textLabel?.text = wish.name
         
@@ -79,61 +88,44 @@ extension WishViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedWish = Wishes.shared.wishes[sourceIndexPath.row]
-        Wishes.shared.wishes.remove(at: sourceIndexPath.row)
-        Wishes.shared.wishes.insert(movedWish, at: destinationIndexPath.row)
-        
-        /// Reset priority because of reordering priority
-        Wishes.shared.resetPriority()
-        
-        do {
-            try self.context.save()
+        guard var wishes = fetchedResultsController.fetchedObjects as? [Wish] else {
+            return
         }
-        catch {
-            
+        let movedWish = wishes.remove(at: sourceIndexPath.row)
+        wishes.insert(movedWish, at: destinationIndexPath.row)
+        
+        if sourceIndexPath.row < destinationIndexPath.row {
+            for index in sourceIndexPath.row...destinationIndexPath.row {
+                wishes[index].priority = Int16(index)
+            }
+        } else {
+            for index in destinationIndexPath.row...sourceIndexPath.row {
+                wishes[index].priority = Int16(index)
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let goalSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Goal", comment: "")) { (action, view, completion) in
-            guard Goals.shared.goals.count < 5 else {
+            guard let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")), goalCount < 5 else {
+                // TODO: To localize alert string
                 self.presentNoticeAlert("The number of goals cannot exceed 5.")
                 return
             }
             
-            /// A wish to move goal area
-            let wishToGoal = Wishes.shared.wishes[indexPath.row]
+            self.isSwipeDone = true
             
-            /// New goal from the wish area
-            let goalFromWish = Goal(context: self.context)
+            guard let wishToGoal = self.fetchedResultsController.object(at: indexPath) as? Wish else {
+                return
+            }
+            
+            let goalFromWish = Goal(context: PersistentContainer.shared.viewContext)
             goalFromWish.name = wishToGoal.name
-            goalFromWish.priority = Int16(Goals.shared.goals.count)
+            goalFromWish.priority = Int16(goalCount)
             
-            self.context.delete(wishToGoal)
+            PersistentContainer.shared.viewContext.delete(wishToGoal)
             
-            do {
-                try self.context.save()
-                
-                if #available(iOS 14.0, *) {
-                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
-                }
-                
-                Goals.shared.goals.append(goalFromWish)
-                
-                NotificationCenter.default.post(name: Notification.Name("ReloadGoal"), object: nil)
-                
-                Wishes.shared.wishes.remove(at: indexPath.row)
-                
-                /// Reset all wish priority because one of them disappear
-                Wishes.shared.resetPriority()
-                
-                self.wishTableView.beginUpdates()
-                self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.wishTableView.endUpdates()
-            }
-            catch {
-                
-            }
+            self.minDeletedRow = indexPath.row
         }
         
         goalSwipeAction.backgroundColor = UIColor.systemGreen
@@ -143,35 +135,23 @@ extension WishViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let givingupSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Giving-up", comment: "")) { (action, view, completion) in
-            /// A wish to move the giving-up area
-            let wishToGivingup = Wishes.shared.wishes[indexPath.row]
+            guard let givingupCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Givingup")) else {
+                return
+            }
             
-            /// New giving-up from the wish area
-            let givingupFromWish = Givingup(context: self.context)
+            self.isSwipeDone = true
+            
+            guard let wishToGivingup = self.fetchedResultsController.object(at: indexPath) as? Wish else {
+                return
+            }
+            
+            let givingupFromWish = Givingup(context: PersistentContainer.shared.viewContext)
             givingupFromWish.name = wishToGivingup.name
-            givingupFromWish.priority = Int16(Givingups.shared.givingups.count)
+            givingupFromWish.priority = Int16(givingupCount)
             
-            self.context.delete(wishToGivingup)
-
-            do {
-                try self.context.save()
-                
-                Givingups.shared.givingups.append(givingupFromWish)
-                
-                NotificationCenter.default.post(name: Notification.Name("ReloadGivingup"), object: nil)
-                
-                Wishes.shared.wishes.remove(at: indexPath.row)
-
-                /// Reset all wish priority because one of them disappear
-                Wishes.shared.resetPriority()
-                
-                self.wishTableView.beginUpdates()
-                self.wishTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.wishTableView.endUpdates()
-            }
-            catch {
-
-            }
+            PersistentContainer.shared.viewContext.delete(wishToGivingup)
+            
+            self.minDeletedRow = indexPath.row
         }
         
         givingupSwipeAction.backgroundColor = UIColor.systemRed
@@ -182,12 +162,6 @@ extension WishViewController: UITableViewDelegate {
 }
 
 extension WishViewController: UITextFieldDelegate {
-    
-    @objc func reload() {
-        DispatchQueue.main.async {
-            self.wishTableView.reloadData()
-        }
-    }
         
     func toggleEditMode() {
         self.isEditMode.toggle()
@@ -212,6 +186,8 @@ extension WishViewController: UITextFieldDelegate {
                 tabBarController.changeTabBarItemsState(to: false)
             }
         } else {
+//            self.wishTableView.reloadData()
+            
             self.wishTableView.setEditing(false, animated: true)
             
             self.addBarButton.isEnabled = true
@@ -243,28 +219,34 @@ extension WishViewController: UITextFieldDelegate {
                 self.presentNoticeAlert("")
                 return
             }
+            
+            guard let wishes = self.fetchedResultsController.fetchedObjects as? [Wish] else {
+                return
+            }
              
-            let wish = Wish(context: self.context)
+            let wish = Wish(context: PersistentContainer.shared.viewContext)
             wish.name = textField.text
-            wish.priority = Int16(Wishes.shared.wishes.count)
-
-            do {
-                try self.context.save()
-                
-                Wishes.shared.wishes.append(wish)
-
-                /// Insert Wish Cell.
-                let indexPath = IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)
-                self.wishTableView.beginUpdates()
-                self.wishTableView.insertRows(at: [indexPath], with: UITableView.RowAnimation.none)
-                self.wishTableView.endUpdates()
-                
-                /// Show inserted cell.
-                self.wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-            }
-            catch {
-             
-            }
+            wish.priority = Int16(wishes.count)
+            
+            // TODO: To implement scroll to bottom
+            
+//            do {
+//                try PersistentContainer.shared.viewContext.save()
+//
+//                Wishes.shared.wishes.append(wish)
+//
+//                /// Insert Wish Cell.
+//                let indexPath = IndexPath(row: Wishes.shared.wishes.count - 1, section: 0)
+//                self.wishTableView.beginUpdates()
+//                self.wishTableView.insertRows(at: [indexPath], with: UITableView.RowAnimation.none)
+//                self.wishTableView.endUpdates()
+//
+//                /// Show inserted cell.
+//                self.wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+//            }
+//            catch {
+//
+//            }
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -277,7 +259,9 @@ extension WishViewController: UITextFieldDelegate {
     }
     
     func presentRenameWishAlert(_ indexPath: IndexPath) {
-        let wish = Wishes.shared.wishes[indexPath.row]
+        guard let wish = fetchedResultsController.object(at: indexPath) as? Wish else {
+            return
+        }
         let alert = UIAlertController(title: NSLocalizedString("RenameWish", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
@@ -294,20 +278,6 @@ extension WishViewController: UITextFieldDelegate {
             }
         
             wish.name = textField.text
-    
-            do {
-                try self.context.save()
-                
-                self.wishTableView.beginUpdates()
-                self.wishTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.wishTableView.endUpdates()
-                
-                /// To exit edit mode after renaming wish.
-                self.toggleEditMode()
-            }
-            catch {
-             
-            }
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -357,36 +327,34 @@ extension WishViewController: UITextFieldDelegate {
             return
         }
         
-        var wishesToRemove: [Wish] = []
-        
-        selectedRows.forEach {
-            let wishToRemove = Wishes.shared.wishes[$0.row]
-            wishesToRemove.append(wishToRemove)
+        guard let wishes = fetchedResultsController.fetchedObjects as? [Wish] else {
+            return
         }
         
-        /// To delete wishes in Core Data
-        wishesToRemove.forEach { self.context.delete($0) }
+        var minDeletedRow = wishes.count - selectedRows.count - 1
+        selectedRows.forEach {
+            PersistentContainer.shared.viewContext.delete(wishes[$0.row])
+            if $0.row < minDeletedRow {
+                minDeletedRow = $0.row
+            }
+        }
+        if minDeletedRow >= 0 {
+            self.minDeletedRow = minDeletedRow
+        }
         
-        do {
-            try self.context.save()
-            
-            /// To delete selected items in table view data source
-            wishesToRemove.forEach {
-                if let index = Wishes.shared.wishes.firstIndex(of: $0) {
-                    Wishes.shared.wishes.remove(at: index)
-                }
+        self.toggleEditMode()
+    }
+    
+    private func resetPriorityIfDeletionIsDone() {
+        if let minDeletedRow = self.minDeletedRow {
+            guard let wishes = fetchedResultsController.fetchedObjects as? [Wish] else {
+                return
             }
             
-            /// To delete table view cell of selected wish
-            self.wishTableView.beginUpdates()
-            self.wishTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
-            self.wishTableView.endUpdates()
-            
-            /// To exit edit mode after deleting the wishes
-            self.toggleEditMode()
-        }
-        catch {
-            
+            for row in minDeletedRow..<wishes.count {
+                wishes[row].priority = Int16(row)
+            }
+            self.minDeletedRow = nil
         }
     }
     
@@ -396,16 +364,16 @@ extension WishViewController: UITextFieldDelegate {
 extension WishViewController {
     
     @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
-        guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
-            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
-            return
-        }
+//        guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
+//            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
+//            return
+//        }
         
         presentAddWishAlert()
     }
     
     @IBAction func touchUpEditBarButton(_ sender:UIBarButtonItem) {
-        guard Wishes.shared.wishes.count > 0 else {
+        guard let section = fetchedResultsController.sections?[0], section.numberOfObjects > 0 else {
             presentNoticeAlert(NSLocalizedString("EditWishUnavailable", comment: ""))
             return
         }
@@ -418,6 +386,50 @@ extension WishViewController {
             deleteWishes()
         } else {
             performSegue(withIdentifier: "More", sender: sender)
+        }
+    }
+    
+}
+
+extension WishViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        wishTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            guard let indexPath = indexPath else {
+                return
+            }
+            wishTableView.deleteRows(at: [indexPath], with: .automatic)
+        case .insert:
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            wishTableView.insertRows(at: [newIndexPath], with: .automatic)
+        case .update:
+            guard let indexPath = indexPath else {
+                return
+            }
+            wishTableView.reloadRows(at: [indexPath], with: .automatic)
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            wishTableView.reloadRows(at: [newIndexPath], with: .automatic)
+        default:
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        wishTableView.endUpdates()
+        resetPriorityIfDeletionIsDone()
+        if isSwipeDone == false {
+            PersistentContainer.shared.saveContext()
+        } else {
+            isSwipeDone = false
         }
     }
     
