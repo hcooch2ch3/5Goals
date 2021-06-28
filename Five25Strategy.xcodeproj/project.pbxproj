@@ -32,6 +32,7 @@
 		36E078CD252505C9003C439A /* GoalWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 36E078BF252505C8003C439A /* GoalWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		36E26949267886B600C19FEB /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E26948267886B600C19FEB /* PersistentContainer.swift */; };
 		36E2694B26788B5800C19FEB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2694A26788B5800C19FEB /* Constants.swift */; };
+		36E2694D267C6FAD00C19FEB /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */; };
 		36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7EB3A265F7D5C0059C860 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		36E078CA252505C9003C439A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36E26948267886B600C19FEB /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
 		36E2694A26788B5800C19FEB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		36E7EB3A265F7D5C0059C860 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +175,7 @@
 				363638B024E7AA9F00F6B267 /* Wishes.swift */,
 				363638B224E7AB0D00F6B267 /* Givingups.swift */,
 				36E26948267886B600C19FEB /* PersistentContainer.swift */,
+				36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			files = (
 				363638AF24E7A6B300F6B267 /* Goals.swift in Sources */,
 				366AE50A2542C9CD0080C1DE /* Goal.intentdefinition in Sources */,
+				36E2694D267C6FAD00C19FEB /* FetchedResultsController.swift in Sources */,
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
 				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
 				36E26949267886B600C19FEB /* PersistentContainer.swift in Sources */,
