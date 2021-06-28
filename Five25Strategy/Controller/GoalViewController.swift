@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import WidgetKit
 
 class GoalViewController: UIViewController {
     
@@ -16,13 +15,20 @@ class GoalViewController: UIViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var isEditMode = false
+    private var isEditMode = false
+    private var minDeletedRow: Int? = nil
+    private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: self, Goal.self)
+    private var isSwipeDone = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("ReloadGoal"), object: nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            // TODO: 예외처리 추가.
+            print("Fail to fetch goal data.")
+        }
         
         /// Show help on first use
         if UserDefaults.standard.bool(forKey: "Use") == false {
@@ -38,15 +44,12 @@ class GoalViewController: UIViewController {
         /// To remove empty cell in table view
         self.goalTableView.tableFooterView = UIView()
         
-        self.fetchData()
-        
         /// Move wish tab when there is any goal.
-        if Goals.shared.goals.count == 0,
+        if let section = fetchedResultsController.sections?[0],
+           section.numberOfObjects == 0,
            let tabBarController = tabBarController as? TabBarController {
             tabBarController.moveTab(to: 1)
         }
-    
-        self.reload()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -74,14 +77,20 @@ extension GoalViewController: UITableViewDataSource {
             tabBarController.refreshTabBarItemsBadge()
         }
         
-        return Goals.shared.goals.count
+        guard let section = fetchedResultsController.sections?[section] else {
+            return 0
+        }
+        return section.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = goalTableView.dequeueReusableCell(withIdentifier: "GoalCell", for: indexPath)
         
-        let goal = Goals.shared.goals[indexPath.row]
+        guard let goal = fetchedResultsController.object(at: indexPath) as? Goal else {
+            return UITableViewCell()
+        }
         
+        // TODO: To implement cell init method
         cell.textLabel?.text = "\(goal.priority + 1). \(goal.name!)"
         
         /// For dynamic cell height about text line number
@@ -106,72 +115,43 @@ extension GoalViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedGoal = Goals.shared.goals[sourceIndexPath.row]
-        Goals.shared.goals.remove(at: sourceIndexPath.row)
-        Goals.shared.goals.insert(movedGoal, at: destinationIndexPath.row)
-        
-        /// Reset priority because of reordering priority
-        Goals.shared.resetPriority()
-        
-        if let tabBarController = tabBarController as? TabBarController {
-            tabBarController.refreshTabBarItemsBadge()
+        guard var goals = fetchedResultsController.fetchedObjects as? [Goal] else {
+            return
         }
+        let movedGoal = goals.remove(at: sourceIndexPath.row)
+        goals.insert(movedGoal, at: destinationIndexPath.row)
         
-        do {
-            try self.context.save()
-            
-            if #available(iOS 14.0, *) {
-                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+        if sourceIndexPath.row < destinationIndexPath.row {
+            for index in sourceIndexPath.row...destinationIndexPath.row {
+                goals[index].priority = Int16(index)
             }
-        }
-        catch {
-            
+        } else {
+            for index in destinationIndexPath.row...sourceIndexPath.row {
+                goals[index].priority = Int16(index)
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
-            /// A goal to move the wish area
-            let goalToWish = Goals.shared.goals[indexPath.row]
+            guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
+                return
+            }
             
-            /// New wish from the goal area
-            let wishFromGoal = Wish(context: self.context)
+            self.isSwipeDone = true
+            
+            guard let goalToWish = self.fetchedResultsController.object(at: indexPath) as? Goal else {
+                return
+            }
+            
+            // New wish from the goal area
+            let wishFromGoal = Wish(context: PersistentContainer.shared.viewContext)
             wishFromGoal.name = goalToWish.name
-            wishFromGoal.priority = Int16(Wishes.shared.wishes.count)
+            wishFromGoal.priority = Int16(wishCount)
             
-            self.context.delete(goalToWish)
+            PersistentContainer.shared.viewContext.delete(goalToWish)
             
-            do {
-                try self.context.save()
-                
-                if #available(iOS 14.0, *) {
-                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
-                }
-                
-                Wishes.shared.wishes.append(wishFromGoal)
-                
-                NotificationCenter.default.post(name: Notification.Name("ReloadWish"), object: nil)
-                
-                /// Set indexpaths to reload priority.
-                var indexPaths: [IndexPath] = []
-                for i in 0..<Goals.shared.goals.count {
-                    if i == indexPath.row { continue }
-                    indexPaths.append(IndexPath(row: i, section: 0))
-                }
-                
-                Goals.shared.goals.remove(at: indexPath.row)
-                
-                /// Reset all wish priority because one of them disappear
-                Goals.shared.resetPriority()
-                
-                self.goalTableView.beginUpdates()
-                self.goalTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.goalTableView.reloadRows(at: indexPaths, with: UITableView.RowAnimation.automatic)
-                self.goalTableView.endUpdates()
-            }
-            catch {
-                /// To do:
-            }
+            self.minDeletedRow = indexPath.row
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -182,19 +162,7 @@ extension GoalViewController: UITableViewDelegate {
 }
 
 extension GoalViewController {
-    
-    func fetchData() {
-        Goals.shared.fetch()
-        Wishes.shared.fetch()
-        Givingups.shared.fetch()
-    }
-    
-    @objc func reload() {
-        DispatchQueue.main.async {
-            self.goalTableView.reloadData()
-        }
-    }
-    
+        
     func toggleEditMode() {
         self.isEditMode.toggle()
         
@@ -216,8 +184,6 @@ extension GoalViewController {
                 tabBarController.changeTabBarItemsState(to: false)
             }
         } else {
-            self.goalTableView.reloadData()
-            
             self.goalTableView.setEditing(false, animated: true)
             
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
@@ -242,46 +208,40 @@ extension GoalViewController {
          self.present(alert, animated: true, completion: nil)
     }
     
-    func deleteGoals() {
+    private func deleteGoals() {
         guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
             presentNoticeAlert(NSLocalizedString("CheckGoal", comment: "Check the goals to delete."))
             return
         }
         
-        var goalsToRemove: [Goal] = []
+        guard let goals = fetchedResultsController.fetchedObjects as? [Goal] else {
+            return
+        }
         
+        var minDeletedRow = goals.count - selectedRows.count - 1
         selectedRows.forEach {
-            let goalToRemove = Goals.shared.goals[$0.row]
-            goalsToRemove.append(goalToRemove)
+            PersistentContainer.shared.viewContext.delete(goals[$0.row])
+            if $0.row < minDeletedRow {
+                minDeletedRow = $0.row
+            }
+        }
+        if minDeletedRow >= 0 {
+            self.minDeletedRow = minDeletedRow
         }
         
-        /// To delete wishes in Core Data
-        goalsToRemove.forEach { self.context.delete($0) }
-        
-        do {
-            try self.context.save()
-            
-            if #available(iOS 14.0, *) {
-                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+        self.toggleEditMode()
+    }
+    
+    private func resetPriorityIfDeletionIsDone() {
+        if let minDeletedRow = self.minDeletedRow {
+            guard let goals = fetchedResultsController.fetchedObjects as? [Goal] else {
+                return
             }
             
-            /// To delete selected items in table view data source
-            goalsToRemove.forEach {
-                if let index = Goals.shared.goals.firstIndex(of: $0) {
-                    Goals.shared.goals.remove(at: index)
-                }
+            for row in minDeletedRow..<goals.count {
+                goals[row].priority = Int16(row)
             }
-            
-            /// To delete table view cell of selected goal
-            self.goalTableView.beginUpdates()
-            self.goalTableView.deleteRows(at: selectedRows, with: UITableView.RowAnimation.automatic)
-            self.goalTableView.endUpdates()
-            
-            /// To exit edit mode after deleting the goals
-            self.toggleEditMode()
-        }
-        catch {
-            
+            self.minDeletedRow = nil
         }
     }
     
@@ -299,7 +259,9 @@ extension GoalViewController: UITextFieldDelegate {
     }
     
     func presentRenameGoalAlert(_ indexPath: IndexPath) {
-        let goal = Goals.shared.goals[indexPath.row]
+        guard let goal = fetchedResultsController.object(at: indexPath) as? Goal else {
+            return
+        }
         let alert = UIAlertController(title: NSLocalizedString("RenameGoal", comment: ""), message: nil, preferredStyle: .alert)
 
         alert.addTextField { textField in
@@ -316,24 +278,6 @@ extension GoalViewController: UITextFieldDelegate {
             }
         
             goal.name = textField.text
-    
-            do {
-                try self.context.save()
-                
-                if #available(iOS 14.0, *) {
-                    WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
-                }
-                
-                self.goalTableView.beginUpdates()
-                self.goalTableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-                self.goalTableView.endUpdates()
-                
-                /// To exit edit mode after renaming wish.
-                self.toggleEditMode()
-            }
-            catch {
-             
-            }
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -364,7 +308,7 @@ extension GoalViewController: UITextFieldDelegate {
 extension GoalViewController {
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
-        guard Goals.shared.goals.count > 0 else {
+        guard let section = fetchedResultsController.sections?[0], section.numberOfObjects > 0 else {
             presentNoticeAlert(NSLocalizedString("EditGoalUnavailable", comment: ""))
             return
         }
@@ -380,4 +324,46 @@ extension GoalViewController {
         }
     }
     
+}
+
+extension GoalViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        goalTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            guard let indexPath = indexPath else {
+                return
+            }
+            goalTableView.deleteRows(at: [indexPath], with: .automatic)
+        case .insert:
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            goalTableView.insertRows(at: [newIndexPath], with: .automatic)
+        case .update:
+            guard let indexPath = indexPath else {
+                return
+            }
+            goalTableView.reloadRows(at: [indexPath], with: .automatic)
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            goalTableView.reloadRows(at: [newIndexPath], with: .automatic)
+        default:
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        goalTableView.endUpdates()
+        resetPriorityIfDeletionIsDone()
+        if isSwipeDone == false {
+            PersistentContainer.shared.saveContext()
+        } else {
+            isSwipeDone = false
+        }
+    }
 }
