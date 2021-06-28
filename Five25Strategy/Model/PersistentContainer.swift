@@ -7,6 +7,7 @@
 //
 
 import CoreData
+import WidgetKit
 
 final class PersistentContainer: NSPersistentContainer {
     
@@ -74,6 +75,10 @@ final class PersistentContainer: NSPersistentContainer {
                 try context.save()
             } catch {
                 // TODO: Adding Exception Handling
+            }
+            // TODO: Changing code to reload Widget if only goal is changed.
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
             }
         }
     }
