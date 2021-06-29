@@ -16,9 +16,6 @@
 		3636388124E2CBD600F6B267 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3636387F24E2CBD600F6B267 /* LaunchScreen.storyboard */; };
 		3636388924E2D19400F6B267 /* WishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636388824E2D19400F6B267 /* WishViewController.swift */; };
 		3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */; };
-		363638AF24E7A6B300F6B267 /* Goals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638AE24E7A6B300F6B267 /* Goals.swift */; };
-		363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B024E7AA9F00F6B267 /* Wishes.swift */; };
-		363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B224E7AB0D00F6B267 /* Givingups.swift */; };
 		363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B424ECEA6600F6B267 /* HelpViewController.swift */; };
 		3645E06B253D82CC0049C564 /* Five25Strategy.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */; };
 		364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364EFDC324F6CDB300521B7C /* MoreViewController.swift */; };
@@ -72,9 +69,6 @@
 		3636388224E2CBD600F6B267 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3636388824E2D19400F6B267 /* WishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishViewController.swift; sourceTree = "<group>"; };
 		3636388A24E2D1AE00F6B267 /* GivingupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GivingupViewController.swift; sourceTree = "<group>"; };
-		363638AE24E7A6B300F6B267 /* Goals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goals.swift; sourceTree = "<group>"; };
-		363638B024E7AA9F00F6B267 /* Wishes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wishes.swift; sourceTree = "<group>"; };
-		363638B224E7AB0D00F6B267 /* Givingups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Givingups.swift; sourceTree = "<group>"; };
 		363638B424ECEA6600F6B267 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		3645E06E253D8EE30049C564 /* Five25Strategy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Five25Strategy.entitlements; sourceTree = "<group>"; };
 		3645E071253D94AA0049C564 /* GoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalWidgetExtension.entitlements; sourceTree = "<group>"; };
@@ -171,9 +165,6 @@
 		3636389124E79B0600F6B267 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				363638AE24E7A6B300F6B267 /* Goals.swift */,
-				363638B024E7AA9F00F6B267 /* Wishes.swift */,
-				363638B224E7AB0D00F6B267 /* Givingups.swift */,
 				36E26948267886B600C19FEB /* PersistentContainer.swift */,
 				36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */,
 			);
@@ -304,11 +295,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				363638AF24E7A6B300F6B267 /* Goals.swift in Sources */,
 				366AE50A2542C9CD0080C1DE /* Goal.intentdefinition in Sources */,
 				36E2694D267C6FAD00C19FEB /* FetchedResultsController.swift in Sources */,
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
-				363638B124E7AA9F00F6B267 /* Wishes.swift in Sources */,
 				36E26949267886B600C19FEB /* PersistentContainer.swift in Sources */,
 				36E2694B26788B5800C19FEB /* Constants.swift in Sources */,
 				3636387224E2CBD500F6B267 /* AppDelegate.swift in Sources */,
@@ -318,7 +307,6 @@
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
 				36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */,
-				363638B324E7AB0D00F6B267 /* Givingups.swift in Sources */,
 				363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
