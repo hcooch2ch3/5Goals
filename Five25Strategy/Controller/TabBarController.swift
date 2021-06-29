@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TabBarController: UITabBarController {
 
@@ -21,9 +22,15 @@ class TabBarController: UITabBarController {
         guard let items = tabBar.items else {
             return
         }
-        items[0].badgeValue = Goals.shared.goals.count > 0 ? String(Goals.shared.goals.count) : nil
-        items[1].badgeValue = Wishes.shared.wishes.count > 0 ? String(Wishes.shared.wishes.count) : nil
-        items[2].badgeValue = Givingups.shared.givingups.count > 0 ? String(Givingups.shared.givingups.count) : nil
+        if let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")) {
+            items[0].badgeValue = goalCount > 0 ? String(goalCount) : nil
+        }
+        if let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) {
+            items[1].badgeValue = wishCount > 0 ? String(wishCount) : nil
+        }
+        if let givingupCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Givingup")) {
+            items[2].badgeValue = givingupCount > 0 ? String(givingupCount) : nil
+        }
     }
     
     func moveTab(to index: Int) {
