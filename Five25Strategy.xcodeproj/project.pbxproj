@@ -19,7 +19,7 @@
 		363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363638B424ECEA6600F6B267 /* HelpViewController.swift */; };
 		3645E06B253D82CC0049C564 /* Five25Strategy.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */; };
 		364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364EFDC324F6CDB300521B7C /* MoreViewController.swift */; };
-		366155AD268B07DD0067F5E4 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366155AC268B07DD0067F5E4 /* UserAction.swift */; };
+		366155B3268CB6650067F5E4 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366155B2268CB6650067F5E4 /* UserAction.swift */; };
 		366AE50725428E020080C1DE /* Goal.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 366AE50625428E020080C1DE /* Goal.intentdefinition */; };
 		366AE50A2542C9CD0080C1DE /* Goal.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 366AE50625428E020080C1DE /* Goal.intentdefinition */; };
 		36948BFF250389A8009D3A1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 36948C01250389A8009D3A1B /* Localizable.strings */; };
@@ -74,7 +74,7 @@
 		3645E06E253D8EE30049C564 /* Five25Strategy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Five25Strategy.entitlements; sourceTree = "<group>"; };
 		3645E071253D94AA0049C564 /* GoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalWidgetExtension.entitlements; sourceTree = "<group>"; };
 		364EFDC324F6CDB300521B7C /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
-		366155AC268B07DD0067F5E4 /* UserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserAction.swift; path = ../../../../UserAction.swift; sourceTree = "<group>"; };
+		366155B2268CB6650067F5E4 /* UserAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAction.swift; sourceTree = "<group>"; };
 		366AE50625428E020080C1DE /* Goal.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Goal.intentdefinition; sourceTree = "<group>"; };
 		36948C00250389A8009D3A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		36948C02250389DD009D3A1B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				3636388224E2CBD600F6B267 /* Info.plist */,
 				3636387A24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld */,
 				36E2694A26788B5800C19FEB /* Constants.swift */,
-				366155AC268B07DD0067F5E4 /* UserAction.swift */,
+				366155B2268CB6650067F5E4 /* UserAction.swift */,
 			);
 			path = Five25Strategy;
 			sourceTree = "<group>";
@@ -310,7 +310,7 @@
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
 				36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */,
-				366155AD268B07DD0067F5E4 /* UserAction.swift in Sources */,
+				366155B3268CB6650067F5E4 /* UserAction.swift in Sources */,
 				363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
