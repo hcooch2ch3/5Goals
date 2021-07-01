@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import WidgetKit
 
 class GoalViewController: UIViewController {
     
@@ -16,9 +17,8 @@ class GoalViewController: UIViewController {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     private var isEditMode = false
-    private var minDeletedRow: Int? = nil
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: self, Goal.self)
-    private var isSwipeDone = false
+    private var lastUserAction: UserAction = UserAction.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,14 +133,12 @@ extension GoalViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
+        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { [weak self] (action, view, completion) in
             guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
                 return
             }
             
-            self.isSwipeDone = true
-            
-            guard let goalToWish = self.fetchedResultsController.object(at: indexPath) as? Goal else {
+            guard let goalToWish = self?.fetchedResultsController.object(at: indexPath) as? Goal else {
                 return
             }
             
@@ -151,7 +149,7 @@ extension GoalViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(goalToWish)
             
-            self.minDeletedRow = indexPath.row
+            self?.lastUserAction = .swipe(indexPath.row)
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -226,22 +224,19 @@ extension GoalViewController {
             }
         }
         if minDeletedRow >= 0 {
-            self.minDeletedRow = minDeletedRow
+            self.lastUserAction = .delete(minDeletedRow)
         }
         
         self.toggleEditMode()
     }
     
-    private func resetPriorityIfDeletionIsDone() {
-        if let minDeletedRow = self.minDeletedRow {
-            guard let goals = fetchedResultsController.fetchedObjects as? [Goal] else {
-                return
-            }
-            
-            for row in minDeletedRow..<goals.count {
-                goals[row].priority = Int16(row)
-            }
-            self.minDeletedRow = nil
+    private func resetPriority(from minDeletedRow: Int) {
+        guard let goals = fetchedResultsController.fetchedObjects as? [Goal] else {
+            return
+        }
+        
+        for row in minDeletedRow..<goals.count {
+            goals[row].priority = Int16(row)
         }
     }
     
@@ -359,11 +354,21 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         goalTableView.endUpdates()
-        resetPriorityIfDeletionIsDone()
-        if isSwipeDone == false {
-            PersistentContainer.shared.saveContext()
-        } else {
-            isSwipeDone = false
+        switch lastUserAction {
+        case .delete(let minDeletedRow):
+            resetPriority(from: minDeletedRow)
+        case .swipe(let minDeletedRow):
+            resetPriority(from: minDeletedRow)
+            lastUserAction = .none
+            return
+        default:
+            break
         }
+        PersistentContainer.shared.saveContext()
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+        }
+        lastUserAction = .none
+        
     }
 }
