@@ -16,9 +16,8 @@ class GivingupViewController: UIViewController {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     private var isEditMode = false
-    private var minDeletedRow: Int? = nil
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Givingup.priority), delegate: self, Givingup.self)
-    private var isSwipeDone = false
+    private var lastUserAction: UserAction = UserAction.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,15 +104,13 @@ extension GivingupViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { (action, view, completion) in
+        let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { [weak self] (action, view, completion) in
             guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
                 // TODO: To localize alert string
                 return
             }
             
-            self.isSwipeDone = true
-            
-            guard let givingupToWish = self.fetchedResultsController.object(at: indexPath) as? Givingup else {
+            guard let givingupToWish = self?.fetchedResultsController.object(at: indexPath) as? Givingup else {
                 return
             }
             
@@ -123,7 +120,7 @@ extension GivingupViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(givingupToWish)
             
-            self.minDeletedRow = indexPath.row
+            self?.lastUserAction = .swipe(indexPath.row)
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -250,22 +247,19 @@ extension GivingupViewController: UITextFieldDelegate {
             }
         }
         if minDeletedRow >= 0 {
-            self.minDeletedRow = minDeletedRow
+            self.lastUserAction = .delete(minDeletedRow)
         }
         
         self.toggleEditMode()
     }
     
-    private func resetPriorityIfDeletionIsDone() {
-        if let minDeletedRow = self.minDeletedRow {
-            guard let givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
-                return
-            }
-            
-            for row in minDeletedRow..<givingups.count {
-                givingups[row].priority = Int16(row)
-            }
-            self.minDeletedRow = nil
+    private func resetPriority(from minDeletedRow: Int) {
+        guard let givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
+            return
+        }
+        
+        for row in minDeletedRow..<givingups.count {
+            givingups[row].priority = Int16(row)
         }
     }
     
@@ -326,12 +320,18 @@ extension GivingupViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         givingupTableView.endUpdates()
-        resetPriorityIfDeletionIsDone()
-        if isSwipeDone == false {
-            PersistentContainer.shared.saveContext()
-        } else {
-            isSwipeDone = false
+        switch lastUserAction {
+        case .delete(let minDeletedRow):
+            resetPriority(from: minDeletedRow)
+        case .swipe(let minDeletedRow):
+            resetPriority(from: minDeletedRow)
+            lastUserAction = .none
+            return
+        default:
+            break
         }
+        PersistentContainer.shared.saveContext()
+        lastUserAction = .none
     }
     
 }
