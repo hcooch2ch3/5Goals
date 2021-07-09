@@ -14,9 +14,10 @@ class WishViewController: UIViewController {
 
     @IBOutlet weak var wishTableView: UITableView!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
-    @IBOutlet weak var addBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
-
+    @IBOutlet weak var addBarButton: UIBarButtonItem!
+    
+    var isScrollToBottom = false
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Wish.priority), delegate: self, Wish.self)
     private var lastUserAction: UserAction = UserAction.none

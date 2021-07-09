@@ -14,6 +14,7 @@ class GivingupViewController: UIViewController {
     @IBOutlet weak var givingupTableView: UITableView!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var addBarButton: UIBarButtonItem!
     
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Givingup.priority), delegate: self, Givingup.self)
@@ -143,6 +144,8 @@ extension GivingupViewController: UITextFieldDelegate {
             
             self.givingupTableView.setEditing(true, animated: true)
             
+            self.addBarButton.isEnabled = false
+            
             self.editBarButton.image = UIImage(systemName: "escape")
             self.editBarButton.tintColor = UIColor.systemPink
             
@@ -154,6 +157,8 @@ extension GivingupViewController: UITextFieldDelegate {
             }
         } else {
             self.givingupTableView.setEditing(false, animated: true)
+            
+            self.addBarButton.isEnabled = true
             
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
             self.editBarButton.tintColor = nil

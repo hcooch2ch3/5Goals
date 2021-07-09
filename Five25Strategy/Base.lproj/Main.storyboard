@@ -60,12 +60,13 @@
                             <barButtonItem image="plus.circle.fill" catalog="system" id="DOd-Wb-uxi">
                                 <color key="tintColor" systemColor="systemYellowColor"/>
                                 <connections>
-                                    <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="vd1-3F-fMM"/>
+                                    <action selector="touchUpAddWishBarButton:" destination="BYZ-38-t0r" id="9ir-we-U4g"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addBarButton" destination="DOd-Wb-uxi" id="EzN-0k-cXC"/>
                         <outlet property="editBarButton" destination="2vl-p9-BUT" id="fmQ-5H-EXV"/>
                         <outlet property="goalTableView" destination="qkw-Gj-Uzm" id="dSj-Me-B0R"/>
                         <outlet property="leftBarButton" destination="RiP-My-NXp" id="Q0W-Eq-m2j"/>
@@ -347,6 +348,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addBarButton" destination="TB0-RN-VUw" id="1d8-0S-tVp"/>
                         <outlet property="editBarButton" destination="iLp-nt-6WS" id="xaF-3G-M7e"/>
                         <outlet property="givingupTableView" destination="74N-Vs-MNM" id="NEy-jB-h6s"/>
                         <outlet property="leftBarButton" destination="pye-SD-44e" id="FAo-fP-dbC"/>
@@ -521,7 +523,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="J05-9J-NGD"/>
+        <segue reference="Vmr-46-JMg"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis.circle" catalog="system" width="128" height="121"/>

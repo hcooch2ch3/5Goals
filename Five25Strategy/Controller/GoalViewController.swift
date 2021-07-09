@@ -15,6 +15,7 @@ class GoalViewController: UIViewController {
     @IBOutlet weak var goalTableView: UITableView!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var addBarButton: UIBarButtonItem!
     
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: self, Goal.self)
@@ -172,6 +173,8 @@ extension GoalViewController {
             
             self.goalTableView.setEditing(true, animated: true)
             
+            self.addBarButton.isEnabled = false
+            
             self.editBarButton.image = UIImage(systemName: "escape")
             self.editBarButton.tintColor = UIColor.systemPink
             
@@ -184,6 +187,8 @@ extension GoalViewController {
         } else {
             self.goalTableView.setEditing(false, animated: true)
             
+            self.addBarButton.isEnabled = true
+            
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
             self.editBarButton.tintColor = nil
             
@@ -194,6 +199,35 @@ extension GoalViewController {
                 tabBarController.changeTabBarItemsState(to: true)
             }
         }
+    }
+    
+    func presentAddWishAlert() {
+        let alert = UIAlertController(title: NSLocalizedString("AddWish", comment: ""), message: nil, preferredStyle: .alert)
+
+        alert.addTextField { texfield in
+            texfield.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+            texfield.delegate = self
+        }
+         
+        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
+            let textField = alert.textFields![0]
+
+            guard let text = textField.text,
+                  text != "" else {
+                self.presentNoticeAlert("")
+                return
+            }
+            
+            self.addWish(text)
+        })
+         
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+         
+        alert.addAction(submitButton)
+        alert.addAction(cancelButton)
+        alert.actions[0].isEnabled = false // Add Button's default value is false
+         
+        self.present(alert, animated: true, completion: nil)
     }
     
     func presentNoticeAlert(_ message:String) {
@@ -301,6 +335,19 @@ extension GoalViewController: UITextFieldDelegate {
 
 // MARK:- IBAction
 extension GoalViewController {
+    
+    @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
+        guard let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")), let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")), let givingupCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Givingup"))
+              else {
+            return
+        }
+        guard goalCount + wishCount + givingupCount < 25 else {
+            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
+            return
+        }
+        
+        presentAddWishAlert()
+    }
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
         guard let section = fetchedResultsController.sections?[0], section.numberOfObjects > 0 else {
