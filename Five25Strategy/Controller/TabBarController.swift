@@ -43,4 +43,28 @@ class TabBarController: UITabBarController {
         selectedIndex = index
     }
     
+    func moveTabToWishAndScrollToBottom() {
+        if let viewControllers = self.viewControllers {
+            if viewControllers.count > 1,
+                let navigationController = viewControllers[1] as? UINavigationController {
+                if let wishViewController = navigationController.viewControllers.first as? WishViewController {
+                    wishViewController.isScrollToBottom = true
+                }
+            }
+        }
+        moveTab(to: 1)
+    }
+    
+    var isWishViewControllerLoaded: Bool {
+        if let viewControllers = self.viewControllers {
+            if viewControllers.count > 1,
+                let navigationController = viewControllers[1] as? UINavigationController {
+                if let wishViewController = navigationController.viewControllers.first as? WishViewController {
+                    return wishViewController.isViewLoaded
+                }
+            }
+        }
+        return false
+    }
+    
 }
