@@ -116,6 +116,9 @@ extension GoalViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath != destinationIndexPath else {
+            return
+        }
         guard var goals = fetchedResultsController.fetchedObjects as? [Goal] else {
             return
         }
@@ -240,24 +243,41 @@ extension GoalViewController {
          self.present(alert, animated: true, completion: nil)
     }
     
+    func addWish(_ name: String) {
+        guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
+            return
+        }
+        let wish = Wish(context: PersistentContainer.shared.viewContext)
+        wish.name = name
+        wish.priority = Int16(wishCount)
+        
+        guard let tabBarController = self.tabBarController as? TabBarController else {
+            return
+        }
+        
+        if tabBarController.isWishViewControllerLoaded == false {
+            PersistentContainer.shared.saveContext()
+        }
+        
+        tabBarController.moveTabToWishAndScrollToBottom()
+    }
+    
     private func deleteGoals() {
-        guard let selectedRows = self.goalTableView.indexPathsForSelectedRows else {
+        guard var selectedRows = self.goalTableView.indexPathsForSelectedRows else {
             presentNoticeAlert(NSLocalizedString("CheckGoal", comment: "Check the goals to delete."))
             return
         }
-        
+        selectedRows.sort {
+            $0.row > $1.row
+        }
         guard let goals = fetchedResultsController.fetchedObjects as? [Goal] else {
             return
         }
-        
-        var minDeletedRow = goals.count - selectedRows.count - 1
         selectedRows.forEach {
             PersistentContainer.shared.viewContext.delete(goals[$0.row])
-            if $0.row < minDeletedRow {
-                minDeletedRow = $0.row
-            }
         }
-        if minDeletedRow >= 0 {
+        
+        if let minDeletedRow = selectedRows.last?.row {
             self.lastUserAction = .delete(minDeletedRow)
         }
         
@@ -406,8 +426,10 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
             resetPriority(from: minDeletedRow)
         case .swipe(let minDeletedRow):
             resetPriority(from: minDeletedRow)
-            lastUserAction = .none
-            return
+            if let tabBarController = tabBarController as? TabBarController, tabBarController.isWishViewControllerLoaded {
+                lastUserAction = .none
+                return
+            }
         default:
             break
         }
@@ -416,6 +438,5 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
             WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
         }
         lastUserAction = .none
-        
     }
 }
