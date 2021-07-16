@@ -42,6 +42,18 @@ class WishViewController: UIViewController {
         self.wishTableView.tableFooterView = UIView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isScrollToBottom {
+            let lastRow = wishTableView.numberOfRows(inSection: 0) - 1
+            if lastRow >= 0 {
+                let indexPath = IndexPath(row: lastRow, section: 0)
+                wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+            isScrollToBottom = false
+        }
+    }
+    
 }
 
 extension WishViewController: UITableViewDataSource {
@@ -210,19 +222,13 @@ extension WishViewController: UITextFieldDelegate {
         let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
 
-            guard textField.text != "" else {
+            guard let text = textField.text,
+                  text != "" else {
                 self.presentNoticeAlert("")
                 return
             }
             
-            guard let wishes = self.fetchedResultsController.fetchedObjects as? [Wish] else {
-                return
-            }
-             
-            let wish = Wish(context: PersistentContainer.shared.viewContext)
-            wish.name = textField.text
-            wish.priority = Int16(wishes.count)
-            self.lastUserAction = .add(wishes.count)
+            self.addWish(text)
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -297,6 +303,16 @@ extension WishViewController: UITextFieldDelegate {
         alert?.actions[0].isEnabled = (textfield.text != "")
     }
     
+    func addWish(_ name: String) {
+        guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
+            return
+        }
+        let wish = Wish(context: PersistentContainer.shared.viewContext)
+        wish.name = name
+        wish.priority = Int16(wishCount)
+        self.lastUserAction = .add(wishCount)
+    }
+    
     func deleteWishes() {
         guard let selectedRows = self.wishTableView.indexPathsForSelectedRows else {
             presentNoticeAlert(NSLocalizedString("CheckWish", comment: "Check the wishes to delete."))
@@ -337,10 +353,14 @@ extension WishViewController: UITextFieldDelegate {
 extension WishViewController {
     
     @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
-//        guard (Goals.shared.goals.count + Wishes.shared.wishes.count + Givingups.shared.givingups.count) < 25 else {
-//            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
-//            return
-//        }
+        guard let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")), let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")), let givingupCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Givingup"))
+              else {
+            return
+        }
+        guard goalCount + wishCount + givingupCount < 25 else {
+            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
+            return
+        }
         
         presentAddWishAlert()
     }
