@@ -212,16 +212,13 @@ extension GoalViewController {
             texfield.delegate = self
         }
          
-        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { [weak self] (action) in
             let textField = alert.textFields![0]
-
             guard let text = textField.text,
                   text != "" else {
-                self.presentNoticeAlert("")
                 return
             }
-            
-            self.addWish(text)
+            self?.addWish(text)
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -313,19 +310,17 @@ extension GoalViewController: UITextFieldDelegate {
         }
         let alert = UIAlertController(title: NSLocalizedString("RenameGoal", comment: ""), message: nil, preferredStyle: .alert)
 
-        alert.addTextField { textField in
-            textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+        alert.addTextField { [weak self] textField in
+            textField.addTarget(self, action: #selector(self?.textChanged), for: .editingChanged)
             textField.delegate = self
             textField.text = goal.name
         }
          
         let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
-
             guard textField.text != "" else {
                 return
             }
-        
             goal.name = textField.text
         })
          

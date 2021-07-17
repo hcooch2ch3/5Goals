@@ -101,6 +101,9 @@ extension WishViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath != destinationIndexPath else {
+            return
+        }
         guard var wishes = fetchedResultsController.fetchedObjects as? [Wish] else {
             return
         }
@@ -213,21 +216,18 @@ extension WishViewController: UITextFieldDelegate {
     func presentAddWishAlert() {
         let alert = UIAlertController(title: NSLocalizedString("AddWish", comment: ""), message: nil, preferredStyle: .alert)
 
-        alert.addTextField { texfield in
-            texfield.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+        alert.addTextField { [weak self] texfield in
+            texfield.addTarget(self, action: #selector(self?.textChanged), for: .editingChanged)
             texfield.delegate = self
         }
          
-        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
+        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { [weak self] (action) in
             let textField = alert.textFields![0]
-
             guard let text = textField.text,
                   text != "" else {
-                self.presentNoticeAlert("")
                 return
             }
-            
-            self.addWish(text)
+            self?.addWish(text)
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
@@ -245,19 +245,17 @@ extension WishViewController: UITextFieldDelegate {
         }
         let alert = UIAlertController(title: NSLocalizedString("RenameWish", comment: ""), message: nil, preferredStyle: .alert)
 
-        alert.addTextField { textField in
-            textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+        alert.addTextField { [weak self] textField in
+            textField.addTarget(self, action: #selector(self?.textChanged), for: .editingChanged)
             textField.delegate = self
             textField.text = wish.name
         }
          
         let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
-
             guard textField.text != "" else {
                 return
             }
-        
             wish.name = textField.text
         })
          
