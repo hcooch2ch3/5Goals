@@ -87,6 +87,9 @@ extension GivingupViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath != destinationIndexPath else {
+            return
+        }
         guard var givingups = fetchedResultsController.fetchedObjects as? [Givingup] else {
             return
         }
@@ -107,7 +110,6 @@ extension GivingupViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let wishSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Wish", comment: "")) { [weak self] (action, view, completion) in
             guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
-                // TODO: To localize alert string
                 return
             }
             
@@ -172,6 +174,32 @@ extension GivingupViewController: UITextFieldDelegate {
         }
     }
     
+    func presentAddWishAlert() {
+        let alert = UIAlertController(title: NSLocalizedString("AddWish", comment: ""), message: nil, preferredStyle: .alert)
+
+        alert.addTextField { [weak self] texfield in
+            texfield.addTarget(self, action: #selector(self?.textChanged), for: .editingChanged)
+            texfield.delegate = self
+        }
+         
+        let submitButton = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default, handler: { (action) in
+            let textField = alert.textFields![0]
+            guard let text = textField.text,
+                  text != "" else {
+                return
+            }
+            self.addWish(text)
+        })
+         
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+         
+        alert.addAction(submitButton)
+        alert.addAction(cancelButton)
+        alert.actions[0].isEnabled = false // Add Button's default value is false
+         
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func presentNoticeAlert(_ message:String) {
          let alert = UIAlertController(title: NSLocalizedString("Notice", comment: ""), message: message, preferredStyle: .alert)
          
@@ -180,6 +208,25 @@ extension GivingupViewController: UITextFieldDelegate {
          alert.addAction(cancelButton)
          
          self.present(alert, animated: true, completion: nil)
+    }
+    
+    func addWish(_ name: String) {
+        guard let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")) else {
+            return
+        }
+        let wish = Wish(context: PersistentContainer.shared.viewContext)
+        wish.name = name
+        wish.priority = Int16(wishCount)
+        
+        guard let tabBarController = self.tabBarController as? TabBarController else {
+            return
+        }
+        
+        if tabBarController.isWishViewControllerLoaded == false {
+            PersistentContainer.shared.saveContext()
+        }
+        
+        tabBarController.moveTabToWishAndScrollToBottom()
     }
     
     @objc func touchUpRenameButton(_ sender: UIButton, _ event: UIEvent) {
@@ -197,19 +244,17 @@ extension GivingupViewController: UITextFieldDelegate {
         }
         let alert = UIAlertController(title: NSLocalizedString("RenameGivingup", comment: ""), message: nil, preferredStyle: .alert)
 
-        alert.addTextField { textField in
-            textField.addTarget(self, action: #selector(self.textChanged), for: .editingChanged)
+        alert.addTextField { [weak self] textField in
+            textField.addTarget(self, action: #selector(self?.textChanged), for: .editingChanged)
             textField.delegate = self
             textField.text = givingup.name
         }
          
         let submitButton = UIAlertAction(title: NSLocalizedString("Rename", comment: ""), style: .default, handler: { (action) in
             let textField = alert.textFields![0]
-
             guard textField.text != "" else {
                 return
             }
-        
             givingup.name = textField.text
         })
          
@@ -271,6 +316,19 @@ extension GivingupViewController: UITextFieldDelegate {
 }
 
 extension GivingupViewController {
+    
+    @IBAction func touchUpAddWishBarButton(_ sender: UIBarButtonItem) {
+        guard let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")), let wishCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Wish")), let givingupCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Givingup"))
+              else {
+            return
+        }
+        guard goalCount + wishCount + givingupCount < 25 else {
+            presentNoticeAlert(NSLocalizedString("TotalNumberExceed", comment: "The total number cannot exceed 25."))
+            return
+        }
+        
+        presentAddWishAlert()
+    }
     
     @IBAction func touchUpEditBarButton(_ sender: UIBarButtonItem) {
         guard let section = fetchedResultsController.sections?[0], section.numberOfObjects > 0 else {

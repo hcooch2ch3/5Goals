@@ -342,7 +342,7 @@
                             <barButtonItem image="plus.circle.fill" catalog="system" id="TB0-RN-VUw">
                                 <color key="tintColor" systemColor="systemYellowColor"/>
                                 <connections>
-                                    <action selector="touchUpAddWishBarButton:" destination="whK-CH-sRD" id="PUc-8n-2QH"/>
+                                    <action selector="touchUpAddWishBarButton:" destination="IB9-WP-PMd" id="I6a-Nd-Kx2"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
