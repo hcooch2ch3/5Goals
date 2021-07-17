@@ -27,6 +27,7 @@
 "EditWishUnavailable" = "You can edit when there is more than one wish.";
 "EditGivingupUnavailable" = "You can edit when there is more than one giving-up.";
 
+"GoalNumberExceed" = "The total number cannot exceed 25.";
 "TotalNumberExceed" = "The total number cannot exceed 25.";
 
 "Add" = "Add";

@@ -121,8 +121,7 @@ extension WishViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let goalSwipeAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Goal", comment: "")) { [weak self] (action, view, completion) in
             guard let goalCount = try? PersistentContainer.shared.viewContext.count(for: NSFetchRequest(entityName: "Goal")), goalCount < 5 else {
-                // TODO: To localize alert string
-                self?.presentNoticeAlert("The number of goals cannot exceed 5.")
+                self?.presentNoticeAlert(NSLocalizedString("GoalNumberExceed", comment: ""))
                 return
             }
             
