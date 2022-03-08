@@ -16,6 +16,8 @@ class GoalViewController: UIViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
+    @IBOutlet weak var topSpaceHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomSpaceHeightConstraint: NSLayoutConstraint!
     
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: self, Goal.self)
@@ -23,6 +25,11 @@ class GoalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        topSpaceHeightConstraint.constant = topSpaceHeight
+        bottomSpaceHeightConstraint.constant = bottomSpaceHeight
+        
+        setNavigationBarClear()
+        setTabBarClear()
         
         do {
             try fetchedResultsController.performFetch()
@@ -85,17 +92,17 @@ extension GoalViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = goalTableView.dequeueReusableCell(withIdentifier: "GoalCell", for: indexPath)
+        guard let cell = goalTableView.dequeueReusableCell(withIdentifier: "GoalCell", for: indexPath) as? IdeaCell else {
+            return UITableViewCell()
+        }
         
         guard let goal = fetchedResultsController.object(at: indexPath) as? Goal else {
             return UITableViewCell()
         }
         
         // TODO: To implement cell init method
-        cell.textLabel?.text = "\(goal.priority + 1). \(goal.name!)"
-        
-        /// For dynamic cell height about text line number
-        cell.textLabel?.numberOfLines = 0
+//        cell.textLabel?.text = "\(goal.priority + 1). \(goal.name!)"
+        cell.ideaLabel.text = "\(goal.priority + 1). \(goal.name!)"
         
         /// Add rename button to right side of each cell.
         let renameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
@@ -103,14 +110,18 @@ extension GoalViewController: UITableViewDataSource {
         renameButton.tag = indexPath.row
         renameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
         cell.editingAccessoryView = renameButton
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .systemGreen
+        cell.selectedBackgroundView = selectedBackgroundView
         
         return cell
     }
-
+    
+    
+    
 }
 
 extension GoalViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
@@ -178,8 +189,7 @@ extension GoalViewController {
             
             self.addBarButton.isEnabled = false
             
-            self.editBarButton.image = UIImage(systemName: "escape")
-            self.editBarButton.tintColor = UIColor.systemPink
+            self.editBarButton.image = UIImage(systemName: "arrow.forward.circle.fill")
             
             self.leftBarButton.image = UIImage(systemName: "trash.circle")
             
@@ -193,7 +203,6 @@ extension GoalViewController {
             self.addBarButton.isEnabled = true
             
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
-            self.editBarButton.tintColor = nil
             
             self.leftBarButton.image = UIImage(systemName: "ellipsis.circle")
             

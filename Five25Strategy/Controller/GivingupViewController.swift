@@ -16,12 +16,16 @@ class GivingupViewController: UIViewController {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
     
+    @IBOutlet weak var topSpaceHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomSpaceHeightConstraint: NSLayoutConstraint!
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Givingup.priority), delegate: self, Givingup.self)
     private var lastUserAction: UserAction = UserAction.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        topSpaceHeightConstraint.constant = topSpaceHeight
+        bottomSpaceHeightConstraint.constant = bottomSpaceHeight
         
         do {
             try fetchedResultsController.performFetch()
@@ -57,16 +61,15 @@ extension GivingupViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = givingupTableView.dequeueReusableCell(withIdentifier: "GivingupCell", for: indexPath)
+        guard let cell = givingupTableView.dequeueReusableCell(withIdentifier: "GivingupCell", for: indexPath) as? IdeaCell else {
+            return UITableViewCell()
+        }
         
         guard let givingup = fetchedResultsController.object(at: indexPath) as? Givingup else {
             return UITableViewCell()
         }
         
-        cell.textLabel?.text = givingup.name
-        
-        /// For dynamic cell height about text line number
-        cell.textLabel?.numberOfLines = 0
+        cell.ideaLabel.text = givingup.name
         
         /// Add rename button to right side of each cell.
         let renameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
@@ -148,8 +151,7 @@ extension GivingupViewController: UITextFieldDelegate {
             
             self.addBarButton.isEnabled = false
             
-            self.editBarButton.image = UIImage(systemName: "escape")
-            self.editBarButton.tintColor = UIColor.systemPink
+            self.editBarButton.image = UIImage(systemName: "arrow.forward.circle.fill")
             
             self.leftBarButton.image = UIImage(systemName: "trash.circle")
             
@@ -163,7 +165,6 @@ extension GivingupViewController: UITextFieldDelegate {
             self.addBarButton.isEnabled = true
             
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
-            self.editBarButton.tintColor = nil
             
             self.leftBarButton.image = UIImage(systemName: "ellipsis.circle")
             

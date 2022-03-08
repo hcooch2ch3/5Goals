@@ -16,6 +16,8 @@ class WishViewController: UIViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
+    @IBOutlet weak var topSpaceHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomSpaceHeightConstraint: NSLayoutConstraint!
     
     var isScrollToBottom = false
     private var isEditMode = false
@@ -24,6 +26,8 @@ class WishViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        topSpaceHeightConstraint.constant = topSpaceHeight
+        bottomSpaceHeightConstraint.constant = bottomSpaceHeight
         
         do {
             try fetchedResultsController.performFetch()
@@ -71,16 +75,15 @@ extension WishViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = wishTableView.dequeueReusableCell(withIdentifier: "WishCell", for: indexPath)
+        guard let cell = wishTableView.dequeueReusableCell(withIdentifier: "WishCell", for: indexPath) as? IdeaCell else {
+            return UITableViewCell()
+        }
         
         guard let wish = fetchedResultsController.object(at: indexPath) as? Wish else {
             return UITableViewCell()
         }
         
-        cell.textLabel?.text = wish.name
-        
-        /// For dynamic cell height about text line number
-        cell.textLabel?.numberOfLines = 0
+        cell.ideaLabel.text = wish.name
         
         /// Add rename button to right side of each cell.
         let renameButton = UIButton(frame: CGRect(x: tableView.frame.width - 100, y: 0 , width: 40, height: 40))
@@ -187,8 +190,7 @@ extension WishViewController: UITextFieldDelegate {
             
             self.addBarButton.isEnabled = false
             
-            self.editBarButton.image = UIImage(systemName: "escape")
-            self.editBarButton.tintColor = UIColor.systemPink
+            self.editBarButton.image = UIImage(systemName: "arrow.forward.circle.fill")
             
             self.leftBarButton.image = UIImage(systemName: "trash.circle")
             
@@ -202,7 +204,6 @@ extension WishViewController: UITextFieldDelegate {
             self.addBarButton.isEnabled = true
             
             self.editBarButton.image = UIImage(systemName: "pencil.tip.crop.circle")
-            self.editBarButton.tintColor = nil
             
             self.leftBarButton.image = UIImage(systemName: "ellipsis.circle")
             
