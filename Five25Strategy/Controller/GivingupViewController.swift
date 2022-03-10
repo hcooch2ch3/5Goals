@@ -77,6 +77,9 @@ extension GivingupViewController: UITableViewDataSource {
         renameButton.tag = indexPath.row
         renameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
         cell.editingAccessoryView = renameButton
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .systemRed
+        cell.selectedBackgroundView = selectedBackgroundView
         
         return cell
     }
