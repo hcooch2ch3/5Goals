@@ -11,8 +11,27 @@ import SwiftUI
 import Intents
 import CoreData
 
+extension FontWeight {
+    var weight: Font.Weight {
+        switch self {
+        case .thin:
+            return .thin
+        case .regular:
+            return .regular
+        case .semiBold:
+            return .semibold
+        case .bold:
+            return .bold
+        case .heavy:
+            return .heavy
+        case .unknown:
+            return .bold
+        }
+    }
+}
+
 struct Provider: IntentTimelineProvider {
-    typealias Intent = SetFontSizeIntent
+    typealias Intent = FontIntent
     typealias Entry = GoalEntry
      
     var managedObjectContext: NSManagedObjectContext
@@ -21,73 +40,49 @@ struct Provider: IntentTimelineProvider {
         self.managedObjectContext = context
     }
     
-    func fontSize(for config: SetFontSizeIntent) -> Int {
-        switch config.fontsize {
-        case .s:
-            return 12
-        case .m:
-            return 15
-        case .l:
-            return 18
-        case .unknown:
-            return 15
-        }
-    }
-    
     func placeholder(in context: Context) -> GoalEntry {
-        var goals: [Goal]? = nil
-        var entry: GoalEntry? = nil
-        
-        do {
-            goals = try self.managedObjectContext.fetch(Goal.fetchRequest())
-            goals!.sort { $0.priority < $1.priority }
-            entry = GoalEntry(goals: goals, fontSize: 15)
+        if var goals = try? self.managedObjectContext.fetch(Goal.fetchRequest()) {
+            goals.sort { $0.priority < $1.priority }
+            return GoalEntry(goals: goals, fontSize: 12, fontWeight: .bold)
+        } else {
+            return GoalEntry(goals: nil, fontSize: 12, fontWeight: .bold)
         }
-        catch {
-            entry = GoalEntry(goals: nil, fontSize: 15)
-        }
-        
-        return entry!
     }
     
-    func getSnapshot(for configuration: SetFontSizeIntent, in context: Context, completion: @escaping (GoalEntry) -> Void) {
-        var goals: [Goal]? = nil
-        var entry: GoalEntry? = nil
-        
-        do {
-            goals = try self.managedObjectContext.fetch(Goal.fetchRequest())
-            goals!.sort { $0.priority < $1.priority }
-            entry = GoalEntry(goals: goals, fontSize: fontSize(for: configuration))
+    func getSnapshot(for configuration: FontIntent, in context: Context, completion: @escaping (GoalEntry) -> Void) {
+        let fontSize = CGFloat(truncating: configuration.fontsize ?? 12)
+        let fontWeight = configuration.fontweight.weight
+        if var goals = try? self.managedObjectContext.fetch(Goal.fetchRequest()) {
+            goals.sort { $0.priority < $1.priority }
+            let goalEntry = GoalEntry(goals: goals, fontSize: fontSize, fontWeight: fontWeight)
+            completion(goalEntry)
+        } else {
+            let goalEntry = GoalEntry(goals: nil, fontSize: fontSize, fontWeight: fontWeight)
+            completion(goalEntry)
         }
-        catch {
-            entry = GoalEntry(goals: nil, fontSize: fontSize(for: configuration))
-        }
-        
-        completion(entry!)
     }
     
-    func getTimeline(for configuration: SetFontSizeIntent, in context: Context, completion: @escaping (Timeline<GoalEntry>) -> Void) {
-        var goals: [Goal]? = nil
-        var entry: GoalEntry? = nil
-        
-        do {
-            goals = try self.managedObjectContext.fetch(Goal.fetchRequest())
-            goals!.sort { $0.priority < $1.priority }
-            entry = GoalEntry(goals: goals, fontSize: fontSize(for: configuration))
+    func getTimeline(for configuration: FontIntent, in context: Context, completion: @escaping (Timeline<GoalEntry>) -> Void) {
+        let fontSize = CGFloat(truncating: configuration.fontsize ?? 12)
+        let fontWeight = configuration.fontweight.weight
+        if var goals = try? self.managedObjectContext.fetch(Goal.fetchRequest()) {
+            goals.sort { $0.priority < $1.priority }
+            let goalEntry = GoalEntry(goals: goals, fontSize: fontSize, fontWeight: fontWeight)
+            let timeline = Timeline(entries: [goalEntry], policy: .never)
+            completion(timeline)
+        } else {
+            let goalEntry = GoalEntry(goals: nil, fontSize: fontSize, fontWeight: fontWeight)
+            let timeline = Timeline(entries: [goalEntry], policy: .never)
+            completion(timeline)
         }
-        catch {
-            entry = GoalEntry(goals: nil, fontSize: fontSize(for: configuration))
-        }
-        
-        let timeline = Timeline(entries: [entry!], policy: .never)
-        completion(timeline)
     }
 }
 
 struct GoalEntry: TimelineEntry {
     let date = Date()
     let goals: [Goal]?
-    let fontSize: Int
+    let fontSize: CGFloat
+    let fontWeight: Font.Weight
 }
 
 struct GoalWidgetEntryView : View {
@@ -98,14 +93,14 @@ struct GoalWidgetEntryView : View {
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
             ForEach(0..<5) { i in
-                Text("\(i+1). \(entry.goals!.indices.contains(i) ? (entry.goals![i] as Goal).name! : String(repeating: " ", count: 30))")
-                    .font(.system(size: CGFloat(entry.fontSize)))
-                    .foregroundColor(Color.green)
+                Text("\(i+1). \((entry.goals?.indices.contains(i) ?? false) ? (entry.goals?[i].name ?? "") : "")")
+                    .font(.system(size: entry.fontSize, weight: entry.fontWeight))
+                    .foregroundColor(.black)
             }
         }
         .padding(.all, 7)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(colorScheme == .dark ? Color(red: 28/255, green: 28/255, blue: 30/255) : Color.white)
+        .background(Color.green)
     }
 }
 
@@ -114,12 +109,12 @@ struct GoalWidget: Widget {
     let kind: String = "GoalWidget"
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: SetFontSizeIntent.self, provider: Provider(context: persistentContainer.viewContext)) { entry in
+        IntentConfiguration(kind: kind, intent: FontIntent.self, provider: Provider(context: persistentContainer.viewContext)) { entry in
             GoalWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("5/25 Strategy Widget")
+        .configurationDisplayName("5Goals Widget")
         .description("This is your goal widget.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
     
     var persistentContainer: NSPersistentContainer = {

@@ -24,7 +24,7 @@
 	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>SetFontSizeIntent</string>
+		<string>FontIntent</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
