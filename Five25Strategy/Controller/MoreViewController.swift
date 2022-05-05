@@ -12,7 +12,7 @@ class MoreViewController: UIViewController {
     
     @IBOutlet weak var moreTableView: UITableView!
     
-    let contents: [(name: String, imageName: String, segueIdentifier: String)] = [(NSLocalizedString("Help", comment: ""), "questionmark", "Help")]
+    let contents: [(name: String, imageName: String, segueIdentifier: String)] = [(NSLocalizedString("Help", comment: ""), "questionmark", "Help"), (NSLocalizedString("Notification", comment: ""), "bell.badge", "Notification")]
     
     override func viewDidLoad() {
         super.viewDidLoad()

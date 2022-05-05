@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YMD-he-1ga">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -262,6 +262,103 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PEx-cb-tDL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4178" y="300"/>
+        </scene>
+        <!--Notification-->
+        <scene sceneID="44U-y2-URP">
+            <objects>
+                <viewController id="wd8-Xz-nu5" customClass="NotificationViewController" customModule="Five25Strategy" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PqK-iQ-ZiK">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nXo-ej-Frh">
+                                <rect key="frame" x="0.0" y="56" width="414" height="737"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="NotificationToggleCell" id="c33-e6-UC5" customClass="NotificationToggleCell" customModule="Five25Strategy" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="49.5" width="374" height="61.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="c33-e6-UC5" id="zGU-G9-dMr">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="61.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ks5-Jt-Xeg">
+                                                    <rect key="frame" x="15" y="15" width="42" height="31.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlJ-mM-SOd">
+                                                    <rect key="frame" x="310" y="15" width="51" height="31.5"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="rlJ-mM-SOd" firstAttribute="top" secondItem="zGU-G9-dMr" secondAttribute="top" constant="15" id="4F7-6b-sVg"/>
+                                                <constraint firstItem="Ks5-Jt-Xeg" firstAttribute="top" secondItem="zGU-G9-dMr" secondAttribute="top" constant="15" id="5ns-BV-cSC"/>
+                                                <constraint firstAttribute="bottom" secondItem="Ks5-Jt-Xeg" secondAttribute="bottom" constant="15" id="LCD-La-RPF"/>
+                                                <constraint firstAttribute="trailing" secondItem="rlJ-mM-SOd" secondAttribute="trailing" constant="15" id="M82-Kn-zEZ"/>
+                                                <constraint firstItem="Ks5-Jt-Xeg" firstAttribute="leading" secondItem="zGU-G9-dMr" secondAttribute="leading" constant="15" id="Oot-2f-p7j"/>
+                                                <constraint firstItem="rlJ-mM-SOd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ks5-Jt-Xeg" secondAttribute="trailing" constant="8" symbolic="YES" id="e2a-cL-LSb"/>
+                                                <constraint firstAttribute="bottom" secondItem="rlJ-mM-SOd" secondAttribute="bottom" constant="15" id="eh2-2O-EGo"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="title" destination="Ks5-Jt-Xeg" id="gTq-5Z-cnJ"/>
+                                            <outlet property="toggleSwitch" destination="rlJ-mM-SOd" id="I5G-P6-Hln"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="NotificationTimePickerCell" id="n3I-2w-TKQ" customClass="NotificationTimePickerCell" customModule="Five25Strategy" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="111" width="374" height="216.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="n3I-2w-TKQ" id="1ez-9I-ITm">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="216.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="glz-ZI-ClE">
+                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="216.5"/>
+                                                </datePicker>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="glz-ZI-ClE" secondAttribute="bottom" id="gwO-zP-tBt"/>
+                                                <constraint firstAttribute="trailing" secondItem="glz-ZI-ClE" secondAttribute="trailing" id="j1h-I2-KfF"/>
+                                                <constraint firstItem="glz-ZI-ClE" firstAttribute="top" secondItem="1ez-9I-ITm" secondAttribute="top" id="qiQ-b1-fzi"/>
+                                                <constraint firstItem="glz-ZI-ClE" firstAttribute="leading" secondItem="1ez-9I-ITm" secondAttribute="leading" id="rY7-7r-Za8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="timePicker" destination="glz-ZI-ClE" id="R8k-87-GIf"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="wd8-Xz-nu5" id="QUm-i7-oRr"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7FQ-aP-tsC"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="7FQ-aP-tsC" firstAttribute="bottom" secondItem="nXo-ej-Frh" secondAttribute="bottom" id="AN3-H2-fj3"/>
+                            <constraint firstItem="7FQ-aP-tsC" firstAttribute="trailing" secondItem="nXo-ej-Frh" secondAttribute="trailing" id="G9h-a5-BD2"/>
+                            <constraint firstItem="nXo-ej-Frh" firstAttribute="leading" secondItem="7FQ-aP-tsC" secondAttribute="leading" id="TdC-h7-OiH"/>
+                            <constraint firstItem="nXo-ej-Frh" firstAttribute="top" secondItem="7FQ-aP-tsC" secondAttribute="top" id="dh3-b5-5rt"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Notification" id="Jmk-LS-1cn">
+                        <barButtonItem key="rightBarButtonItem" image="xmark" catalog="system" id="yeD-mR-Lm9">
+                            <connections>
+                                <action selector="tab:" destination="wd8-Xz-nu5" id="s02-CS-ppd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="notificationTableView" destination="nXo-ej-Frh" id="C2r-sE-7kw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zvE-aQ-XrQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4182" y="1009"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="MK3-AZ-ejn">
@@ -684,6 +781,7 @@
                     <connections>
                         <outlet property="moreTableView" destination="NMg-zd-ye8" id="Jzb-W5-b4x"/>
                         <segue destination="TI0-P1-wri" kind="show" identifier="Help" id="Ctf-2h-wcZ"/>
+                        <segue destination="wd8-Xz-nu5" kind="show" identifier="Notification" id="lUH-Vg-S5E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DTR-nB-OqD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

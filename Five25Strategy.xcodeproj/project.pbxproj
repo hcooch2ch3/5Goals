@@ -36,6 +36,9 @@
 		36E2694B26788B5800C19FEB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2694A26788B5800C19FEB /* Constants.swift */; };
 		36E2694D267C6FAD00C19FEB /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */; };
 		36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7EB3A265F7D5C0059C860 /* TabBarController.swift */; };
+		36F5C646282401DE00E3D3AB /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C645282401DE00E3D3AB /* NotificationViewController.swift */; };
+		36F5C6482824128100E3D3AB /* NotificationToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */; };
+		36F5C64A2824192600E3D3AB /* NotificationTimePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +101,9 @@
 		36E2694A26788B5800C19FEB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		36E2694C267C6FAD00C19FEB /* FetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		36E7EB3A265F7D5C0059C860 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		36F5C645282401DE00E3D3AB /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToggleCell.swift; sourceTree = "<group>"; };
+		36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimePickerCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +179,9 @@
 				364EFDC324F6CDB300521B7C /* MoreViewController.swift */,
 				36E7EB3A265F7D5C0059C860 /* TabBarController.swift */,
 				36A7994927CE6BD9006C3350 /* IdeaCell.swift */,
+				36F5C645282401DE00E3D3AB /* NotificationViewController.swift */,
+				36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */,
+				36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -322,9 +331,12 @@
 				364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */,
 				3636387C24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld in Sources */,
 				3636388924E2D19400F6B267 /* WishViewController.swift in Sources */,
+				36F5C646282401DE00E3D3AB /* NotificationViewController.swift in Sources */,
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
 				36E7EB3B265F7D5C0059C860 /* TabBarController.swift in Sources */,
+				36F5C6482824128100E3D3AB /* NotificationToggleCell.swift in Sources */,
+				36F5C64A2824192600E3D3AB /* NotificationTimePickerCell.swift in Sources */,
 				366155B3268CB6650067F5E4 /* UserAction.swift in Sources */,
 				36A7994627CE5DFD006C3350 /* UITableViewCell+ImageViews.swift in Sources */,
 				363638B524ECEA6600F6B267 /* HelpViewController.swift in Sources */,
@@ -515,7 +527,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -539,7 +551,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
