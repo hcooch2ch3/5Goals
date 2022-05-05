@@ -347,7 +347,7 @@
                     <navigationItem key="navigationItem" title="Notification" id="Jmk-LS-1cn">
                         <barButtonItem key="rightBarButtonItem" image="xmark" catalog="system" id="yeD-mR-Lm9">
                             <connections>
-                                <action selector="tab:" destination="wd8-Xz-nu5" id="s02-CS-ppd"/>
+                                <action selector="touchUpExitBarButton:" destination="wd8-Xz-nu5" id="arg-Ws-IlP"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

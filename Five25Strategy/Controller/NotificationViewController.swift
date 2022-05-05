@@ -11,16 +11,19 @@ import UIKit
 class NotificationViewController: UIViewController {
     
     @IBOutlet weak var notificationTableView: UITableView!
+    var cellCount = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let isEverydayNotificationOn = UserDefaults.standard.bool(forKey: "EverydayNotification")
+        cellCount = isEverydayNotificationOn ? 2 : 1
     }
     
 }
 
 extension NotificationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return cellCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -29,7 +32,13 @@ extension NotificationViewController: UITableViewDataSource {
             guard let notificationToggleCell = self.notificationTableView.dequeueReusableCell(withIdentifier: "NotificationToggleCell", for: indexPath) as? NotificationToggleCell else {
                 return UITableViewCell()
             }
-            notificationToggleCell.title?.text = "Everyday Notification"
+            
+            notificationToggleCell.title?.text = NSLocalizedString("EverydayNotification", comment: "")
+            
+            notificationToggleCell.toggleSwitch.addTarget(self, action: #selector(toggleSwitch), for: .valueChanged)
+            let isEverydayNotificationOn = UserDefaults.standard.bool(forKey: "EverydayNotification")
+            notificationToggleCell.toggleSwitch.isOn = isEverydayNotificationOn
+            
             return notificationToggleCell
         case 1:
             guard let notificationTimePickerCell = self.notificationTableView.dequeueReusableCell(withIdentifier: "NotificationTimePickerCell", for: indexPath) as? NotificationTimePickerCell else {
@@ -39,6 +48,17 @@ extension NotificationViewController: UITableViewDataSource {
         default:
             return UITableViewCell()
         }
+    }
+    
+    @objc func toggleSwitch(sender: UISwitch) {
+        if sender.isOn {
+            cellCount = 2
+            notificationTableView.insertRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+        } else {
+            cellCount = 1
+            notificationTableView.deleteRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+        }
+        UserDefaults.standard.set(sender.isOn, forKey: "EverydayNotification")
     }
     
 }

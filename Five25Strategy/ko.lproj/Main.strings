@@ -46,3 +46,6 @@
 
 /* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "ulF-u8-1dU"; */
 "ulF-u8-1dU.title" = "Item";
+
+/* Class = "UINavigationItem"; title = "Notification"; ObjectID = "Jmk-LS-1cn"; */
+"Jmk-LS-1cn.title" = "알림";
