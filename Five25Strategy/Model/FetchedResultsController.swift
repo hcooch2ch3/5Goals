@@ -11,7 +11,7 @@ import CoreData
 
 final class FetchedResultsController<T: NSManagedObject>: NSFetchedResultsController<NSFetchRequestResult> {
     
-    convenience init(context: NSManagedObjectContext, key: String, delegate: NSFetchedResultsControllerDelegate, _ managedObjectType: T.Type) {
+    convenience init(context: NSManagedObjectContext, key: String, delegate: NSFetchedResultsControllerDelegate?, _ managedObjectType: T.Type) {
         let fetchRequest = managedObjectType.fetchRequest()
         let sort = NSSortDescriptor(key: key, ascending: true)
         fetchRequest.sortDescriptors = [sort]

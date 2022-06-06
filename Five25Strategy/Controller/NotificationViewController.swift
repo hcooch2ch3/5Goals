@@ -114,7 +114,10 @@ extension NotificationViewController: UITableViewDataSource {
     }
     
     @objc func timeChanged(_ sender: UIDatePicker) {
-        
+        let date = sender.date
+        let hour = Calendar.current.component(.hour, from: date)
+        let minute = Calendar.current.component(.minute, from: date)
+        scheduleNotifications(hour, minute)
     }
     
     @objc func applicationDidBecomeActive() {
@@ -137,22 +140,47 @@ extension NotificationViewController {
 }
 
 extension NotificationViewController {
-    func scheduleNotification() {
+    func scheduleNotifications(_ hour: Int, _ minute: Int) {
+        let goals = getGoals()
+        guard goals.count > 0 else { return }
+        
         let center = UNUserNotificationCenter.current()
-
+        center.removeAllPendingNotificationRequests()
+        goals.forEach { goal in
+            scheduleNotification(hour, minute, goal)
+        }
+    }
+    
+    func scheduleNotification(_ hour: Int, _ minute: Int, _ goal: String) {
+        let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
-        content.title = "Late wake up call"
-        content.body = "The early bird catches the worm, but the second mouse gets the cheese."
+        content.title = "My 5Goals"
+        content.body = goal
         content.categoryIdentifier = "alarm"
-        content.userInfo = ["customData": "fizzbuzz"]
         content.sound = UNNotificationSound.default
 
         var dateComponents = DateComponents()
-        dateComponents.hour = 10
-        dateComponents.minute = 30
+        dateComponents.hour = hour
+        dateComponents.minute = minute
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         center.add(request)
+    }
+    
+    func getGoals() -> [String] {
+        let fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: nil, Goal.self)
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {}
+        var goals: [String] = []
+        fetchedResultsController.fetchedObjects?.forEach {
+            guard let goal = $0 as? Goal else {
+                return
+            }
+            goals.append("\(goal.priority + 1). \(goal.name!)")
+        }
+        return goals
     }
 }
