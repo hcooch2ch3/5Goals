@@ -11,6 +11,12 @@ import Foundation
 enum UserAction {
     case add(Int)
     case delete(Int)
-    case swipe(Int)
+    case swipe(Int, SwipeDestination)
     case none
+}
+
+enum SwipeDestination {
+    case goal
+    case wish
+    case givingUp
 }

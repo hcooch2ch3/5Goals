@@ -144,7 +144,7 @@ extension WishViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(wishToGoal)
             
-            self?.lastUserAction = .swipe(indexPath.row)
+            self?.lastUserAction = .swipe(indexPath.row, .goal)
         }
         
         goalSwipeAction.backgroundColor = UIColor.systemGreen
@@ -168,7 +168,7 @@ extension WishViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(wishToGivingup)
             
-            self?.lastUserAction = .swipe(indexPath.row)
+            self?.lastUserAction = .swipe(indexPath.row, .givingUp)
         }
         
         givingupSwipeAction.backgroundColor = UIColor.systemRed
@@ -425,8 +425,12 @@ extension WishViewController: NSFetchedResultsControllerDelegate {
             self.wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         case .delete(let minDeletedRow):
             resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow):
+        case .swipe(let minDeletedRow, let destination):
             resetPriority(from: minDeletedRow)
+            PersistentContainer.shared.saveContext()
+            if destination == .goal {
+                NotificationViewController.refreshNotifications()
+            }
             lastUserAction = .none
             return
         default:

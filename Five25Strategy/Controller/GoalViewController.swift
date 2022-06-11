@@ -164,7 +164,7 @@ extension GoalViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(goalToWish)
             
-            self?.lastUserAction = .swipe(indexPath.row)
+            self?.lastUserAction = .swipe(indexPath.row, .wish)
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -394,6 +394,7 @@ extension GoalViewController {
 
 extension GoalViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        NotificationViewController.refreshNotifications()
         goalTableView.beginUpdates()
     }
     
@@ -428,8 +429,12 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
         switch lastUserAction {
         case .delete(let minDeletedRow):
             resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow):
+        case .swipe(let minDeletedRow, let destination):
             resetPriority(from: minDeletedRow)
+            PersistentContainer.shared.saveContext()
+            if destination == .wish {
+                NotificationViewController.refreshNotifications()
+            }
             if let tabBarController = tabBarController as? TabBarController, tabBarController.isWishViewControllerLoaded {
                 lastUserAction = .none
                 return

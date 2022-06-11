@@ -59,6 +59,13 @@ extension NotificationViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             notificationTimePickerCell.timePicker.addTarget(self, action: #selector(timeChanged), for: .valueChanged)
+            
+            let hour = UserDefaults.standard.integer(forKey: "EverydayNotificationHour")
+            let minute = UserDefaults.standard.integer(forKey: "EverydayNotificationMinute")
+            if let presetDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: Date()) {
+                notificationTimePickerCell.timePicker.setDate(presetDate, animated: true)
+            }
+            
             return notificationTimePickerCell
         default:
             return UITableViewCell()
@@ -117,7 +124,9 @@ extension NotificationViewController: UITableViewDataSource {
         let date = sender.date
         let hour = Calendar.current.component(.hour, from: date)
         let minute = Calendar.current.component(.minute, from: date)
-        scheduleNotifications(hour, minute)
+        UserDefaults.standard.set(hour, forKey: "EverydayNotificationHour")
+        UserDefaults.standard.set(minute, forKey: "EverydayNotificationMinute")
+        NotificationViewController.scheduleNotifications(hour, minute)
     }
     
     @objc func applicationDidBecomeActive() {
@@ -140,7 +149,16 @@ extension NotificationViewController {
 }
 
 extension NotificationViewController {
-    func scheduleNotifications(_ hour: Int, _ minute: Int) {
+    static func refreshNotifications() {
+        let isEverydayNotificationOn = UserDefaults.standard.bool(forKey: "EverydayNotification")
+        if isEverydayNotificationOn {
+            let hour = UserDefaults.standard.integer(forKey: "EverydayNotificationHour")
+            let minute = UserDefaults.standard.integer(forKey: "EverydayNotificationMinute")
+            scheduleNotifications(hour, minute)
+        }
+    }
+    
+    static func scheduleNotifications(_ hour: Int, _ minute: Int) {
         let goals = getGoals()
         guard goals.count > 0 else { return }
         
@@ -151,7 +169,7 @@ extension NotificationViewController {
         }
     }
     
-    func scheduleNotification(_ hour: Int, _ minute: Int, _ goal: String) {
+    static func scheduleNotification(_ hour: Int, _ minute: Int, _ goal: String) {
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
         content.title = "My 5Goals"
@@ -168,7 +186,7 @@ extension NotificationViewController {
         center.add(request)
     }
     
-    func getGoals() -> [String] {
+    static func getGoals() -> [String] {
         let fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: nil, Goal.self)
         
         do {

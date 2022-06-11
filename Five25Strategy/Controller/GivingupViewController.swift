@@ -129,7 +129,7 @@ extension GivingupViewController: UITableViewDelegate {
             
             PersistentContainer.shared.viewContext.delete(givingupToWish)
             
-            self?.lastUserAction = .swipe(indexPath.row)
+            self?.lastUserAction = .swipe(indexPath.row, .wish)
         }
         
         wishSwipeAction.backgroundColor = UIColor.systemYellow
@@ -390,7 +390,7 @@ extension GivingupViewController: NSFetchedResultsControllerDelegate {
         switch lastUserAction {
         case .delete(let minDeletedRow):
             resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow):
+        case .swipe(let minDeletedRow, _):
             resetPriority(from: minDeletedRow)
             lastUserAction = .none
             return
