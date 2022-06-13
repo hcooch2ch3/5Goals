@@ -193,7 +193,7 @@ extension NotificationViewController {
             try fetchedResultsController.performFetch()
         } catch {}
         var goals: [String] = []
-        fetchedResultsController.fetchedObjects?.forEach {
+        fetchedResultsController.fetchedObjects?.reversed().forEach {
             guard let goal = $0 as? Goal else {
                 return
             }
