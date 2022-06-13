@@ -98,15 +98,15 @@ extension NotificationViewController: UITableViewDataSource {
     }
     
     func showAlertAboutSettings() {
-       let defaultAction = UIAlertAction(title: "확인",
+       let defaultAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""),
                             style: .default) { (action) in
            self.goToSettings()
        }
-       let cancelAction = UIAlertAction(title: "취소",
+       let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
                             style: .cancel)
        
-       let alert = UIAlertController(title: "알림",
-             message: "설정에서 알림을 허용해야만 목표 알림이 가능합니다.",
+       let alert = UIAlertController(title: NSLocalizedString("Notice", comment: ""),
+             message: NSLocalizedString("AllowNotification", comment: ""),
              preferredStyle: .alert)
        alert.addAction(defaultAction)
        alert.addAction(cancelAction)
@@ -172,7 +172,7 @@ extension NotificationViewController {
     static func scheduleNotification(_ hour: Int, _ minute: Int, _ goal: String) {
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
-        content.title = "My 5Goals"
+        content.title = "5Goals"
         content.body = goal
         content.categoryIdentifier = "alarm"
         content.sound = UNNotificationSound.default
