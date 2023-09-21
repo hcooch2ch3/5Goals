@@ -132,7 +132,7 @@ extension GivingupViewController: UITableViewDelegate {
             self?.lastUserAction = .swipe(indexPath.row, .wish)
         }
         
-        wishSwipeAction.backgroundColor = UIColor.systemYellow
+        wishSwipeAction.backgroundColor = UIColor(hex: "#FFFF00")
         
         return UISwipeActionsConfiguration(actions: [wishSwipeAction])
     }

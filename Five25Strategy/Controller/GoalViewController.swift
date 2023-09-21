@@ -111,7 +111,7 @@ extension GoalViewController: UITableViewDataSource {
         renameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
         cell.editingAccessoryView = renameButton
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .systemGreen
+        selectedBackgroundView.backgroundColor = UIColor(hex: "#00FF00")
         cell.selectedBackgroundView = selectedBackgroundView
         
         return cell
@@ -167,7 +167,7 @@ extension GoalViewController: UITableViewDelegate {
             self?.lastUserAction = .swipe(indexPath.row, .wish)
         }
         
-        wishSwipeAction.backgroundColor = UIColor.systemYellow
+        wishSwipeAction.backgroundColor = UIColor(hex: "#FFFF00")
         
         return UISwipeActionsConfiguration(actions: [wishSwipeAction])
     }

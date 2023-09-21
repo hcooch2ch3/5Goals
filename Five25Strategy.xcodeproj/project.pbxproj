@@ -39,6 +39,7 @@
 		36F5C646282401DE00E3D3AB /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C645282401DE00E3D3AB /* NotificationViewController.swift */; };
 		36F5C6482824128100E3D3AB /* NotificationToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */; };
 		36F5C64A2824192600E3D3AB /* NotificationTimePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */; };
+		3EF9F1C82AB7375900E2231E /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		36F5C645282401DE00E3D3AB /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToggleCell.swift; sourceTree = "<group>"; };
 		36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimePickerCell.swift; sourceTree = "<group>"; };
+		3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				36A7994327CDD974006C3350 /* UIViewController+Appearance.swift */,
 				36A7994527CE5DFD006C3350 /* UITableViewCell+ImageViews.swift */,
 				36A7994727CE5EB2006C3350 /* UIImageView+Color.swift */,
+				3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */,
 			);
 			path = Five25Strategy;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				36A7994A27CE6BD9006C3350 /* IdeaCell.swift in Sources */,
 				36A7994427CDD974006C3350 /* UIViewController+Appearance.swift in Sources */,
 				3636387624E2CBD500F6B267 /* GoalViewController.swift in Sources */,
+				3EF9F1C82AB7375900E2231E /* UIColor+Hex.swift in Sources */,
 				36E26949267886B600C19FEB /* PersistentContainer.swift in Sources */,
 				36A7994827CE5EB2006C3350 /* UIImageView+Color.swift in Sources */,
 				36E2694B26788B5800C19FEB /* Constants.swift in Sources */,

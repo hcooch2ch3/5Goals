@@ -92,7 +92,7 @@ extension WishViewController: UITableViewDataSource {
         renameButton.addTarget(self, action: #selector(touchUpRenameButton(_:_:)), for: .touchUpInside)
         cell.editingAccessoryView = renameButton
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .systemYellow
+        selectedBackgroundView.backgroundColor = UIColor(hex: "#FFFF00")
         cell.selectedBackgroundView = selectedBackgroundView
         
         return cell
@@ -147,7 +147,7 @@ extension WishViewController: UITableViewDelegate {
             self?.lastUserAction = .swipe(indexPath.row, .goal)
         }
         
-        goalSwipeAction.backgroundColor = UIColor.systemGreen
+        goalSwipeAction.backgroundColor = UIColor(hex: "#00FF00")
         
         return UISwipeActionsConfiguration(actions: [goalSwipeAction])
     }
@@ -171,7 +171,7 @@ extension WishViewController: UITableViewDelegate {
             self?.lastUserAction = .swipe(indexPath.row, .givingUp)
         }
         
-        givingupSwipeAction.backgroundColor = UIColor.systemRed
+        givingupSwipeAction.backgroundColor = UIColor(hex: "#FF3243")
         
         return UISwipeActionsConfiguration(actions: [givingupSwipeAction])
     }
