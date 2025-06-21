@@ -56,6 +56,7 @@ class TabBarController: UITabBarController {
     }
     
     var isWishViewControllerLoaded: Bool {
+        // WishViewController가 아직 메모리에 없을 경우 불필요한 초기화나 작업을 방지 목적
         if let viewControllers = self.viewControllers {
             if viewControllers.count > 1,
                 let navigationController = viewControllers[1] as? UINavigationController {

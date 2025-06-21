@@ -74,6 +74,7 @@ final class PersistentContainer: NSPersistentContainer {
                 try context.save()
             } catch {
                 // TODO: Adding Exception Handling
+                print("save context exception", error)
             }
         }
     }

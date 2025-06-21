@@ -21,7 +21,6 @@ class GoalViewController: UIViewController {
     
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Goal.priority), delegate: self, Goal.self)
-    private var lastUserAction: UserAction = UserAction.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,8 +162,11 @@ extension GoalViewController: UITableViewDelegate {
             wishFromGoal.priority = Int16(wishCount)
             
             PersistentContainer.shared.viewContext.delete(goalToWish)
+            PersistentContainer.shared.saveContext()
             
-            self?.lastUserAction = .swipe(indexPath.row, .wish)
+            self?.resetPriority(from: indexPath.row)
+            
+            NotificationViewController.refreshNotifications()
         }
         
         wishSwipeAction.backgroundColor = UIColor(hex: "#FFFF00")
@@ -284,8 +286,9 @@ extension GoalViewController {
         }
         
         if let minDeletedRow = selectedRows.last?.row {
-            self.lastUserAction = .delete(minDeletedRow)
+            resetPriority(from: minDeletedRow)
         }
+        PersistentContainer.shared.saveContext()
         
         self.toggleEditMode()
     }
@@ -298,6 +301,8 @@ extension GoalViewController {
         for row in minDeletedRow..<goals.count {
             goals[row].priority = Int16(row)
         }
+        
+        PersistentContainer.shared.saveContext()
     }
     
 }
@@ -401,10 +406,19 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .delete:
-            guard let indexPath = indexPath else {
-                return
-            }
+            guard let indexPath = indexPath else { return }
+            
             goalTableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            // 삭제된 indexPath 아래의 셀들을 reload
+            let totalRows = goalTableView.numberOfRows(inSection: indexPath.section)
+            let nextRow = indexPath.row + 1
+            if nextRow < totalRows {
+                let indexPathsToReload = (nextRow..<totalRows).map {
+                    IndexPath(row: $0, section: indexPath.section)
+                }
+                goalTableView.reloadRows(at: indexPathsToReload, with: .automatic)
+            }
         case .insert:
             guard let newIndexPath = newIndexPath else {
                 return
@@ -415,10 +429,6 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
                 return
             }
             goalTableView.reloadRows(at: [indexPath], with: .automatic)
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
-            goalTableView.reloadRows(at: [newIndexPath], with: .automatic)
         default:
             break
         }
@@ -426,26 +436,9 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         goalTableView.endUpdates()
-        switch lastUserAction {
-        case .delete(let minDeletedRow):
-            resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow, let destination):
-            resetPriority(from: minDeletedRow)
-            PersistentContainer.shared.saveContext()
-            if destination == .wish {
-                NotificationViewController.refreshNotifications()
-            }
-            if let tabBarController = tabBarController as? TabBarController, tabBarController.isWishViewControllerLoaded {
-                lastUserAction = .none
-                return
-            }
-        default:
-            break
-        }
-        PersistentContainer.shared.saveContext()
+        
         if #available(iOS 14.0, *) {
             WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
         }
-        lastUserAction = .none
     }
 }

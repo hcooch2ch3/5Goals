@@ -20,7 +20,6 @@ class GivingupViewController: UIViewController {
     @IBOutlet weak var bottomSpaceHeightConstraint: NSLayoutConstraint!
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Givingup.priority), delegate: self, Givingup.self)
-    private var lastUserAction: UserAction = UserAction.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,8 +127,9 @@ extension GivingupViewController: UITableViewDelegate {
             wishFromGivingup.priority = Int16(wishCount)
             
             PersistentContainer.shared.viewContext.delete(givingupToWish)
+            PersistentContainer.shared.saveContext()
             
-            self?.lastUserAction = .swipe(indexPath.row, .wish)
+            self?.resetPriority(from: indexPath.row)
         }
         
         wishSwipeAction.backgroundColor = UIColor(hex: "#FFFF00")
@@ -301,7 +301,7 @@ extension GivingupViewController: UITextFieldDelegate {
             }
         }
         if minDeletedRow >= 0 {
-            self.lastUserAction = .delete(minDeletedRow)
+            resetPriority(from: minDeletedRow)
         }
         
         self.toggleEditMode()
@@ -315,6 +315,8 @@ extension GivingupViewController: UITextFieldDelegate {
         for row in minDeletedRow..<givingups.count {
             givingups[row].priority = Int16(row)
         }
+        
+        PersistentContainer.shared.saveContext()
     }
     
 }
@@ -376,10 +378,6 @@ extension GivingupViewController: NSFetchedResultsControllerDelegate {
                 return
             }
             givingupTableView.reloadRows(at: [indexPath], with: .automatic)
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
-            givingupTableView.reloadRows(at: [newIndexPath], with: .automatic)
         default:
             break
         }
@@ -387,18 +385,6 @@ extension GivingupViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         givingupTableView.endUpdates()
-        switch lastUserAction {
-        case .delete(let minDeletedRow):
-            resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow, _):
-            resetPriority(from: minDeletedRow)
-            lastUserAction = .none
-            return
-        default:
-            break
-        }
-        PersistentContainer.shared.saveContext()
-        lastUserAction = .none
     }
     
 }

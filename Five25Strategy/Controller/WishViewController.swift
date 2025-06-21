@@ -22,7 +22,7 @@ class WishViewController: UIViewController {
     var isScrollToBottom = false
     private var isEditMode = false
     private lazy var fetchedResultsController = FetchedResultsController(context: PersistentContainer.shared.viewContext, key: #keyPath(Wish.priority), delegate: self, Wish.self)
-    private var lastUserAction: UserAction = UserAction.none
+    private var indexPathForNewlyInsertedRow: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +57,6 @@ class WishViewController: UIViewController {
             isScrollToBottom = false
         }
     }
-    
 }
 
 extension WishViewController: UITableViewDataSource {
@@ -82,7 +81,6 @@ extension WishViewController: UITableViewDataSource {
         guard let wish = fetchedResultsController.object(at: indexPath) as? Wish else {
             return UITableViewCell()
         }
-        
         cell.ideaLabel.text = wish.name
         
         /// Add rename button to right side of each cell.
@@ -142,9 +140,11 @@ extension WishViewController: UITableViewDelegate {
             goalFromWish.name = wishToGoal.name
             goalFromWish.priority = Int16(goalCount)
             
+            self?.resetPriority(from: indexPath.row)
             PersistentContainer.shared.viewContext.delete(wishToGoal)
             
-            self?.lastUserAction = .swipe(indexPath.row, .goal)
+            NotificationViewController.refreshNotifications()
+            PersistentContainer.shared.saveContext()
         }
         
         goalSwipeAction.backgroundColor = UIColor(hex: "#00FF00")
@@ -166,9 +166,10 @@ extension WishViewController: UITableViewDelegate {
             givingupFromWish.name = wishToGivingup.name
             givingupFromWish.priority = Int16(givingupCount)
             
+            
             PersistentContainer.shared.viewContext.delete(wishToGivingup)
             
-            self?.lastUserAction = .swipe(indexPath.row, .givingUp)
+            PersistentContainer.shared.saveContext()
         }
         
         givingupSwipeAction.backgroundColor = UIColor(hex: "#FF3243")
@@ -311,7 +312,8 @@ extension WishViewController: UITextFieldDelegate {
         let wish = Wish(context: PersistentContainer.shared.viewContext)
         wish.name = name
         wish.priority = Int16(wishCount)
-        self.lastUserAction = .add(wishCount)
+        
+        PersistentContainer.shared.saveContext()
     }
     
     func deleteWishes() {
@@ -331,8 +333,9 @@ extension WishViewController: UITextFieldDelegate {
                 minDeletedRow = $0.row
             }
         }
+        
         if minDeletedRow >= 0 {
-            self.lastUserAction = .delete(minDeletedRow)
+            resetPriority(from: minDeletedRow)
         }
         
         self.toggleEditMode()
@@ -346,6 +349,7 @@ extension WishViewController: UITextFieldDelegate {
         for row in minDeletedRow..<wishes.count {
             wishes[row].priority = Int16(row)
         }
+        PersistentContainer.shared.saveContext()
     }
     
 }
@@ -389,15 +393,25 @@ extension WishViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         wishTableView.beginUpdates()
+        print("WishViewController: controllerWillChangeContent")
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("WishViewController: controller")
         switch type {
         case .delete:
-            guard let indexPath = indexPath else {
-                return
+            guard let indexPath = indexPath else { return }
+                wishTableView.deleteRows(at: [indexPath], with: .automatic)
+
+            // 삭제된 indexPath 아래의 셀들을 reload
+            let totalRows = wishTableView.numberOfRows(inSection: indexPath.section)
+            let nextRow = indexPath.row + 1
+            if nextRow < totalRows {
+                let indexPathsToReload = (nextRow..<totalRows).map {
+                    IndexPath(row: $0, section: indexPath.section)
+                }
+                wishTableView.reloadRows(at: indexPathsToReload, with: .automatic)
             }
-            wishTableView.deleteRows(at: [indexPath], with: .automatic)
         case .insert:
             guard let newIndexPath = newIndexPath else {
                 return
@@ -408,10 +422,6 @@ extension WishViewController: NSFetchedResultsControllerDelegate {
                 return
             }
             wishTableView.reloadRows(at: [indexPath], with: .automatic)
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
-            wishTableView.reloadRows(at: [newIndexPath], with: .automatic)
         default:
             break
         }
@@ -419,25 +429,12 @@ extension WishViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         wishTableView.endUpdates()
-        switch lastUserAction {
-        case .add(let row):
-            let indexPath = IndexPath(row: row, section: 0)
-            self.wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-        case .delete(let minDeletedRow):
-            resetPriority(from: minDeletedRow)
-        case .swipe(let minDeletedRow, let destination):
-            resetPriority(from: minDeletedRow)
-            PersistentContainer.shared.saveContext()
-            if destination == .goal {
-                NotificationViewController.refreshNotifications()
-            }
-            lastUserAction = .none
-            return
-        default:
-            break
+        
+        // 새로운 소망이 추가될 경우 스크롤하기
+        if let indexPath = indexPathForNewlyInsertedRow {
+            wishTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            indexPathForNewlyInsertedRow = nil
         }
-        PersistentContainer.shared.saveContext()
-        lastUserAction = .none
     }
     
 }
