@@ -38,6 +38,8 @@
 		36F5C646282401DE00E3D3AB /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C645282401DE00E3D3AB /* NotificationViewController.swift */; };
 		36F5C6482824128100E3D3AB /* NotificationToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */; };
 		36F5C64A2824192600E3D3AB /* NotificationTimePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */; };
+		3E2ADDE62E1A7A3600C21388 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADDE52E1A7A3600C21388 /* Color+hex.swift */; };
+		3E2ADDE72E1A7A3600C21388 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2ADDE52E1A7A3600C21388 /* Color+hex.swift */; };
 		3EF9F1C82AB7375900E2231E /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +105,7 @@
 		36F5C645282401DE00E3D3AB /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		36F5C6472824128100E3D3AB /* NotificationToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToggleCell.swift; sourceTree = "<group>"; };
 		36F5C6492824192600E3D3AB /* NotificationTimePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimePickerCell.swift; sourceTree = "<group>"; };
+		3E2ADDE52E1A7A3600C21388 /* Color+hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
 		3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,6 +214,7 @@
 				36E078C8252505C9003C439A /* Assets.xcassets */,
 				36E078CA252505C9003C439A /* Info.plist */,
 				366AE50625428E020080C1DE /* Goal.intentdefinition */,
+				3E2ADDE52E1A7A3600C21388 /* Color+hex.swift */,
 			);
 			path = GoalWidget;
 			sourceTree = "<group>";
@@ -332,6 +336,7 @@
 				364EFDC424F6CDB300521B7C /* MoreViewController.swift in Sources */,
 				3636387C24E2CBD500F6B267 /* Five25Strategy.xcdatamodeld in Sources */,
 				3636388924E2D19400F6B267 /* WishViewController.swift in Sources */,
+				3E2ADDE72E1A7A3600C21388 /* Color+hex.swift in Sources */,
 				36F5C646282401DE00E3D3AB /* NotificationViewController.swift in Sources */,
 				3636387424E2CBD500F6B267 /* SceneDelegate.swift in Sources */,
 				3636388B24E2D1AE00F6B267 /* GivingupViewController.swift in Sources */,
@@ -348,6 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36E078C7252505C9003C439A /* GoalWidget.swift in Sources */,
+				3E2ADDE62E1A7A3600C21388 /* Color+hex.swift in Sources */,
 				366AE50725428E020080C1DE /* Goal.intentdefinition in Sources */,
 				3645E06B253D82CC0049C564 /* Five25Strategy.xcdatamodeld in Sources */,
 			);
@@ -527,7 +533,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -551,7 +557,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";

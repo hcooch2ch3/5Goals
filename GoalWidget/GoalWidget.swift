@@ -100,7 +100,7 @@ struct GoalWidgetEntryView : View {
         }
         .padding(.all, 7)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(Color.green)
+        .background(Color(hex: "#00FF00"))
     }
 }
 
@@ -115,6 +115,7 @@ struct GoalWidget: Widget {
         .configurationDisplayName("5Goals Widget")
         .description("This is your goal widget.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .disableContentMarginsIfNeeded()
     }
     
     var persistentContainer: NSPersistentContainer = {
@@ -129,5 +130,14 @@ struct GoalWidget: Widget {
         })
         return container
     }()
+}
 
+extension WidgetConfiguration {
+    func disableContentMarginsIfNeeded() -> some WidgetConfiguration {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return self.contentMarginsDisabled()
+        } else {
+            return self
+        }
+    }
 }
