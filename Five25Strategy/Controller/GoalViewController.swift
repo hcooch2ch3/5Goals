@@ -425,10 +425,16 @@ extension GoalViewController: NSFetchedResultsControllerDelegate {
             }
             goalTableView.insertRows(at: [newIndexPath], with: .automatic)
         case .update:
-            guard let indexPath = indexPath else {
-                return
+            var indexPaths: [IndexPath] = []
+            if let indexPath = indexPath {
+                indexPaths.append(indexPath)
             }
-            goalTableView.reloadRows(at: [indexPath], with: .automatic)
+            if let newIndexPath = newIndexPath {
+                indexPaths.append(newIndexPath)
+            }
+            if !indexPaths.isEmpty {
+                goalTableView.reloadRows(at: indexPaths, with: .automatic)
+            }
         default:
             break
         }
