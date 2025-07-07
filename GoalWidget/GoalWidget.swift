@@ -30,6 +30,25 @@ extension FontWeight {
     }
 }
 
+extension Font.Weight {
+    var fontName: String {
+        switch self {
+        case .thin:
+            return "NanumSquareNeoTTF-aLt"
+        case .regular:
+            return "NanumSquareNeoTTF-bRg"
+        case .semibold:
+            return "NanumSquareNeoTTF-cBd"
+        case .bold:
+            return "NanumSquareNeoTTF-dEb"
+        case .heavy:
+            return "NanumSquareNeoTTF-eHv"
+        default:
+            return "NanumSquareNeoTTF-dEb" // fallback
+        }
+    }
+}
+
 struct Provider: IntentTimelineProvider {
     typealias Intent = FontIntent
     typealias Entry = GoalEntry
@@ -94,8 +113,9 @@ struct GoalWidgetEntryView : View {
         VStack(alignment: .leading, spacing: 7) {
             ForEach(0..<5) { i in
                 Text("\(i+1). \((entry.goals?.indices.contains(i) ?? false) ? (entry.goals?[i].name ?? "") : "")")
-                    .font(.system(size: entry.fontSize, weight: entry.fontWeight))
+                    .font(.custom(entry.fontWeight.fontName, size: entry.fontSize))
                     .foregroundColor(.black)
+                
             }
         }
         .padding(.all, 7)

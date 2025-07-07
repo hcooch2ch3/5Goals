@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -109,6 +109,24 @@
 		3EF9F1C72AB7375900E2231E /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3E2ADDF82E1C359F00C21388 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"NanumSquareNeo-aLt.ttf",
+				"NanumSquareNeo-bRg.ttf",
+				"NanumSquareNeo-cBd.ttf",
+				"NanumSquareNeo-dEb.ttf",
+				"NanumSquareNeo-eHv.ttf",
+			);
+			target = 36E078BE252505C8003C439A /* GoalWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3E2ADDE82E1C358200C21388 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (3E2ADDF82E1C359F00C21388 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		3636386B24E2CBD500F6B267 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -132,6 +150,7 @@
 		3636386524E2CBD500F6B267 = {
 			isa = PBXGroup;
 			children = (
+				3E2ADDE82E1C358200C21388 /* Fonts */,
 				3645E071253D94AA0049C564 /* GoalWidgetExtension.entitlements */,
 				36948C01250389A8009D3A1B /* Localizable.strings */,
 				3636387024E2CBD500F6B267 /* Five25Strategy */,
@@ -235,6 +254,9 @@
 			);
 			dependencies = (
 				36E078CC252505C9003C439A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3E2ADDE82E1C358200C21388 /* Fonts */,
 			);
 			name = Five25Strategy;
 			productName = FiveTwoFiveRule;
@@ -533,7 +555,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -557,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SM.Five25Strategy;
 				PRODUCT_NAME = Five25Strategy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
