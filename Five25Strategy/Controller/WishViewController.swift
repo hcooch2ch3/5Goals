@@ -215,6 +215,9 @@ extension WishViewController: UITextFieldDelegate {
             if let tabBarController = tabBarController as? TabBarController {
                 tabBarController.changeTabBarItemsState(to: true)
             }
+            
+            // 변경 내용 저장하기 (순서 변경)
+            PersistentContainer.shared.saveContext()
         }
     }
     
@@ -262,6 +265,7 @@ extension WishViewController: UITextFieldDelegate {
                 return
             }
             wish.name = textField.text
+            PersistentContainer.shared.saveContext()
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)

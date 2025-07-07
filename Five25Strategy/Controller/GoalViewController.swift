@@ -212,6 +212,14 @@ extension GoalViewController {
             if let tabBarController = tabBarController as? TabBarController {
                 tabBarController.changeTabBarItemsState(to: true)
             }
+
+            // 변경 내용 저장하기 (순서 변경)
+            PersistentContainer.shared.saveContext()
+            
+            // 위젯 반영하기 (순서 변경은 controllerDidChangeContent에서 반영 안되므로)
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadTimelines(ofKind: "GoalWidget")
+            }
         }
     }
     
@@ -336,6 +344,7 @@ extension GoalViewController: UITextFieldDelegate {
                 return
             }
             goal.name = textField.text
+            PersistentContainer.shared.saveContext()
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)

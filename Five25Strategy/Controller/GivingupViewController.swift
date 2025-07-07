@@ -175,6 +175,9 @@ extension GivingupViewController: UITextFieldDelegate {
             if let tabBarController = tabBarController as? TabBarController {
                 tabBarController.changeTabBarItemsState(to: true)
             }
+            
+            // 변경 내용 저장하기 (순서 변경)
+            PersistentContainer.shared.saveContext()
         }
     }
     
@@ -260,6 +263,7 @@ extension GivingupViewController: UITextFieldDelegate {
                 return
             }
             givingup.name = textField.text
+            PersistentContainer.shared.saveContext()
         })
          
         let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)

@@ -114,8 +114,7 @@ struct GoalWidgetEntryView : View {
             ForEach(0..<5) { i in
                 Text("\(i+1). \((entry.goals?.indices.contains(i) ?? false) ? (entry.goals?[i].name ?? "") : "")")
                     .font(.custom(entry.fontWeight.fontName, size: entry.fontSize))
-                    .foregroundColor(.black)
-                
+                    .foregroundColor(.black)                
             }
         }
         .padding(.all, 7)
